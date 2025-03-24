@@ -1,22 +1,27 @@
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { ReactNode } from "react";
 
 export default function UnauthenticatedLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <main className="flex flex-col h-screen px-10">
-      <nav className="flex items-center py-5">
-        <p className="text-4xl font-bold mr-5">Nota</p>
-        <div className="grow">
-          <Link href="/#pricing">Pricing</Link>
-        </div>
+    <main className="flex flex-col h-screen max-w-7xl px-10 mx-auto">
+      <nav className="flex items-center justify-between py-5">
+        <Link
+          href="/"
+          className="text-3xl font-bold mr-5">
+          Nota
+        </Link>
         <div className="flex gap-2">
-          <Button className="cursor-pointer">Login</Button>
-          <Button
-            variant="secondary"
-            className="cursor-pointer">
-            Signup
-          </Button>
+          <Link
+            href="/login"
+            className={buttonVariants({ size: "lg", variant: "default" })}>
+            Login
+          </Link>
+          <Link
+            href="/sign-up"
+            className={buttonVariants({ size: "lg", variant: "secondary" })}>
+            Sign up
+          </Link>
         </div>
       </nav>
       {children}
