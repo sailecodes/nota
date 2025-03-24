@@ -20,7 +20,7 @@ export default function UnauthenticatedLayout({ children }: Readonly<{ children:
           <Link
             href="/sign-up"
             className={buttonVariants({ size: "lg", variant: "secondary" })}>
-            Sign up
+            Sign Up
           </Link>
         </div>
       </nav>
