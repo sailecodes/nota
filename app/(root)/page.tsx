@@ -1,3 +1,5 @@
+import CoreFeatures from "@/components/home/CoreFeatures";
+import Demo from "@/components/home/Demo";
 import Hero from "@/components/home/Hero";
 
 export default function Home() {
@@ -5,7 +7,7 @@ export default function Home() {
     <section>
       <Hero />
       {/* <Demo /> */}
-      {/* <CoreFeatures /> */}
+      <CoreFeatures />
       {/* <Pricing /> */}
     </section>
   );
