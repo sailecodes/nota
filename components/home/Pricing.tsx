@@ -25,11 +25,16 @@ export default function Pricing() {
         />
         <PricingCard
           title="Team"
-          description="For professionals and teams who need reliable transcription, summaries, and action
-                tracking — with more power and fewer limits."
+          description="Unlock Nota’s full potential — guaranteed access to the most powerful AI models, faster processing, and deeper collaboration features."
           pricing="$15/mo"
           btnText="Upgrade To Team"
-          features={["Unlimited uploads (max 500MB each)", "Faster processing & priority support"]}
+          features={[
+            "Unlimited uploads (max 500MB each)",
+            "Guaranteed usage of best-in-class AI",
+            "Priority support",
+            "Collaboration tools — assign, track, and manage actions (coming soon)",
+            "Role-based access control for teams (coming soon)",
+          ]}
         />
       </div>
     </div>
