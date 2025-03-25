@@ -18,13 +18,13 @@ export default function UnauthenticatedLayout({ children }: Readonly<{ children:
         <div className="flex flex-1 items-center justify-end gap-2">
           <Link
             href="/login"
-            className={buttonVariants({ size: "lg", variant: "default" })}>
-            Login
+            className={buttonVariants({ size: "lg", variant: "ghost" })}>
+            Log in
           </Link>
           <Link
             href="/sign-up"
             className={buttonVariants({ size: "lg", variant: "secondary", className: "mr-5" })}>
-            Get Started
+            Get started
           </Link>
           <ModeToggle />
         </div>
@@ -33,7 +33,9 @@ export default function UnauthenticatedLayout({ children }: Readonly<{ children:
       <footer className="flex justify-between py-20 mt-auto">
         <div>
           <p className="text-5xl font-bold mb-5">Nota</p>
-          <p className="text-muted-foreground">AI Platform for enthusiasts, teams, and enterprises.</p>
+          <p className="text-muted-foreground">
+            AI Platform for enthusiasts, teams, and enterprises.
+          </p>
         </div>
         <div>
           <p className="text-lg font-semibold">Want to connect?</p>
