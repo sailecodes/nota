@@ -1,16 +1,18 @@
 import { NavigationMenuLink } from "../ui/navigation-menu";
 
-interface NavLinksStackLinkProps {
+interface NavLinksLinkProps {
   header: string;
   links: string[];
   linkTexts: string[];
   linkIcons: any[];
 }
 
-export default function NavLinksStackLink({ header, links, linkTexts, linkIcons }: NavLinksStackLinkProps) {
+export default function NavLinksLink({ header, links, linkTexts, linkIcons }: NavLinksLinkProps) {
   return (
     <div>
-      <header className="font-semibold text-muted-foreground text-sm text-nowrap px-2 mb-1">{header}</header>
+      <header className="text-muted-foreground text-sm text-nowrap font-semibold px-2 mb-1">
+        {header}
+      </header>
       <div>
         {linkTexts.map((linkText, ind) => (
           <NavigationMenuLink
