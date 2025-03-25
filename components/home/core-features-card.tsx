@@ -30,5 +30,3 @@ export default function CoreFeaturesCard({
     </div>
   );
 }
-
-// hover:cursor-default hover:border-primary hover:bg-secondary

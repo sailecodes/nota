@@ -37,7 +37,8 @@ export default function CoreFeatures() {
     <div className="flex flex-col gap-5 py-24">
       <header className="text-5xl font-bold">Core Features</header>
       <p className="text-muted-foreground text-lg font-semibold">
-        Everything you need to turn meetings into clear, actionable notes — powered by AI.
+        Utilize powerful AI tools that transcribe, summarize, and structure your meetings into clear
+        notes.
       </p>
       <div className="grid grid-cols-3 gap-4">
         {coreFeatures.map((feature) => (

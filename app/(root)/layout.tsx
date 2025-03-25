@@ -23,7 +23,7 @@ export default function UnauthenticatedLayout({ children }: Readonly<{ children:
           </Link>
           <Link
             href="/sign-up"
-            className={buttonVariants({ size: "lg", variant: "secondary", className: "mr-5" })}>
+            className={buttonVariants({ size: "lg", className: "mr-5" })}>
             Get started
           </Link>
           <ModeToggle />

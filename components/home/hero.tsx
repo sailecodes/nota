@@ -3,7 +3,7 @@ import { buttonVariants } from "../ui/button";
 
 export default function Hero() {
   return (
-    <div className="flex items-center gap-5 py-36">
+    <div className="flex items-center gap-5 py-44">
       <div className="flex flex-col gap-5 flex-1">
         <p className="font-bold text-6xl">
           <span className="bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 text-transparent bg-clip-text animate-gradient-x">
