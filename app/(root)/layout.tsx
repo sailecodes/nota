@@ -32,17 +32,15 @@ export default function UnauthenticatedLayout({ children }: Readonly<{ children:
       {children}
       <footer className="flex justify-between py-20 mt-auto">
         <div>
-          <p className="text-5xl font-bold mb-5">Nota</p>
-          <p className="text-muted-foreground">
+          <p className="text-3xl font-bold mb-4">Nota</p>
+          <p className="text-muted-foreground text-sm">
             AI Platform for enthusiasts, teams, and enterprises.
           </p>
         </div>
-        <div>
-          <p className="text-lg font-semibold">Want to connect?</p>
-          {/* TODO: Implement connect feature with a form */}
-        </div>
       </footer>
-      <aside className="text-muted-foreground text-center py-5">© 2025 Elias IV Roman</aside>
+      <aside className="text-muted-foreground text-center text-xs py-5">
+        © 2025 Elias IV Roman. All rights reserved.
+      </aside>
     </main>
   );
 }
