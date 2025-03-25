@@ -1,41 +1,69 @@
 import PricingCard from "./pricing-card";
 
+const pricingTiers = [
+  {
+    title: "Starter",
+    description:
+      "Get started with Nota and make meetings more manageable — no commitments, just smarter workflows.",
+    pricing: "Free",
+    btnText: "Get started now",
+    features: [
+      "Up to 5 uploads/mo (max 100MB each)",
+      "AI-powered transcription & summaries",
+      "Automatic action item extraction",
+      "Access to dashboard & smart search",
+      "Email support",
+    ],
+  },
+  {
+    title: "Teams",
+    description:
+      "Unlock Nota’s full potential — guaranteed access to the most powerful AI models, faster processing, and deeper collaboration features.",
+    pricing: "$15",
+    btnText: "Upgrade to teams",
+    features: [
+      "Unlimited uploads (max 500MB each)",
+      "Guaranteed usage of best-in-class AI",
+      "Priority support",
+      "Collaboration tools — assign, track, and manage actions (coming soon)",
+      "Role-based access control for teams (coming soon)",
+    ],
+  },
+  {
+    title: "Organizations",
+    description:
+      "For growing teams and enterprises that need advanced collaboration, custom workflows, and scalable AI infrastructure — coming soon.",
+    pricing: "Contact us",
+    btnText: "Join the waitlist",
+    features: [
+      "Custom AI model selection & fine-tuning",
+      "Analytics dashboard for team activity, summary accuracy, and usage tracking",
+      "Workflow integrations with tools like Slack, Asana, Notion, and Google Calendar",
+      "SSO & enterprise-grade authentication",
+      "Flexible usage tiers + overage plans",
+    ],
+  },
+];
+
 export default function Pricing() {
   return (
     <div className="flex flex-col gap-5 py-24">
-      <header className="text-4xl font-bold">Simple, transparent pricing</header>
-      <p className="text-muted-foreground text-lg">
+      <header className="text-5xl font-bold">Simple, transparent pricing</header>
+      <p className="text-muted-foreground text-lg font-semibold">
         Get started with smart meeting summaries and action tracking. Upgrade when your workflow
         grows.
       </p>
-      <div className="grid grid-cols-2 gap-4">
-        <PricingCard
-          title="Starter"
-          description="Get started with Nota and make meetings more manageable — no commitments, just
-                smarter workflows."
-          pricing="Free"
-          btnText="Get Started Now"
-          features={[
-            "Up to 5 uploads/mo (max 100MB each)",
-            "AI-powered transcription & summaries",
-            "Automatic action item extraction",
-            "Access to dashboard & smart search",
-            "Email support",
-          ]}
-        />
-        <PricingCard
-          title="Team"
-          description="Unlock Nota’s full potential — guaranteed access to the most powerful AI models, faster processing, and deeper collaboration features."
-          pricing="$15/mo"
-          btnText="Upgrade To Team"
-          features={[
-            "Unlimited uploads (max 500MB each)",
-            "Guaranteed usage of best-in-class AI",
-            "Priority support",
-            "Collaboration tools — assign, track, and manage actions (coming soon)",
-            "Role-based access control for teams (coming soon)",
-          ]}
-        />
+      <div className="grid grid-cols-3 auto-rows-[600px] gap-4">
+        {pricingTiers.map((tier) => (
+          <PricingCard
+            key={tier.title}
+            title={tier.title}
+            description={tier.description}
+            pricing={tier.pricing}
+            btnText={tier.btnText}
+            features={tier.features}
+          />
+        ))}
       </div>
     </div>
   );

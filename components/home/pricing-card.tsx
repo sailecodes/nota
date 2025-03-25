@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui
 import { buttonVariants } from "../ui/button";
 import { Separator } from "../ui/separator";
 import PricingCardFeature from "./pricing-card-feature";
+import { Badge } from "../ui/badge";
 
 interface PricingCardProps {
   title: string;
@@ -20,34 +21,46 @@ export default function PricingCard({
   features,
 }: PricingCardProps) {
   return (
-    <Card className="h-[550px]">
-      <CardHeader>
-        <CardTitle className="text-xl">{title}</CardTitle>
-        <CardDescription>
-          <p className="text-base">{description}</p>
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p className="text-4xl font-bold mb-5">{pricing}</p>
-        <Link
-          href="/payment"
-          className={buttonVariants({
-            size: "lg",
-            variant: "default",
-            className: "w-full",
-          })}>
-          {btnText}
-        </Link>
-        <Separator className="my-8" />
-        <div className="flex flex-col gap-3">
-          {features.map((feature) => (
-            <PricingCardFeature
-              key={feature}
-              feature={feature}
-            />
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+    <div
+      className={`rounded-xl p-[2px] ${
+        title === "Teams" &&
+        "bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 animate-gradient-x"
+      }`}>
+      <Card className="min-h-full">
+        <CardHeader>
+          <CardTitle className="flex justify-between gap-2">
+            <p className="text-lg">{title}</p>
+            {title === "Teams" && <Badge>Most popular</Badge>}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col gap-4">
+            <div className="relative flex gap-1">
+              <p className="text-4xl font-bold">{pricing}</p>
+              {pricing.includes("$") && (
+                <p className="relative self-end text-xs text-muted-foreground bottom-1">
+                  per month
+                </p>
+              )}
+            </div>
+            <p className="text-sm text-muted-foreground">{description}</p>
+            <Link
+              href="/payment"
+              className={buttonVariants({ size: "lg" })}>
+              {btnText}
+            </Link>
+          </div>
+          <Separator className="my-8" />
+          <div className="flex flex-col gap-3">
+            {features.map((feature) => (
+              <PricingCardFeature
+                key={feature}
+                feature={feature}
+              />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
