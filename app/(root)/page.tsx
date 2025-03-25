@@ -1,7 +1,7 @@
-import CoreFeatures from "@/components/home/CoreFeatures";
-import Demo from "@/components/home/Demo";
-import Hero from "@/components/home/Hero";
-import Pricing from "@/components/home/Pricing";
+import CoreFeatures from "@/components/home/core-features";
+import Hero from "@/components/home/hero";
+import Pricing from "@/components/home/pricing";
+// import Demo from "@/components/home/demo";
 
 export default function Home() {
   return (

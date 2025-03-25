@@ -1,4 +1,5 @@
 import { buttonVariants } from "@/components/ui/button";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 import Link from "next/link";
 import { ReactNode } from "react";
 
@@ -11,7 +12,7 @@ export default function UnauthenticatedLayout({ children }: Readonly<{ children:
           className="text-3xl font-bold mr-5">
           Nota
         </Link>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <Link
             href="/login"
             className={buttonVariants({ size: "lg", variant: "default" })}>
@@ -19,23 +20,26 @@ export default function UnauthenticatedLayout({ children }: Readonly<{ children:
           </Link>
           <Link
             href="/sign-up"
-            className={buttonVariants({ size: "lg", variant: "secondary" })}>
+            className={buttonVariants({ size: "lg", variant: "secondary", className: "mr-5" })}>
             Sign Up
           </Link>
+          <ModeToggle />
         </div>
       </nav>
       {children}
       <footer className="flex justify-between py-20 mt-auto">
         <div>
-          <p className="text-5xl font-bold mb-2">Nota</p>
-          <p className="">AI Platform for blah blah blah</p>
+          <p className="text-5xl font-bold mb-5">Nota</p>
+          <p className="text-muted-foreground">
+            AI Platform for enthusiasts, teams, and enterprises.
+          </p>
         </div>
         <div>
           <p className="text-lg font-semibold">Want to connect?</p>
           {/* TODO: Implement connect feature with a form */}
         </div>
       </footer>
-      <aside className="text-center py-5">© 2025 Elias IV Roman</aside>
+      <aside className="text-muted-foreground text-center py-5">© 2025 Elias IV Roman</aside>
     </main>
   );
 }
