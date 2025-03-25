@@ -1,4 +1,3 @@
-import { Badge } from "../ui/badge";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
 interface CoreFeaturesCardProps {
@@ -15,19 +14,21 @@ export default function CoreFeaturesCard({
   isLong,
 }: CoreFeaturesCardProps) {
   return (
-    <Card
-      className={`${
-        isLong ? "col-span-2" : ""
-      } py-8 hover:cursor-default hover:border-primary hover:bg-secondary`}>
-      <CardHeader className="flex flex-col gap-4">
-        <CardTitle className="flex items-center gap-3">
-          {icon}
-          <Badge>
-            <p className="text-base">{title}</p>
-          </Badge>
-        </CardTitle>
-        <CardDescription className="text-base">{description}</CardDescription>
-      </CardHeader>
-    </Card>
+    <div
+      className={`p-[2px] rounded-xl hover:cursor-default hover:bg-gradient-to-r hover:from-blue-600 hover:via-green-500 hover:to-indigo-400 animate-gradient-x ${
+        isLong && "col-span-2"
+      }`}>
+      <Card className="py-8 hover:bg-background">
+        <CardHeader className="flex flex-col gap-4">
+          <CardTitle className="flex items-center gap-3">
+            {icon}
+            <p>{title}</p>
+          </CardTitle>
+          <CardDescription className="text-sm/relaxed">{description}</CardDescription>
+        </CardHeader>
+      </Card>
+    </div>
   );
 }
+
+// hover:cursor-default hover:border-primary hover:bg-secondary

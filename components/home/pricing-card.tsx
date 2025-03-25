@@ -5,6 +5,8 @@ import { Separator } from "../ui/separator";
 import PricingCardFeature from "./pricing-card-feature";
 import { Badge } from "../ui/badge";
 
+const MostPopularTier = "Teams";
+
 interface PricingCardProps {
   title: string;
   description: string;
@@ -22,15 +24,15 @@ export default function PricingCard({
 }: PricingCardProps) {
   return (
     <div
-      className={`rounded-xl p-[2px] ${
-        title === "Teams" &&
+      className={`p-[2px] rounded-xl ${
+        title === MostPopularTier &&
         "bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 animate-gradient-x"
       }`}>
-      <Card className="min-h-full">
+      <Card className={`min-h-full ${title === MostPopularTier && "bg-background"}`}>
         <CardHeader>
           <CardTitle className="flex justify-between gap-2">
             <p className="text-lg">{title}</p>
-            {title === "Teams" && <Badge>Most popular</Badge>}
+            {title === MostPopularTier && <Badge>Most popular</Badge>}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -43,7 +45,7 @@ export default function PricingCard({
                 </p>
               )}
             </div>
-            <p className="text-sm text-muted-foreground">{description}</p>
+            <p className="text-sm/relaxed text-muted-foreground">{description}</p>
             <Link
               href="/payment"
               className={buttonVariants({ size: "lg" })}>

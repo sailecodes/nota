@@ -32,7 +32,7 @@ const pricingTiers = [
   {
     title: "Organizations",
     description:
-      "For growing teams and enterprises that need advanced collaboration, custom workflows, and scalable AI infrastructure — coming soon.",
+      "For growing teams and organizations that need advanced collaboration, custom workflows, and scalable AI infrastructure — coming soon.",
     pricing: "Personalized",
     btnText: "Join the waitlist",
     features: [
