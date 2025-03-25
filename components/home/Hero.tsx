@@ -6,7 +6,7 @@ export default function Hero() {
     <div className="flex items-center gap-5 py-32">
       <div className="flex flex-col gap-5 flex-1">
         <p className="font-bold text-5xl">
-          <span className="bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">
+          <span className="bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 text-transparent bg-clip-text animate-gradient-x">
             AI-Powered
           </span>{" "}
           Meeting Notes, Instantly
