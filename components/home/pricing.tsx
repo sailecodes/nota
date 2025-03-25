@@ -8,7 +8,7 @@ const pricingTiers = [
     pricing: "Free",
     btnText: "Get started now",
     features: [
-      "Up to 5 uploads/mo (max 100MB each)",
+      "Up to 3 uploads/mo (max 100MB each)",
       "AI-powered transcription & summaries",
       "Automatic action item extraction",
       "Access to dashboard & smart search",
@@ -33,14 +33,14 @@ const pricingTiers = [
     title: "Organizations",
     description:
       "For growing teams and enterprises that need advanced collaboration, custom workflows, and scalable AI infrastructure — coming soon.",
-    pricing: "Contact us",
+    pricing: "Personalized",
     btnText: "Join the waitlist",
     features: [
-      "Custom AI model selection & fine-tuning",
-      "Analytics dashboard for team activity, summary accuracy, and usage tracking",
-      "Workflow integrations with tools like Slack, Asana, Notion, and Google Calendar",
-      "SSO & enterprise-grade authentication",
       "Flexible usage tiers + overage plans",
+      "Analytics dashboard for team activity, summary accuracy, and usage tracking",
+      "SSO & enterprise-grade authentication",
+      "Workflow integrations with tools like Slack, Asana, Notion, and Google Calendar",
+      "Custom AI model selection & fine-tuning",
     ],
   },
 ];
@@ -48,7 +48,7 @@ const pricingTiers = [
 export default function Pricing() {
   return (
     <div className="flex flex-col gap-5 py-24">
-      <header className="text-5xl font-bold">Simple, transparent pricing</header>
+      <header className="text-5xl font-bold">Start Free. Scale with Your Ambitions.</header>
       <p className="text-muted-foreground text-lg font-semibold">
         Get started with smart meeting summaries and action tracking. Upgrade when your workflow
         grows.

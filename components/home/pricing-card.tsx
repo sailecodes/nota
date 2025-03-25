@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { buttonVariants } from "../ui/button";
 import { Separator } from "../ui/separator";
 import PricingCardFeature from "./pricing-card-feature";
