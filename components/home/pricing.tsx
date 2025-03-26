@@ -8,7 +8,8 @@ const pricingTiers = [
     pricing: "Free",
     btnText: "Get started now",
     features: [
-      "Up to 3 uploads/mo (max 100MB each)",
+      "3 uploads/mo (max 100MB each)",
+      "1 workspace to manage your meetings",
       "AI-powered transcription & summaries",
       "Automatic action item extraction",
       "Access to dashboard & smart search",
@@ -23,6 +24,7 @@ const pricingTiers = [
     btnText: "Upgrade to teams",
     features: [
       "Unlimited uploads (max 500MB each)",
+      "5 workspaces for team collaboration",
       "Guaranteed usage of best-in-class AI",
       "Priority support",
       "Collaboration tools — assign, track, and manage actions (coming soon)",
@@ -37,6 +39,7 @@ const pricingTiers = [
     btnText: "Join the waitlist",
     features: [
       "Flexible usage tiers + overage plans",
+      "Unlimited workspaces with advanced admin control",
       "Analytics dashboard for team activity, summary accuracy, and usage tracking",
       "SSO & enterprise-grade authentication",
       "Workflow integrations with tools like Slack, Asana, Notion, and Google Calendar",
@@ -53,7 +56,7 @@ export default function Pricing() {
         Get started with smart meeting summaries and action tracking. Upgrade when your workflow
         grows.
       </p>
-      <div className="grid grid-cols-3 auto-rows-[600px] gap-4">
+      <div className="grid grid-cols-3 auto-rows-[620px] gap-4">
         {pricingTiers.map((tier) => (
           <PricingCard
             key={tier.title}
