@@ -48,7 +48,7 @@ const pricingTiers = [
 export default function Pricing() {
   return (
     <div className="flex flex-col gap-5 py-24">
-      <header className="text-5xl font-bold">Start Free. Scale with Your Ambitions.</header>
+      <header className="text-5xl font-bold">Start free. Scale with your ambitions.</header>
       <p className="text-muted-foreground text-lg font-semibold">
         Get started with smart meeting summaries and action tracking. Upgrade when your workflow
         grows.

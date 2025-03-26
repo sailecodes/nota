@@ -19,7 +19,7 @@ export default function Hero() {
           <Link
             href="/#core-features"
             className={`${buttonVariants({ variant: "default", className: "text-lg" })}`}>
-            Core Features
+            Core features
           </Link>
           <Link
             href="/#pricing"
