@@ -15,7 +15,7 @@ import {
   FileText,
   LayoutDashboardIcon,
   MessageCircle,
-  Pencil,
+  Route,
   PlusCircle,
   User,
   Wallet,
@@ -24,6 +24,7 @@ import DashboardSidebarGroup from "./dashboard-sidebar-group";
 import DashboardSidebarSingle from "./dashboard-sidebar-single";
 import { UserButton } from "@clerk/nextjs";
 import { buttonVariants } from "../ui/button";
+import DashboardSidebarHeader from "./dashboard-sidebar-header";
 
 const dashboardSidebarData = {
   dashboard: {
@@ -41,7 +42,7 @@ const dashboardSidebarData = {
         href: "/dashboard/meetings",
       },
       {
-        icon: Pencil,
+        icon: Route,
         title: "Action Items",
         href: "/dashboard/meetings",
       },
@@ -84,7 +85,9 @@ const dashboardSidebarData = {
 export default function DashboardSidebar() {
   return (
     <Sidebar>
-      <SidebarHeader className="text-3xl font-bold p-4">Nota</SidebarHeader>
+      <SidebarHeader>
+        <DashboardSidebarHeader />
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup className="p-4">
           <SidebarGroupContent>
@@ -95,7 +98,7 @@ export default function DashboardSidebar() {
                     href="/dashboard/upload"
                     className={buttonVariants({})}>
                     <PlusCircle />
-                    <span>Upload file</span>
+                    <span>Upload meeting</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
