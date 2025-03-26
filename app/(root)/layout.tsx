@@ -1,6 +1,7 @@
 import NavLinks from "@/components/home/nav-links";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ui/mode-toggle";
+import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -15,26 +16,43 @@ export default function UnauthenticatedLayout({ children }: Readonly<{ children:
           Nota
         </Link>
         <NavLinks />
-        <div className="flex flex-1 items-center justify-end gap-2">
-          <Link
-            href="/login"
-            className={buttonVariants({ size: "lg", variant: "ghost" })}>
-            Log in
-          </Link>
-          <Link
-            href="/sign-up"
-            className={buttonVariants({ size: "lg", className: "mr-5" })}>
-            Get started
-          </Link>
+        <div className="flex flex-1 items-center justify-end">
+          <SignedOut>
+            <div className="flex items-center gap-2 mr-7">
+              <SignInButton>
+                <Button
+                  size="lg"
+                  variant="ghost"
+                  className="cursor-pointer">
+                  Log in
+                </Button>
+              </SignInButton>
+              <SignUpButton>
+                <Button
+                  size="lg"
+                  className="cursor-pointer">
+                  Get started
+                </Button>
+              </SignUpButton>
+            </div>
+          </SignedOut>
+          <SignedIn>
+            <Link
+              href="/dashboard"
+              className={buttonVariants({ size: "lg", className: "mr-4" })}>
+              View dashboard
+            </Link>
+          </SignedIn>
           <ModeToggle />
         </div>
       </nav>
       {children}
       <footer className="flex justify-between py-20 mt-auto">
-        <div>
+        <div className="max-w-[350px]">
           <p className="text-3xl font-bold mb-4">Nota</p>
           <p className="text-muted-foreground text-sm">
-            AI Platform for enthusiasts, teams, and enterprises.
+            AI Platform with a mission to deliver structured, actionable meeting summaries to
+            everyone.
           </p>
         </div>
       </footer>

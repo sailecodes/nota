@@ -35,7 +35,7 @@ export const coreFeatures = [
 export default function CoreFeatures() {
   return (
     <div className="flex flex-col gap-5 py-24">
-      <header className="text-5xl font-bold">Core Features</header>
+      <header className="text-5xl font-bold">Core features</header>
       <p className="text-muted-foreground text-lg font-semibold">
         Utilize powerful AI tools that transcribe, summarize, and structure your meetings into clear
         notes.
