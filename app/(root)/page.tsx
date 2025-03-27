@@ -5,11 +5,11 @@ import Demo from "@/components/home/demo";
 
 export default function Home() {
   return (
-    <section>
+    <main>
       <Hero />
       <Demo />
       <CoreFeatures />
       <Pricing />
-    </section>
+    </main>
   );
 }

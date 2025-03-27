@@ -1,24 +1,18 @@
-import {
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "../ui/sidebar";
+import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
 import { ForwardRefExoticComponent, ReactNode, RefAttributes } from "react";
 import { LucideProps } from "lucide-react";
 import Link from "next/link";
 
-interface DashboardSidebarSingle {
+interface AuthSidebarSingle {
   icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
   title: string;
   href: string;
   inSidebarContent: boolean;
 }
 
-export default function DashboardSidebarSingle({ data }: { data: DashboardSidebarSingle }) {
+export default function AuthSidebarSingle({ data }: { data: AuthSidebarSingle }) {
   return (
-    <DashboardSidebarSingleHelper inSidebarContent={data.inSidebarContent}>
+    <AuthSidebarSingleHelper inSidebarContent={data.inSidebarContent}>
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton asChild>
@@ -29,17 +23,11 @@ export default function DashboardSidebarSingle({ data }: { data: DashboardSideba
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
-    </DashboardSidebarSingleHelper>
+    </AuthSidebarSingleHelper>
   );
 }
 
-function DashboardSidebarSingleHelper({
-  inSidebarContent,
-  children,
-}: {
-  inSidebarContent: boolean;
-  children: ReactNode;
-}) {
+function AuthSidebarSingleHelper({ inSidebarContent, children }: { inSidebarContent: boolean; children: ReactNode }) {
   return (
     <>
       {inSidebarContent && (
