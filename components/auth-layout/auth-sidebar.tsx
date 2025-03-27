@@ -44,7 +44,7 @@ const sidebarData = {
       {
         icon: Route,
         title: "Action Items",
-        href: "/dashboard/meetings",
+        href: "/dashboard/action-items",
       },
     ],
     inSidebarContent: true,
@@ -84,7 +84,7 @@ const sidebarData = {
 
 export default function AuthSidebar() {
   return (
-    <Sidebar>
+    <Sidebar className="border-none">
       <SidebarHeader>
         <AuthSidebarHeader />
       </SidebarHeader>

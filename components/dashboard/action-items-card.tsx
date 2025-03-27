@@ -1,10 +1,11 @@
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ListTodo } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
+import Link from "next/link";
 
 export default function ActionItemsCard() {
   return (
-    <Card>
+    <Card className="bg-background">
       <CardHeader>
         <CardDescription className="flex items-center gap-2">
           <ListTodo className="w-5 h-5" />
@@ -17,11 +18,11 @@ export default function ActionItemsCard() {
         </CardTitle>
       </CardHeader>
       <CardFooter>
-        <Button
-          variant="secondary"
-          className="w-full hover:cursor-pointer">
+        <Link
+          href="/dashboard/action-items"
+          className={buttonVariants({ variant: "secondary", className: "w-full" })}>
           See actions
-        </Button>
+        </Link>
       </CardFooter>
     </Card>
   );

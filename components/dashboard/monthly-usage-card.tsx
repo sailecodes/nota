@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 
 export default function MonthlyUsageCard() {
   return (
-    <Card>
+    <Card className="bg-background">
       <CardHeader>
         <CardDescription>
           <CardDescription className="flex items-center gap-2">
