@@ -10,7 +10,7 @@ import {
 } from "../ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
 
-export default function DashboardSidebarHeader() {
+export default function AuthSidebarHeader() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>

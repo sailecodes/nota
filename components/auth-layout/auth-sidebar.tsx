@@ -20,13 +20,13 @@ import {
   User,
   Wallet,
 } from "lucide-react";
-import DashboardSidebarGroup from "./dashboard-sidebar-group";
-import DashboardSidebarSingle from "./dashboard-sidebar-single";
+import AuthSidebarGroup from "./auth-sidebar-group";
+import AuthSidebarSingle from "./auth-sidebar-single";
 import { UserButton } from "@clerk/nextjs";
 import { buttonVariants } from "../ui/button";
-import DashboardSidebarHeader from "./dashboard-sidebar-header";
+import AuthSidebarHeader from "./auth-sidebar-header";
 
-const dashboardSidebarData = {
+const sidebarData = {
   dashboard: {
     icon: LayoutDashboardIcon,
     title: "Dashboard",
@@ -82,11 +82,11 @@ const dashboardSidebarData = {
   },
 };
 
-export default function DashboardSidebar() {
+export default function AuthSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <DashboardSidebarHeader />
+        <AuthSidebarHeader />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup className="p-4">
@@ -105,12 +105,12 @@ export default function DashboardSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <DashboardSidebarSingle data={dashboardSidebarData.dashboard} />
-        <DashboardSidebarGroup data={dashboardSidebarData.workspace} />
-        <DashboardSidebarGroup data={dashboardSidebarData.preferences} />
-        <DashboardSidebarGroup
+        <AuthSidebarSingle data={sidebarData.dashboard} />
+        <AuthSidebarGroup data={sidebarData.workspace} />
+        <AuthSidebarGroup data={sidebarData.preferences} />
+        <AuthSidebarGroup
           className="mt-auto"
-          data={dashboardSidebarData.support}
+          data={sidebarData.support}
         />
       </SidebarContent>
       <SidebarFooter>

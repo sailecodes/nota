@@ -3,8 +3,7 @@ import PricingCard from "./pricing-card";
 const pricingTiers = [
   {
     title: "Starter",
-    description:
-      "Get started with Nota and make meetings more manageable — no commitments, just smarter workflows.",
+    description: "Get started with Nota and make meetings more manageable — no commitments, just smarter workflows.",
     pricing: "Free",
     btnText: "Get started now",
     features: [
@@ -53,8 +52,7 @@ export default function Pricing() {
     <div className="flex flex-col gap-5 py-24">
       <header className="text-5xl font-bold">Start free. Scale with your ambitions.</header>
       <p className="text-muted-foreground text-lg font-semibold">
-        Get started with smart meeting summaries and action tracking. Upgrade when your workflow
-        grows.
+        Get started with smart meeting summaries and action tracking. Upgrade when your workflow grows.
       </p>
       <div className="grid grid-cols-3 auto-rows-[620px] gap-4">
         {pricingTiers.map((tier) => (

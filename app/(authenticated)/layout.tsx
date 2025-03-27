@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import DashboardSidebar from "@/components/dashboard/dashboard-sidebar";
+import AuthSidebar from "@/components/auth-layout/auth-sidebar";
 
 export default async function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
@@ -8,8 +8,8 @@ export default async function AuthenticatedLayout({ children }: { children: Reac
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
-      <DashboardSidebar />
-      <main>
+      <AuthSidebar />
+      <main className="px-6 py-4">
         <SidebarTrigger />
         {children}
       </main>

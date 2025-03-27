@@ -12,8 +12,7 @@ export default function Hero() {
           Meeting Notes, Instantly
         </p>
         <p className="text-muted-foreground text-lg/relaxed font-semibold">
-          Turn conversations into actionable insights — summaries, transcripts, and more, all in one
-          place.
+          Turn conversations into actionable insights — summaries, transcripts, and more, all in one place.
         </p>
         <div className="flex gap-2">
           <Link
