@@ -13,8 +13,8 @@ export default async function AuthenticatedLayout({ children }: { children: Reac
       className="min-w-screen bg-primary-foreground">
       <AuthSidebar />
       <main className="w-full bg-background rounded-md m-2">
-        <SidebarTrigger className="mx-4 mt-2" />
-        <Separator className="my-2" />
+        <SidebarTrigger className="mx-4 mt-[9px]" />
+        <Separator className="my-[9px]" />
         {children}
       </main>
     </SidebarProvider>

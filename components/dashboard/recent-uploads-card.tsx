@@ -1,6 +1,6 @@
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from "lucide-react";
-import { Button, buttonVariants } from "../ui/button";
+import { buttonVariants } from "../ui/button";
 import Link from "next/link";
 
 export default function RecentUploadsCard() {
@@ -17,12 +17,17 @@ export default function RecentUploadsCard() {
           </span>
         </CardTitle>
       </CardHeader>
-      <CardFooter>
-        <Link
-          href="/dashboard/summaries"
-          className={buttonVariants({ variant: "secondary", className: "w-full" })}>
-          View summaries
-        </Link>
+      <CardContent>
+        <span className="text-sm text-muted-foreground">Latest meetings are summarized and ready</span>
+      </CardContent>
+      <CardFooter className="px-[23px]">
+        <div className="w-full p-[2px] rounded-md">
+          <Link
+            href="/dashboard/summaries"
+            className={buttonVariants({ variant: "secondary", className: "w-full" })}>
+            View summaries
+          </Link>
+        </div>
       </CardFooter>
     </Card>
   );

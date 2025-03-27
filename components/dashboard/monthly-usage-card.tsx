@@ -1,6 +1,7 @@
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Gauge } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
+import Link from "next/link";
 
 export default function MonthlyUsageCard() {
   return (
@@ -18,14 +19,16 @@ export default function MonthlyUsageCard() {
           </span>
         </CardTitle>
       </CardHeader>
-      <CardFooter>
-        {/* TODO: Fix bg bug */}
-        <div className="p-[2px] rounded-md hover:cursor-pointer hover:bg-gradient-to-r hover:from-blue-600 hover:via-green-500 hover:to-indigo-400 animate-gradient-x">
-          <Button
-            variant="secondary"
-            className="hover:cursor-pointer">
+      <CardContent>
+        <span className="text-sm text-muted-foreground">Keep an eye on your upload count</span>
+      </CardContent>
+      <CardFooter className="px-[23px]">
+        <div className="w-full p-[2px] rounded-md hover:cursor-pointer hover:bg-gradient-to-r hover:from-blue-600 hover:via-green-500 hover:to-indigo-400 animate-gradient-x">
+          <Link
+            href="/dashboard/subscription"
+            className={buttonVariants({ variant: "secondary", className: "w-full hover:bg-secondary/100" })}>
             Upgrade subscription
-          </Button>
+          </Link>
         </div>
       </CardFooter>
     </Card>

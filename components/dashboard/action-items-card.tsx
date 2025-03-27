@@ -1,6 +1,6 @@
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ListTodo } from "lucide-react";
-import { Button, buttonVariants } from "../ui/button";
+import { buttonVariants } from "../ui/button";
 import Link from "next/link";
 
 export default function ActionItemsCard() {
@@ -17,12 +17,17 @@ export default function ActionItemsCard() {
           </span>
         </CardTitle>
       </CardHeader>
-      <CardFooter>
-        <Link
-          href="/dashboard/action-items"
-          className={buttonVariants({ variant: "secondary", className: "w-full" })}>
-          See actions
-        </Link>
+      <CardContent>
+        <span className="text-sm text-muted-foreground">Tasks from recent meetings need attention</span>
+      </CardContent>
+      <CardFooter className="px-[23px]">
+        <div className="w-full p-[2px] rounded-md">
+          <Link
+            href="/dashboard/action-items"
+            className={buttonVariants({ variant: "secondary", className: "w-full" })}>
+            See actions
+          </Link>
+        </div>
       </CardFooter>
     </Card>
   );
