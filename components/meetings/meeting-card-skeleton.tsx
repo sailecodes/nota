@@ -21,10 +21,10 @@ export default function MeetingCardSkeleton() {
           <Calendar className="h-4 w-4" />
           <Skeleton className="h-[18px] w-[100px]" />
         </div>
-        <p className="space-y-2 mb-3">
+        <div className="space-y-2 mb-3">
           <Skeleton className="h-[18px] w-full" />
           <Skeleton className="h-[18px] w-full" />
-        </p>
+        </div>
         <div className="flex items-center gap-2">
           <ListTodo className="h-4 w-4" />
           <Skeleton className="h-[18px] w-[100px]" />
