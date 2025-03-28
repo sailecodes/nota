@@ -1,6 +1,6 @@
-import ActionItemsCard from "@/components/dashboard/action-items-card";
-import MonthlyUsageCard from "@/components/dashboard/monthly-usage-card";
-import RecentUploadsCard from "@/components/dashboard/recent-uploads-card";
+import ActionItemsCard from "@/components/overview/action-items-card";
+import MonthlyUsageCard from "@/components/overview/monthly-usage-card";
+import RecentUploadsCard from "@/components/overview/recent-uploads-card";
 
 export default function Dashboard() {
   return (

@@ -29,8 +29,8 @@ import AuthSidebarHeader from "./auth-sidebar-header";
 const sidebarData = {
   dashboard: {
     icon: LayoutDashboardIcon,
-    title: "Dashboard",
-    href: "/dashboard",
+    title: "Overview",
+    href: "/dashboard/overview",
     inSidebarContent: true,
   },
   workspace: {
