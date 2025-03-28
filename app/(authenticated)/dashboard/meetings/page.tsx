@@ -57,7 +57,12 @@ export default function Meetings() {
       {/* TODO: Implement search bar and filter */}
       {meetingsData.map((meeting) =>
         meeting.status === "Processing" ? (
-          <MeetingCardSkeleton key={meeting.id} />
+          <MeetingCardSkeleton
+            key={meeting.id}
+            title={meeting.title}
+            uploadedBy={meeting.uploadedBy}
+            dateUploaded={meeting.dateUploaded}
+          />
         ) : (
           <MeetingCard
             key={meeting.id}
