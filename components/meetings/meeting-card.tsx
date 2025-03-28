@@ -51,7 +51,7 @@ export default function MeetingCard({
       </CardContent>
       <CardFooter className="mt-auto">
         <Link
-          href={`/dashboard/meetings/${1}`}
+          href={`/dashboard/meetings/${id}`}
           className={buttonVariants({ variant: "secondary", className: "w-full" })}>
           View details
         </Link>

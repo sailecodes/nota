@@ -7,7 +7,7 @@ export default function Dashboard() {
     <section className="flex flex-col gap-24 p-4">
       <div>
         {/* <header className="text-4xl font-bold mb-7">Activity summary</header> */}
-        <div className="grid grid-cols-[1fr_1fr_1fr] gap-4">
+        <div className="grid grid-cols-[1fr_1fr_1fr] gap-2">
           <RecentUploadsCard />
           <ActionItemsCard />
           <MonthlyUsageCard />

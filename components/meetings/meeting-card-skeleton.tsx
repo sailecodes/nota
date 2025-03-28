@@ -1,9 +1,7 @@
 import { Badge } from "@/components/ui/badge";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { getStatusBadgeColor } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
 import { Calendar, ListTodo } from "lucide-react";
-import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
 
 export default function MeetingCardSkeleton() {

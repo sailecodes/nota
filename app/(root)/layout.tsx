@@ -38,7 +38,7 @@ export default function UnauthenticatedLayout({ children }: Readonly<{ children:
           </SignedOut>
           <SignedIn>
             <Link
-              href="/dashboard"
+              href="/dashboard/overview"
               className={buttonVariants({ size: "lg", className: "mr-4" })}>
               View dashboard
             </Link>
@@ -51,8 +51,7 @@ export default function UnauthenticatedLayout({ children }: Readonly<{ children:
         <div className="max-w-[350px]">
           <p className="text-3xl font-bold mb-4">Nota</p>
           <p className="text-muted-foreground text-sm">
-            AI Platform with a mission to deliver structured, actionable meeting summaries to
-            everyone.
+            AI Platform with a mission to deliver structured, actionable meeting summaries to everyone.
           </p>
         </div>
       </footer>
