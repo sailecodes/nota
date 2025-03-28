@@ -7,7 +7,7 @@ const meetingsData = [
     title: "powercoms-standup-022425.mp3",
     status: "Processing",
     uploadedBy: "Elias R.",
-    dateUploaded: "February 24, 2025",
+    dateUploaded: "Feb 24, 2025",
     summary: "Outlined deliverables for sprint 14, identified blockers, and delegated tasks to team members.",
     numOfActionItems: 2,
   },

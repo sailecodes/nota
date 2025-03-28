@@ -21,7 +21,7 @@ export default function MeetingCardSkeleton({ title, uploadedBy, dateUploaded }:
         <CardDescription>Uploaded by {uploadedBy}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
           <Calendar className="h-4 w-4" />
           <span>{dateUploaded}</span>
         </div>
@@ -29,7 +29,7 @@ export default function MeetingCardSkeleton({ title, uploadedBy, dateUploaded }:
           <Skeleton className="h-[18px] w-full" />
           <Skeleton className="h-[18px] w-full" />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 text-muted-foreground">
           <ListTodo className="h-4 w-4" />
           <Skeleton className="h-[18px] w-[100px]" />
         </div>

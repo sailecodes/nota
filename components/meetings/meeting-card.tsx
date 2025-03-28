@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { getStatusBadgeColor } from "@/lib/utils";
+import { getMeetingStatusBadgeColor, MeetingStatus } from "@/lib/utils";
 import { Calendar, ListTodo } from "lucide-react";
 import Link from "next/link";
 
@@ -30,7 +30,7 @@ export default function MeetingCard({
         <div className="flex items-center justify-between gap-6">
           {/* TODO: line-clamp cuts off previous line */}
           <CardTitle className="line-clamp-2">{title}</CardTitle>
-          <Badge className={getStatusBadgeColor(status)}>{status}</Badge>
+          <Badge className={getMeetingStatusBadgeColor(status as MeetingStatus)}>{status}</Badge>
         </div>
         <CardDescription>Uploaded by {uploadedBy}</CardDescription>
       </CardHeader>
