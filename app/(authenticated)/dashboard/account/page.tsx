@@ -76,7 +76,7 @@ export default function AccountPage() {
   // };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 p-6">
+    <div className="flex flex-col gap-3 max-w-7xl mx-auto p-4">
       {/* Profile Settings */}
       <Card className="bg-background">
         <CardHeader>
@@ -86,7 +86,7 @@ export default function AccountPage() {
           <Form {...userInformationForm}>
             <form
               onSubmit={userInformationForm.handleSubmit(handleUpdateUserInformation)}
-              className="space-y-4">
+              className="grid grid-cols-2 gap-4 items-end">
               <FormField
                 control={userInformationForm.control}
                 name="firstName"
@@ -134,7 +134,8 @@ export default function AccountPage() {
                   (userInformation.firstName === user?.firstName &&
                     userInformation.lastName === user?.lastName &&
                     userInformation.username === user?.username)
-                }>
+                }
+                className="justify-self-end">
                 {isUpdatingUserInformation ? "Updating..." : "Update"}
               </Button>
             </form>
