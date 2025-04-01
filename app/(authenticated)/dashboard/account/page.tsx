@@ -20,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { userInformationSchema } from "@/lib/zodSchemas";
+import { userEmailSchema, userInformationSchema } from "@/lib/zodSchemas";
 
 export default function AccountPage() {
   const { user } = useUser();
@@ -34,8 +34,17 @@ export default function AccountPage() {
     },
   });
 
+  const userEmailForm = useForm<z.infer<typeof userEmailSchema>>({
+    resolver: zodResolver(userEmailSchema),
+    defaultValues: {
+      emailAddress: user?.primaryEmailAddress?.emailAddress ?? "",
+    },
+  });
+
   const [isUpdatingUserInformation, setIsUpdatingUserInformation] = useState<boolean>(false);
+  const [isChangingEmail, setIsChangingEmail] = useState<boolean>(false);
   const userInformation = userInformationForm.watch();
+  const userEmail = userEmailForm.watch();
 
   const handleUpdateUserInformation = (data: z.infer<typeof userInformationSchema>) => {
     try {
@@ -47,9 +56,6 @@ export default function AccountPage() {
       console.error("Account update error: ", err);
     }
   };
-
-  const [newEmail, setNewEmail] = useState("");
-  const handleEmailUpdate = () => {};
 
   // const handleSave = async () => {
   //   if (!user) return;
@@ -92,7 +98,7 @@ export default function AccountPage() {
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First name</FormLabel>
+                    <FormLabel className="text-muted-foreground">First name</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -105,7 +111,7 @@ export default function AccountPage() {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Last name</FormLabel>
+                    <FormLabel className="text-muted-foreground">Last name</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -118,7 +124,7 @@ export default function AccountPage() {
                 name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel className="text-muted-foreground">Username</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -136,31 +142,43 @@ export default function AccountPage() {
                     userInformation.username === user?.username)
                 }
                 className="justify-self-end">
-                {isUpdatingUserInformation ? "Updating..." : "Update"}
+                {isUpdatingUserInformation ? "Updating..." : "Update information"}
               </Button>
             </form>
           </Form>
         </CardContent>
       </Card>
 
-      {/* <Card>
+      {/* Email address */}
+      {/* <Card className="bg-background">
         <CardHeader>
-          <CardTitle>Email Address</CardTitle>
+          <CardTitle>Email address</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div>
-            <p className="text-sm text-muted-foreground">Current:</p>
-            <p>{user?.primaryEmailAddress?.emailAddress}</p>
-          </div>
-          <div className="space-y-2">
-            <Input
-              type="email"
-              placeholder="Enter new email"
-              value={newEmail}
-              onChange={(e) => setNewEmail(e.target.value)}
-            />
-            <Button onClick={handleEmailUpdate}>Update Email</Button>
-          </div>
+          <Form {...userEmailForm}>
+            <form className="flex justify-between gap-4">
+              <FormField
+                control={userEmailForm.control}
+                name="emailAddress"
+                render={({ field }) => (
+                  <FormItem className="grow-1">
+                    <FormLabel className="text-muted-foreground">Primary</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                onClick={() => {}}
+                variant="secondary"
+                disabled={userEmail.emailAddress === user?.primaryEmailAddress?.emailAddress}
+                className="self-end">
+                {isChangingEmail ? "Changing..." : "Change email"}
+              </Button>
+            </form>
+          </Form>
           <p className="text-xs text-muted-foreground">
             You'll receive a verification email to confirm the change.
           </p>

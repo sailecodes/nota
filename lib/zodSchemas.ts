@@ -5,3 +5,7 @@ export const userInformationSchema = z.object({
   lastName: z.string().nonempty({ message: "Last name cannot be blank" }),
   username: z.string().nonempty({ message: "Username cannot be blank" }),
 });
+
+export const userEmailSchema = z.object({
+  emailAddress: z.string().email({ message: "Must be a valid email " }),
+});
