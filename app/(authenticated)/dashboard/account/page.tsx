@@ -35,6 +35,18 @@ export default function AccountPage() {
     },
   });
 
+  const [isUpdatingUserInformation, setIsUpdatingUserInformation] = useState<boolean>(false);
+  const [isChangingEmail, setIsChangingEmail] = useState<boolean>(false);
+  const [userData, setUserData] = useState<{
+    firstName: string;
+    lastName: string;
+    username: string;
+    emailAddress: string;
+  } | null>(null);
+
+  const userInformation = userInformationForm.watch();
+  const userEmail = userEmailForm.watch();
+
   useEffect(() => {
     if (isLoaded) {
       userInformationForm.reset({
@@ -42,23 +54,34 @@ export default function AccountPage() {
         lastName: user?.lastName || "",
         username: user?.username || "",
       });
+
       userEmailForm.reset({
+        emailAddress: user?.primaryEmailAddress?.emailAddress || "",
+      });
+
+      setUserData({
+        firstName: user?.firstName || "",
+        lastName: user?.lastName || "",
+        username: user?.username || "",
         emailAddress: user?.primaryEmailAddress?.emailAddress || "",
       });
     }
   }, [isLoaded]);
-
-  const [isUpdatingUserInformation, setIsUpdatingUserInformation] = useState<boolean>(false);
-  const [isChangingEmail, setIsChangingEmail] = useState<boolean>(false);
-
-  const userInformation = userInformationForm.watch();
-  const userEmail = userEmailForm.watch();
 
   const handleUpdateUserInformation = async (data: z.infer<typeof userInformationSchema>) => {
     try {
       setIsUpdatingUserInformation(true);
       updateUserInformation(data);
       setIsUpdatingUserInformation(false);
+
+      const updatedUser = await user?.reload();
+
+      setUserData({
+        firstName: updatedUser?.firstName || "",
+        lastName: updatedUser?.lastName || "",
+        username: updatedUser?.username || "",
+        emailAddress: userData?.emailAddress || "",
+      });
     } catch (err) {
       console.error("User information update error: ", err);
     }
@@ -69,6 +92,15 @@ export default function AccountPage() {
       setIsChangingEmail(true);
       changeUserEmail(data);
       setIsChangingEmail(false);
+
+      const updatedUser = await user?.reload();
+
+      setUserData({
+        firstName: userData?.firstName || "",
+        lastName: userData?.lastName || "",
+        username: userData?.username || "",
+        emailAddress: updatedUser?.primaryEmailAddress?.emailAddress || "",
+      });
     } catch (err) {
       console.error("Email change error", err);
     }
@@ -156,9 +188,9 @@ export default function AccountPage() {
                     variant="secondary"
                     disabled={
                       isUpdatingUserInformation ||
-                      (userInformation.firstName === user?.firstName &&
-                        userInformation.lastName === user?.lastName &&
-                        userInformation.username === user?.username)
+                      (userInformation.firstName === userData?.firstName &&
+                        userInformation.lastName === userData?.lastName &&
+                        userInformation.username === userData?.username)
                     }
                     className="self-end justify-self-end">
                     {isUpdatingUserInformation ? "Updating..." : "Update information"}
@@ -193,7 +225,7 @@ export default function AccountPage() {
                   <Button
                     type="submit"
                     variant="secondary"
-                    disabled={userEmail.emailAddress === user?.primaryEmailAddress?.emailAddress}
+                    disabled={userEmail.emailAddress === userData?.emailAddress}
                     className="self-end">
                     {isChangingEmail ? "Changing..." : "Change email"}
                   </Button>
