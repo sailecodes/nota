@@ -1,29 +1,29 @@
 "use server";
 
-import { userEmailSchema, userInformationSchema } from "@/lib/zodSchemas";
+import { profileInformationSchema, emailAddressSchema } from "@/lib/zodSchemas";
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import { revalidatePath } from "next/cache";
-import { redirect, RedirectType } from "next/navigation";
 import { z } from "zod";
 
-export const updateUserInformation = async (data: z.infer<typeof userInformationSchema>) => {
+export const updateProfileInformation = async (data: z.infer<typeof profileInformationSchema>) => {
   const { userId } = await auth();
 
   // TODO: Add better error statement
   if (!userId) throw new Error("Unauthorized access");
 
-  const { firstName, lastName, username } = userInformationSchema.parse(data);
+  const { firstName, lastName, username } = profileInformationSchema.parse(data);
 
   await (await clerkClient()).users.updateUser(userId, { firstName, lastName, username });
 };
 
-export const changeUserEmail = async (data: z.infer<typeof userEmailSchema>) => {
+export const changeEmailAddress = async (data: z.infer<typeof emailAddressSchema>) => {
   const { userId } = await auth();
 
   // TODO: Add better error statement
   if (!userId) throw new Error("Unauthorized access");
 
-  const { emailAddress } = userEmailSchema.parse(data);
+  const { emailAddress } = emailAddressSchema.parse(data);
 
-  await (await clerkClient()).users.updateUser(userId, {});
+  await (
+    await clerkClient()
+  ).emailAddresses.createEmailAddress({ userId, emailAddress, primary: false, verified: false });
 };

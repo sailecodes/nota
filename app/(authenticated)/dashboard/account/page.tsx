@@ -1,195 +1,27 @@
 "use client";
 
-import { useAuth, useUser } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import { changeUserEmail, updateUserInformation } from "@/actions/account";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { userEmailSchema, userInformationSchema } from "@/lib/zodSchemas";
+import { useUser } from "@clerk/nextjs";
 import AccountSkeleton from "@/components/account/account-skeleton";
+import ProfileInformation from "@/components/account/profile-information";
+import EmailAddress from "@/components/account/email-address";
 
 export default function AccountPage() {
   const { user, isLoaded } = useUser();
-  const [isUpdatingUserInformation, setIsUpdatingUserInformation] = useState<boolean>(false);
-  const [isChangingEmail, setIsChangingEmail] = useState<boolean>(false);
-
-  const userInformationForm = useForm<z.infer<typeof userInformationSchema>>({
-    resolver: zodResolver(userInformationSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      username: "",
-    },
-  });
-
-  const userEmailForm = useForm<z.infer<typeof userEmailSchema>>({
-    resolver: zodResolver(userEmailSchema),
-    defaultValues: {
-      emailAddress: "",
-    },
-  });
-
-  const userInformation = userInformationForm.watch();
-  const userEmail = userEmailForm.watch();
-
-  useEffect(() => {
-    if (isLoaded) {
-      userInformationForm.reset({
-        firstName: user?.firstName || "",
-        lastName: user?.lastName || "",
-        username: user?.username || "",
-      });
-
-      userEmailForm.reset({
-        emailAddress: user?.primaryEmailAddress?.emailAddress || "",
-      });
-    }
-  }, [isLoaded]);
-
-  const handleUpdateUserInformation = async (data: z.infer<typeof userInformationSchema>) => {
-    try {
-      setIsUpdatingUserInformation(true);
-      await updateUserInformation(data);
-      setIsUpdatingUserInformation(false);
-      await user?.reload();
-    } catch (err) {
-      console.error("User information update error: ", err);
-    }
-  };
-
-  const handleChangeUserEmail = async (data: z.infer<typeof userEmailSchema>) => {
-    try {
-      setIsChangingEmail(true);
-      await changeUserEmail(data);
-      setIsChangingEmail(false);
-      await user?.reload();
-    } catch (err) {
-      console.error("Email change error", err);
-    }
-  };
 
   return (
     <>
       {!isLoaded && <AccountSkeleton />}
       {isLoaded && (
         <div className="flex flex-col gap-3 max-w-7xl mx-auto p-4">
-          {/* Profile Settings */}
-          <Card className="bg-background">
-            <CardHeader>
-              <CardTitle>Profile information</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Form {...userInformationForm}>
-                <form
-                  onSubmit={userInformationForm.handleSubmit(handleUpdateUserInformation)}
-                  className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={userInformationForm.control}
-                    name="firstName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-muted-foreground">First name</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={userInformationForm.control}
-                    name="lastName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-muted-foreground">Last name</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={userInformationForm.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-muted-foreground">Username</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button
-                    type="submit"
-                    variant="secondary"
-                    disabled={
-                      isUpdatingUserInformation ||
-                      (userInformation.firstName === user?.firstName &&
-                        userInformation.lastName === user?.lastName &&
-                        userInformation.username === user?.username)
-                    }
-                    className="self-end justify-self-end w-[158px]">
-                    {isUpdatingUserInformation ? "Updating..." : "Update information"}
-                  </Button>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
-          {/* Email address */}
-          <Card className="bg-background">
-            <CardHeader>
-              <CardTitle>Email address</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Form {...userEmailForm}>
-                <form
-                  className="flex justify-between gap-4"
-                  onSubmit={userEmailForm.handleSubmit(handleChangeUserEmail)}>
-                  <FormField
-                    control={userEmailForm.control}
-                    name="emailAddress"
-                    render={({ field }) => (
-                      <FormItem className="grow-1">
-                        <FormLabel className="text-muted-foreground">Primary</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button
-                    type="submit"
-                    variant="secondary"
-                    disabled={userEmail.emailAddress === user?.primaryEmailAddress?.emailAddress}
-                    className="self-end w-[119px]">
-                    {isChangingEmail ? "Changing..." : "Change email"}
-                  </Button>
-                </form>
-              </Form>
-              <p className="text-xs text-muted-foreground">
-                You'll receive a verification email to confirm the change.
-              </p>
-            </CardContent>
-          </Card>
+          <ProfileInformation
+            user={user}
+            isLoaded={isLoaded}
+          />
+          <EmailAddress
+            user={user}
+            isLoaded={isLoaded}
+          />
+
           {/* <Card className="bg-background">
         <CardHeader>
           <CardTitle>Password</CardTitle>

@@ -12,15 +12,15 @@ export default function AccountSkeleton() {
         <CardContent>
           <div className="grid grid-cols-2 gap-4">
             <div className="h-[58px] space-y-2 text-muted-foreground">
-              <span className="text-sm leading-none block">First name</span>
+              <span className="font-medium text-sm leading-none block">First name</span>
               <Skeleton className="h-[36px]" />
             </div>
             <div className="h-[58px] space-y-2 text-muted-foreground">
-              <span className="text-sm leading-none block">Last name</span>
+              <span className="font-medium text-sm leading-none block">Last name</span>
               <Skeleton className="h-[36px]" />
             </div>
             <div className="h-[58px] space-y-2 text-muted-foreground">
-              <span className="text-sm leading-none block">Username</span>
+              <span className="font-medium text-sm leading-none block">Username</span>
               <Skeleton className="h-[36px]" />
             </div>
             <Button
