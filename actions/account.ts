@@ -1,9 +1,9 @@
 "use server";
 
-import { userInformationSchema } from "@/lib/zodSchemas";
+import { userEmailSchema, userInformationSchema } from "@/lib/zodSchemas";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 import { z } from "zod";
 
 export const updateUserInformation = async (data: z.infer<typeof userInformationSchema>) => {
@@ -15,6 +15,15 @@ export const updateUserInformation = async (data: z.infer<typeof userInformation
   const { firstName, lastName, username } = userInformationSchema.parse(data);
 
   await (await clerkClient()).users.updateUser(userId, { firstName, lastName, username });
+};
 
-  revalidatePath("/dashboard/account");
+export const changeUserEmail = async (data: z.infer<typeof userEmailSchema>) => {
+  const { userId } = await auth();
+
+  // TODO: Add better error statement
+  if (!userId) throw new Error("Unauthorized access");
+
+  const { emailAddress } = userEmailSchema.parse(data);
+
+  await (await clerkClient()).users.updateUser(userId, {});
 };
