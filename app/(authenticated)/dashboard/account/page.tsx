@@ -1,6 +1,6 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,12 +12,21 @@ import { changeUserEmail, updateUserInformation } from "@/actions/account";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { userEmailSchema, userInformationSchema } from "@/lib/zodSchemas";
 import AccountSkeleton from "@/components/account/account-skeleton";
 
 export default function AccountPage() {
   const { user, isLoaded } = useUser();
+  const [isUpdatingUserInformation, setIsUpdatingUserInformation] = useState<boolean>(false);
+  const [isChangingEmail, setIsChangingEmail] = useState<boolean>(false);
 
   const userInformationForm = useForm<z.infer<typeof userInformationSchema>>({
     resolver: zodResolver(userInformationSchema),
@@ -35,15 +44,6 @@ export default function AccountPage() {
     },
   });
 
-  const [isUpdatingUserInformation, setIsUpdatingUserInformation] = useState<boolean>(false);
-  const [isChangingEmail, setIsChangingEmail] = useState<boolean>(false);
-  const [userData, setUserData] = useState<{
-    firstName: string;
-    lastName: string;
-    username: string;
-    emailAddress: string;
-  } | null>(null);
-
   const userInformation = userInformationForm.watch();
   const userEmail = userEmailForm.watch();
 
@@ -58,30 +58,15 @@ export default function AccountPage() {
       userEmailForm.reset({
         emailAddress: user?.primaryEmailAddress?.emailAddress || "",
       });
-
-      setUserData({
-        firstName: user?.firstName || "",
-        lastName: user?.lastName || "",
-        username: user?.username || "",
-        emailAddress: user?.primaryEmailAddress?.emailAddress || "",
-      });
     }
   }, [isLoaded]);
 
   const handleUpdateUserInformation = async (data: z.infer<typeof userInformationSchema>) => {
     try {
       setIsUpdatingUserInformation(true);
-      updateUserInformation(data);
+      await updateUserInformation(data);
       setIsUpdatingUserInformation(false);
-
-      const updatedUser = await user?.reload();
-
-      setUserData({
-        firstName: updatedUser?.firstName || "",
-        lastName: updatedUser?.lastName || "",
-        username: updatedUser?.username || "",
-        emailAddress: userData?.emailAddress || "",
-      });
+      await user?.reload();
     } catch (err) {
       console.error("User information update error: ", err);
     }
@@ -90,48 +75,17 @@ export default function AccountPage() {
   const handleChangeUserEmail = async (data: z.infer<typeof userEmailSchema>) => {
     try {
       setIsChangingEmail(true);
-      changeUserEmail(data);
+      await changeUserEmail(data);
       setIsChangingEmail(false);
-
-      const updatedUser = await user?.reload();
-
-      setUserData({
-        firstName: userData?.firstName || "",
-        lastName: userData?.lastName || "",
-        username: userData?.username || "",
-        emailAddress: updatedUser?.primaryEmailAddress?.emailAddress || "",
-      });
+      await user?.reload();
     } catch (err) {
       console.error("Email change error", err);
     }
   };
 
-  // const handleSave = async () => {
-  //   if (!user) return;
-
-  //   setIsSaving(true);
-
-  //   try {
-  //     await user.update({ firstName, lastName, username });
-  //   } catch (err) {
-  //     console.error("Update error:", err);
-  //   } finally {
-  //     setIsSaving(false);
-  //   }
-  // };
-
-  // const handleDeleteAccount = async () => {
-  //   if (confirm("Are you sure you want to delete your account? This cannot be undone.")) {
-  //     try {
-  //       await user?.delete();
-  //     } catch (err) {
-  //       console.log("Account deletion error: ", err);
-  //     }
-  //   }
-  // };
-
   return (
     <>
+      {!isLoaded && <AccountSkeleton />}
       {isLoaded && (
         <div className="flex flex-col gap-3 max-w-7xl mx-auto p-4">
           {/* Profile Settings */}
@@ -188,11 +142,11 @@ export default function AccountPage() {
                     variant="secondary"
                     disabled={
                       isUpdatingUserInformation ||
-                      (userInformation.firstName === userData?.firstName &&
-                        userInformation.lastName === userData?.lastName &&
-                        userInformation.username === userData?.username)
+                      (userInformation.firstName === user?.firstName &&
+                        userInformation.lastName === user?.lastName &&
+                        userInformation.username === user?.username)
                     }
-                    className="self-end justify-self-end">
+                    className="self-end justify-self-end w-[158px]">
                     {isUpdatingUserInformation ? "Updating..." : "Update information"}
                   </Button>
                 </form>
@@ -225,8 +179,8 @@ export default function AccountPage() {
                   <Button
                     type="submit"
                     variant="secondary"
-                    disabled={userEmail.emailAddress === userData?.emailAddress}
-                    className="self-end">
+                    disabled={userEmail.emailAddress === user?.primaryEmailAddress?.emailAddress}
+                    className="self-end w-[119px]">
                     {isChangingEmail ? "Changing..." : "Change email"}
                   </Button>
                 </form>
