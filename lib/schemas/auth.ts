@@ -9,3 +9,11 @@ export const signUpSchema = z.object({
   firstName: z.string().nonempty({ message: "Please provide a first name" }),
   lastName: z.string().nonempty({ message: "Please provide a last name" }),
 });
+
+export const signInSchema = z.object({
+  email: z
+    .string()
+    .nonempty({ message: "Please provide an email address" })
+    .email({ message: "Please provide a valid email address" }),
+  password: z.string().nonempty("Please provide a password"),
+});

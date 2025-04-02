@@ -1,6 +1,6 @@
 "use server";
 
-import { signUpSchema } from "@/lib/schemas/auth";
+import { signInSchema, signUpSchema } from "@/lib/schemas/auth";
 import { createClient } from "@/lib/utils/supabase/server";
 import { z } from "zod";
 
@@ -22,5 +22,45 @@ export async function signUp(data: z.infer<typeof signUpSchema>) {
   });
 
   // Only accounting for existing email error
-  if (error?.message) return { errMessage: "Email already exists" };
+  if (error?.message)
+    return {
+      errMsg: "Email already exists",
+      toastHeader: null,
+      toastDesc: null,
+      isToast: false,
+    };
+}
+
+export async function signIn(data: z.infer<typeof signInSchema>) {
+  let parsedData;
+
+  try {
+    const { email, password } = signInSchema.parse(data);
+    parsedData = {
+      email,
+      password,
+    };
+  } catch (err) {
+    return {
+      errMsg: "Something went wrong. Please double-check your email and password.",
+      toastHeader: "Something went wrong.",
+      toastDesc: "Please double-check your email and password.",
+      isToast: true,
+    };
+  }
+
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email: parsedData.email,
+    password: parsedData.password,
+  });
+
+  if (error?.message)
+    return {
+      errMsg: error?.message,
+      toastHeader: null,
+      toastDesc: null,
+      isToast: false,
+    };
 }
