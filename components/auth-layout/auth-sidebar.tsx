@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import AuthSidebarGroup from "./auth-sidebar-group";
 import AuthSidebarSingle from "./auth-sidebar-single";
-import { UserButton } from "@clerk/nextjs";
 import { buttonVariants } from "../ui/button";
 import AuthSidebarHeader from "./auth-sidebar-header";
 
@@ -116,9 +115,7 @@ export default function AuthSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="h-fit">
-              <UserButton />
-            </SidebarMenuButton>
+            <SidebarMenuButton className="h-fit">User...</SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

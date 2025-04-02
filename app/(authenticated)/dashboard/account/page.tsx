@@ -1,26 +1,23 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
 import AccountSkeleton from "@/components/account/account-skeleton";
 import ProfileInformation from "@/components/account/profile-information";
 import EmailAddress from "@/components/account/email-address";
 
 export default function AccountPage() {
-  const { user, isLoaded } = useUser();
-
   return (
     <>
       {!isLoaded && <AccountSkeleton />}
       {isLoaded && (
         <div className="flex flex-col gap-3 max-w-7xl mx-auto p-4">
-          <ProfileInformation
+          {/* <ProfileInformation
             user={user}
             isLoaded={isLoaded}
           />
           <EmailAddress
             user={user}
             isLoaded={isLoaded}
-          />
+          /> */}
 
           {/* <Card className="bg-background">
         <CardHeader>

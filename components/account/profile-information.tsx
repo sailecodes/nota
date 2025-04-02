@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
-import { profileInformationSchema } from "@/lib/zodSchemas";
+import { profileInformationSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { updateProfileInformation } from "@/actions/account";

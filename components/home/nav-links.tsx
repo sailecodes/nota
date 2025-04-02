@@ -86,7 +86,7 @@ const NavLinksStackContent = [
 export default function NavLinks() {
   return (
     <NavigationMenu>
-      <NavigationMenuList className="gap-2">
+      <NavigationMenuList className="gap-4">
         <NavigationMenuItem>
           <Link
             href="/pricing"

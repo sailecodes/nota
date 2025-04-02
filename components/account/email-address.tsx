@@ -6,16 +6,16 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
-import { emailAddressSchema } from "@/lib/zodSchemas";
+import { emailAddressSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { changeEmailAddress } from "@/actions/account";
 import { Verified } from "lucide-react";
-import { useAuth } from "@clerk/nextjs";
 import { Badge } from "../ui/badge";
+import { UserResource } from "@clerk/types";
 
 interface EmailAddressProps {
-  user: any;
+  user: UserResource | null;
   isLoaded: boolean;
 }
 
@@ -28,7 +28,6 @@ export default function EmailAddress({ user, isLoaded }: EmailAddressProps) {
   });
   const emailAddress = emailAddressForm.watch();
   const [isChangingEmailAddress, setIsChangingEmailAddress] = useState<boolean>(false);
-  const {} = useAuth();
 
   useEffect(() => {
     if (isLoaded) {
@@ -48,8 +47,6 @@ export default function EmailAddress({ user, isLoaded }: EmailAddressProps) {
       console.error("Email change error: ", err);
     }
   };
-
-  console.log(user?.primaryEmailAddress?.verification.status);
 
   return (
     <Card className="bg-background">
