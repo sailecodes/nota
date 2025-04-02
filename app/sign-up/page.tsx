@@ -7,14 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signUp } from "@/actions/auth";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-  Form,
-} from "@/components/ui/form";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage, Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -61,18 +54,18 @@ export default function SignUp() {
     <main className="flex flex-col justify-center min-h-screen max-w-xl space-y-8 p-6 mx-auto my-auto">
       <div className="flex flex-col gap-2 items-center">
         <header className="text-4xl font-bold">Nota</header>
-        <p className="text-sm text-muted-foreground">
+        {/* <p className="text-sm text-muted-foreground">
           Already have an account?{" "}
           <Link
             href="/sign-in"
             className={"text-primary underline"}>
             Log in
           </Link>
-        </p>
+        </p> */}
       </div>
       <Form {...signUpForm}>
         <form
-          className="grid grid-cols-2 gap-6"
+          className="grid grid-cols-2 gap-6 mb-4"
           onSubmit={signUpForm.handleSubmit(handleSignUp)}>
           <FormField
             control={signUpForm.control}
@@ -150,10 +143,16 @@ export default function SignUp() {
       </Form>
       <p className="text-xs text-muted-foreground text-center">
         {/* TODO: Add dummy Terms of Service and Privacy Policy text */}
-        By clicking Sign up, you agree to our <span className="underline">
-          Terms of Service
-        </span>{" "}
-        and <span className="underline">Privacy Policy</span>.
+        By clicking Sign up, you agree to our <span className="underline">Terms of Service</span> and{" "}
+        <span className="underline">Privacy Policy</span>.
+      </p>
+      <p className="text-sm text-muted-foreground text-center">
+        Already have an account?{" "}
+        <Link
+          href="/sign-in"
+          className={"text-primary underline"}>
+          Log in
+        </Link>
       </p>
     </main>
   );

@@ -5,16 +5,24 @@ import { createClient } from "@/lib/utils/supabase/server";
 import { z } from "zod";
 
 export async function signUp(data: z.infer<typeof signUpSchema>) {
-  const { email, password, firstName, lastName } = signUpSchema.parse(data);
+  let parsedData;
+
+  try {
+    const { email, password, firstName, lastName } = signUpSchema.parse(data);
+    parsedData = { email, password, firstName, lastName };
+  } catch (err) {
+    return { errMsg: "Something went wrong. Please try again!" };
+  }
 
   const supabase = await createClient();
+
   const { error } = await supabase.auth.signUp({
-    email,
-    password,
+    email: parsedData.email,
+    password: parsedData.password,
     options: {
       data: {
-        firstName,
-        lastName,
+        firstName: parsedData.firstName,
+        lastName: parsedData.lastName,
       },
       // TODO: Change url for prod
       emailRedirectTo: process.env.SUPABASE_AUTH_REDIRECT_URL,
@@ -22,13 +30,7 @@ export async function signUp(data: z.infer<typeof signUpSchema>) {
   });
 
   // Only accounting for existing email error
-  if (error?.message)
-    return {
-      errMsg: "Email already exists",
-      toastHeader: null,
-      toastDesc: null,
-      isToast: false,
-    };
+  if (error?.message) return { errMsg: "Email already exists" };
 }
 
 export async function signIn(data: z.infer<typeof signInSchema>) {
@@ -36,17 +38,9 @@ export async function signIn(data: z.infer<typeof signInSchema>) {
 
   try {
     const { email, password } = signInSchema.parse(data);
-    parsedData = {
-      email,
-      password,
-    };
+    parsedData = { email, password };
   } catch (err) {
-    return {
-      errMsg: "Something went wrong. Please double-check your email and password.",
-      toastHeader: "Something went wrong.",
-      toastDesc: "Please double-check your email and password.",
-      isToast: true,
-    };
+    return { errMsg: "Something went wrong. Please try again!" };
   }
 
   const supabase = await createClient();
@@ -56,11 +50,5 @@ export async function signIn(data: z.infer<typeof signInSchema>) {
     password: parsedData.password,
   });
 
-  if (error?.message)
-    return {
-      errMsg: error?.message,
-      toastHeader: null,
-      toastDesc: null,
-      isToast: false,
-    };
+  if (error?.message) return { errMsg: error?.message };
 }
