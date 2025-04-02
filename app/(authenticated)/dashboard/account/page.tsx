@@ -92,6 +92,7 @@ export default function AccountPage() {
           </div>
         </CardContent>
       </Card>
+      // Use alert dialog 
       <Card className="border-red-400">
         <CardHeader>
           <CardTitle className="text-red-400">Danger Zone</CardTitle>
