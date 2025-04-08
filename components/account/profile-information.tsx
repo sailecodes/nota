@@ -37,8 +37,8 @@ export default function ProfileInformation({ user }: ProfileInformationProps) {
     setIsUpdatingUserInformation(false);
 
     if (res) {
-      toast.error(res.msg, { icon: <CircleX className="w-4 h-4 stroke-red-300" /> });
       console.error("User information update error: ", res.msg);
+      toast.error(res.msg, { icon: <CircleX className="w-4 h-4 stroke-red-300" /> });
     } else {
       toast.success("Profile information updated!", {
         icon: <CheckCircle2 className="w-4 h-4 stroke-green-300" />,

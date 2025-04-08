@@ -11,15 +11,34 @@ export const updateProfileInformation = async (
 
   const {
     data: { user },
-    error,
+    error: getUserError,
   } = await supabase.auth.getUser();
 
   if (!user) return { success: false, msg: "Unauthorized access to private route." };
-  else if (error) return { success: false, msg: error?.message };
+  else if (getUserError) return { success: false, msg: getUserError.message };
 
-  await supabase.auth.updateUser({
+  const { error: updateUserError } = await supabase.auth.updateUser({
     data: { firstName: profileInformation.firstName, lastName: profileInformation.lastName },
   });
+
+  if (updateUserError) return { success: false, msg: updateUserError.message };
 };
 
-export const changeEmailAddress = async (data: z.infer<typeof emailAddressSchema>) => {};
+export const changeEmailAddress = async (emailAddress: z.infer<typeof emailAddressSchema>) => {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: getUserError,
+  } = await supabase.auth.getUser();
+
+  if (!user) return { success: false, msg: "Unauthorized access to private route." };
+  else if (getUserError) return { success: false, msg: getUserError.message };
+
+  const { error: updateUserError } = await supabase.auth.updateUser(
+    { email: emailAddress.emailAddress },
+    { emailRedirectTo: "http://localhost:3000/dashboard/account" }
+  );
+
+  if (updateUserError) return { success: false, msg: updateUserError.message };
+};

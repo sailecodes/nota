@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -10,41 +10,40 @@ import { emailAddressSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { changeEmailAddress } from "@/actions/account.actions";
-import { Verified } from "lucide-react";
+import { CheckCircle2, CircleX, Verified } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { UserResource } from "@clerk/types";
+import { User } from "@supabase/supabase-js";
+import { toast } from "sonner";
 
 interface EmailAddressProps {
-  user: UserResource | null;
-  isLoaded: boolean;
+  user: User;
 }
 
-export default function EmailAddress({ user, isLoaded }: EmailAddressProps) {
+export default function EmailAddress({ user }: EmailAddressProps) {
   const emailAddressForm = useForm<z.infer<typeof emailAddressSchema>>({
     resolver: zodResolver(emailAddressSchema),
     defaultValues: {
-      emailAddress: "",
+      emailAddress: user.email,
     },
   });
-  const emailAddress = emailAddressForm.watch();
+  const emailAddressFormVals = emailAddressForm.watch();
   const [isChangingEmailAddress, setIsChangingEmailAddress] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (isLoaded) {
-      emailAddressForm.reset({
-        emailAddress: user?.primaryEmailAddress?.emailAddress || "",
-      });
-    }
-  }, [isLoaded]);
-
   const handleChangeEmailAddress = async (data: z.infer<typeof emailAddressSchema>) => {
-    try {
-      setIsChangingEmailAddress(true);
-      await changeEmailAddress(data);
-      setIsChangingEmailAddress(false);
-      await user?.reload();
-    } catch (err) {
-      console.error("Email change error: ", err);
+    setIsChangingEmailAddress(true);
+
+    const res = await changeEmailAddress(data);
+
+    setIsChangingEmailAddress(false);
+
+    if (res) {
+      console.error("Email change error: ", res.msg);
+      toast.error(res.msg, { icon: <CircleX className="w-4 h-4 stroke-red-300" /> });
+    } else {
+      toast.success("Email verification sent!", {
+        description: `We've sent you a confirmation email at ${emailAddressFormVals.emailAddress}.`,
+        icon: <CheckCircle2 className="w-4 h-4 stroke-green-300" />,
+      });
     }
   };
 
@@ -65,7 +64,7 @@ export default function EmailAddress({ user, isLoaded }: EmailAddressProps) {
                 <FormItem className="grow-1">
                   <FormLabel className="gap-1 text-muted-foreground">
                     <span>Primary</span>
-                    {user?.primaryEmailAddress?.verification.status === "verified" ? (
+                    {user.confirmed_at ? (
                       <Verified className="w-4 h-4 stroke-green-300" />
                     ) : (
                       <Badge className=" ml-1">Not verified</Badge>
@@ -81,7 +80,7 @@ export default function EmailAddress({ user, isLoaded }: EmailAddressProps) {
             <Button
               type="submit"
               variant="secondary"
-              disabled={emailAddress.emailAddress === user?.primaryEmailAddress?.emailAddress}
+              disabled={emailAddressFormVals.emailAddress === user.email}
               className="self-end w-[119px]">
               {isChangingEmailAddress ? "Changing..." : "Change email"}
             </Button>
