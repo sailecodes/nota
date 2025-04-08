@@ -10,7 +10,7 @@ import {
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 import { LucideProps } from "lucide-react";
 
-interface AuthSidebarGroupProps {
+interface CustomSidebarGroupProps {
   header?: string;
   content: {
     icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
@@ -20,11 +20,11 @@ interface AuthSidebarGroupProps {
   inSidebarContent: boolean;
 }
 
-export default function AuthSidebarGroup({
+export default function CustomSidebarGroup({
   data,
   ...props
 }: {
-  data: AuthSidebarGroupProps;
+  data: CustomSidebarGroupProps;
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   return (
     <SidebarGroup {...props}>

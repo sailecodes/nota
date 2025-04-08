@@ -20,11 +20,12 @@ import {
   User,
   Wallet,
 } from "lucide-react";
-import AuthSidebarGroup from "./auth-sidebar-group";
-import AuthSidebarSingle from "./auth-sidebar-single";
-import { UserButton } from "@clerk/nextjs";
+import CustomSidebarGroup from "./custom-sidebar-group";
+import CustomSidebarSingle from "./custom-sidebar-single";
 import { buttonVariants } from "../ui/button";
-import AuthSidebarHeader from "./auth-sidebar-header";
+import CustomSidebarHeader from "./custom-sidebar-header";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { signOut } from "@/actions/auth.actions";
 
 const sidebarData = {
   dashboard: {
@@ -82,11 +83,11 @@ const sidebarData = {
   },
 };
 
-export default function AuthSidebar() {
+export default function CustomSidebar() {
   return (
     <Sidebar className="border-none">
       <SidebarHeader>
-        <AuthSidebarHeader />
+        <CustomSidebarHeader />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup className="p-4">
@@ -105,10 +106,10 @@ export default function AuthSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <AuthSidebarSingle data={sidebarData.dashboard} />
-        <AuthSidebarGroup data={sidebarData.workspace} />
-        <AuthSidebarGroup data={sidebarData.preferences} />
-        <AuthSidebarGroup
+        <CustomSidebarSingle data={sidebarData.dashboard} />
+        <CustomSidebarGroup data={sidebarData.workspace} />
+        <CustomSidebarGroup data={sidebarData.preferences} />
+        <CustomSidebarGroup
           className="mt-auto"
           data={sidebarData.support}
         />
@@ -117,7 +118,10 @@ export default function AuthSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton className="h-fit">
-              <UserButton />
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

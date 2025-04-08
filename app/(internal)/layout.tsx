@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import AuthSidebar from "@/components/auth-layout/auth-sidebar";
+import CustomSidebar from "@/components/sidebar/custom-sidebar";
 import { Separator } from "@/components/ui/separator";
 
 export default async function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
@@ -11,7 +11,7 @@ export default async function AuthenticatedLayout({ children }: { children: Reac
     <SidebarProvider
       defaultOpen={defaultOpen}
       className="bg-primary-foreground">
-      <AuthSidebar />
+      <CustomSidebar />
       <main className="w-full bg-background rounded-md m-2">
         <SidebarTrigger className="mx-4 mt-[9px]" />
         <Separator className="my-[9px]" />

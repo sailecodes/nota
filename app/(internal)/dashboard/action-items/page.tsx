@@ -45,7 +45,7 @@ const actionItemsData = [
 
 export default function ActionItems() {
   return (
-    <section className="grid auto-rows-[175px] gap-4 p-4">
+    <section className="grid auto-rows-[175px] gap-3 max-w-7xl mx-auto p-4">
       {actionItemsData.map((item) => (
         <ActionItemCard
           key={item.action}
