@@ -101,7 +101,7 @@ export const resetPassword = async (data: z.infer<typeof passwordSchema>) => {
   }
 
   const { error: updateUserError } = await supabase.auth.updateUser({
-    password: parsedData.password,
+    password: parsedData.newPassword,
   });
 
   if (updateUserError) return { success: false, msg: updateUserError.message };

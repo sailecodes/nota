@@ -41,16 +41,6 @@ export async function signUp(data: z.infer<typeof signUpSchema>) {
 }
 
 export async function signIn(data: z.infer<typeof signInSchema>) {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-    error: getUserError,
-  } = await supabase.auth.getUser();
-
-  if (!user) return { success: false, msg: "Unauthorized access." };
-  else if (getUserError) return { success: false, msg: getUserError.message };
-
   let parsedData;
 
   try {
@@ -59,12 +49,14 @@ export async function signIn(data: z.infer<typeof signInSchema>) {
     return { success: false, msg: "Data couldn't be parsed. Check field values." };
   }
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const supabase = await createClient();
+
+  const { error: signInError } = await supabase.auth.signInWithPassword({
     email: parsedData.email,
     password: parsedData.password,
   });
 
-  if (error?.message) return { msg: error?.message };
+  if (signInError?.message) return { msg: signInError?.message };
 }
 
 export async function signOut() {}

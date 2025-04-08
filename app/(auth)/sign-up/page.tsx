@@ -91,7 +91,7 @@ export default function SignUp() {
             size="lg"
             className="col-span-full mt-1 hover:cursor-pointer"
             disabled={isSigningUp}>
-            {isSigningUp ? 'Signing up...' ? 'Sign up'}
+            {isSigningUp ? "Signing up..." : "Sign up"}
           </Button>
         </form>
       </Form>

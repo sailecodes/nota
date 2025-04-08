@@ -16,11 +16,10 @@ import { CircleX } from "lucide-react";
 
 export default function ResetPassword() {
   const supabase = createClient();
-
   const passwordForm = useForm<z.infer<typeof passwordSchema>>({
     resolver: zodResolver(passwordSchema),
     defaultValues: {
-      password: "",
+      newPassword: "",
     },
   });
   const [isResettingPassword, setIsResettingPassword] = useState<boolean>(false);
