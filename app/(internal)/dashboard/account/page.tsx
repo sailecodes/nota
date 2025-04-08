@@ -1,25 +1,34 @@
-"use client";
-
 import AccountSkeleton from "@/components/account/account-skeleton";
 import ProfileInformation from "@/components/account/profile-information";
 import EmailAddress from "@/components/account/email-address";
+import { createClient } from "@/lib/utils/supabase/server";
 
-export default function AccountPage() {
+export default async function AccountPage() {
+  const {
+    data: { user },
+  } = await (await createClient()).auth.getUser();
+
   return (
-    <>
-      {!isLoaded && <AccountSkeleton />}
-      {isLoaded && (
-        <div className="flex flex-col gap-3 max-w-7xl mx-auto p-4">
-          {/* <ProfileInformation
+    <div className="max-w-7xl mx-auto p-4">
+      {!user && <AccountSkeleton />}
+      {user && (
+        <>
+          <ProfileInformation user={user} />
+        </>
+      )}
+      {/* <ProfileInformation user={user} /> */}
+      {/* <AccountSkeleton /> */}
+      {/* <div className="flex flex-col gap-3 max-w-7xl mx-auto p-4">
+          <ProfileInformation
             user={user}
             isLoaded={isLoaded}
           />
           <EmailAddress
             user={user}
             isLoaded={isLoaded}
-          /> */}
+          />
 
-          {/* <Card className="bg-background">
+          <Card className="bg-background">
         <CardHeader>
           <CardTitle>Password</CardTitle>
         </CardHeader>
@@ -107,9 +116,8 @@ export default function AccountPage() {
             Delete account
           </Button>
         </CardContent>
-      </Card> */}
-        </div>
-      )}
-    </>
+      </Card>
+        </div> */}
+    </div>
   );
 }

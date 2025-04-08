@@ -11,7 +11,7 @@ export async function signUp(data: z.infer<typeof signUpSchema>) {
     const { email, password, firstName, lastName } = signUpSchema.parse(data);
     parsedData = { email, password, firstName, lastName };
   } catch (err) {
-    return { errMsg: "Something went wrong. Please try again!" };
+    return { msg: "Something went wrong. Please try again!" };
   }
 
   const supabase = await createClient();
@@ -30,7 +30,7 @@ export async function signUp(data: z.infer<typeof signUpSchema>) {
   });
 
   // Only accounting for existing email error
-  if (error?.message) return { errMsg: "Email already exists" };
+  if (error?.message) return { msg: "Email already exists" };
 }
 
 export async function signIn(data: z.infer<typeof signInSchema>) {
@@ -40,7 +40,7 @@ export async function signIn(data: z.infer<typeof signInSchema>) {
     const { email, password } = signInSchema.parse(data);
     parsedData = { email, password };
   } catch (err) {
-    return { errMsg: "Something went wrong. Please try again!" };
+    return { msg: "Something went wrong. Please try again!" };
   }
 
   const supabase = await createClient();
@@ -50,5 +50,7 @@ export async function signIn(data: z.infer<typeof signInSchema>) {
     password: parsedData.password,
   });
 
-  if (error?.message) return { errMsg: error?.message };
+  if (error?.message) return { msg: error?.message };
 }
+
+export async function signOut() {}

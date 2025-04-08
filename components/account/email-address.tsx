@@ -9,7 +9,7 @@ import { Input } from "../ui/input";
 import { emailAddressSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { changeEmailAddress } from "@/actions/account";
+import { changeEmailAddress } from "@/actions/account.actions";
 import { Verified } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { UserResource } from "@clerk/types";
