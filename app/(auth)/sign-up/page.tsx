@@ -40,8 +40,14 @@ export default function SignUp() {
     if (res) {
       setSignUpErrMessage("Email already exists");
     } else {
-      toast.success("Check your inbox!", {
-        description: `We've sent you a confirmation email at ${emailWatch}.`,
+      // TODO: Confirmation email functionality can be added later on.
+      //       Caveat of not knowing if email is duplicate
+      // toast.success("Check your inbox!", {
+      //   description: `We've sent you a confirmation email at ${emailWatch}.`,
+      //   icon: <CheckCircle2 className="w-4 h-4 stroke-green-300" />,
+      // });
+      toast.success("Welcome to Nota!", {
+        description: `Get started by uploading a meeting.`,
         icon: <CheckCircle2 className="w-4 h-4 stroke-green-300" />,
       });
 

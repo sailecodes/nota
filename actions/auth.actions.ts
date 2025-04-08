@@ -7,14 +7,6 @@ import { z } from "zod";
 export async function signUp(data: z.infer<typeof signUpSchema>) {
   const supabase = await createClient();
 
-  const {
-    data: { user },
-    error: getUserError,
-  } = await supabase.auth.getUser();
-
-  if (!user) return { success: false, msg: "Unauthorized access." };
-  else if (getUserError) return { success: false, msg: getUserError.message };
-
   let parsedData;
 
   try {
@@ -32,12 +24,12 @@ export async function signUp(data: z.infer<typeof signUpSchema>) {
         lastName: parsedData.lastName,
       },
       // TODO: Change url for prod
-      emailRedirectTo: process.env.SUPABASE_AUTH_REDIRECT_URL,
+      emailRedirectTo: "http://localhost:3000/dashboard/overview",
     },
   });
 
   // Only accounting for existing email error
-  if (error?.message) return { msg: "Email already exists" };
+  if (error?.message) return { success: false, msg: "Email already exists" };
 }
 
 export async function signIn(data: z.infer<typeof signInSchema>) {
@@ -56,7 +48,7 @@ export async function signIn(data: z.infer<typeof signInSchema>) {
     password: parsedData.password,
   });
 
-  if (signInError?.message) return { msg: signInError?.message };
+  if (signInError?.message) return { success: false, msg: signInError?.message };
 }
 
 export async function signOut() {}
