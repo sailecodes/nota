@@ -33,12 +33,13 @@ export default function ResetPassword() {
     setIsResettingPassword(false);
 
     if (res) {
+      console.error("Reset password error: ", res.msg);
       toast.error(`${res.msg}`, { icon: <CircleX className="w-4 h-4 stroke-red-300" /> });
     } else {
       try {
         await supabase.auth.signOut();
       } catch (err) {
-        console.error("Reset password error: ", err);
+        console.error("Sign out error: ", err);
         toast.error(`${err}`, { icon: <CircleX className="w-4 h-4 stroke-red-300" /> });
         // TODO: What to do in this case?
         router.push("/"); // temporary

@@ -5,6 +5,7 @@ import {
   passwordSchema,
   profileInformationSchema,
 } from "@/lib/schemas/account.schema";
+import { supabaseAdmin } from "@/lib/utils/supabase/admin";
 import { createClient } from "@/lib/utils/supabase/server";
 import { z } from "zod";
 
@@ -105,4 +106,22 @@ export const resetPassword = async (data: z.infer<typeof passwordSchema>) => {
   });
 
   if (updateUserError) return { success: false, msg: updateUserError.message };
+};
+
+export const deleteAccount = async () => {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: getUserError,
+  } = await supabase.auth.getUser();
+
+  if (!user) return { success: false, msg: "Unauthorized access." };
+  else if (getUserError) return { success: false, msg: getUserError.message };
+
+  console.log(user);
+
+  const { error: deleteUserError } = await supabaseAdmin.auth.admin.deleteUser(user.id);
+
+  if (deleteUserError) return { success: false, msg: deleteUserError.message };
 };

@@ -48,7 +48,7 @@ export default function EmailAddress({ user }: EmailAddressProps) {
   };
 
   return (
-    <Card className="bg-background">
+    <Card className="col-span-full bg-background">
       <CardHeader>
         <CardTitle>Email address</CardTitle>
       </CardHeader>

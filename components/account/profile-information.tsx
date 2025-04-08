@@ -47,7 +47,7 @@ export default function ProfileInformation({ user }: ProfileInformationProps) {
   };
 
   return (
-    <Card className="bg-background">
+    <Card className="col-span-full bg-background">
       <CardHeader>
         <CardTitle>Profile information</CardTitle>
       </CardHeader>
