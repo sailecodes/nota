@@ -2,6 +2,7 @@ import AccountSkeleton from "@/components/account/account-skeleton";
 import ProfileInformation from "@/components/account/profile-information";
 import EmailAddress from "@/components/account/email-address";
 import { createClient } from "@/lib/utils/supabase/server";
+import Password from "@/components/account/password";
 
 export default async function AccountPage() {
   const {
@@ -15,6 +16,7 @@ export default async function AccountPage() {
         <>
           <ProfileInformation user={user} />
           <EmailAddress user={user} />
+          <Password user={user} />
         </>
       )}
       {/* <ProfileInformation user={user} /> */}

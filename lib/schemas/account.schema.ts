@@ -8,3 +8,7 @@ export const profileInformationSchema = z.object({
 export const emailAddressSchema = z.object({
   emailAddress: z.string().email({ message: "Must be a valid email" }),
 });
+
+export const passwordSchema = z.object({
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});

@@ -1,20 +1,27 @@
 "use server";
 
-import { signInSchema, signUpSchema } from "@/lib/schemas/auth";
+import { signInSchema, signUpSchema } from "@/lib/schemas/auth.schema";
 import { createClient } from "@/lib/utils/supabase/server";
 import { z } from "zod";
 
 export async function signUp(data: z.infer<typeof signUpSchema>) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: getUserError,
+  } = await supabase.auth.getUser();
+
+  if (!user) return { success: false, msg: "Unauthorized access." };
+  else if (getUserError) return { success: false, msg: getUserError.message };
+
   let parsedData;
 
   try {
-    const { email, password, firstName, lastName } = signUpSchema.parse(data);
-    parsedData = { email, password, firstName, lastName };
+    parsedData = signUpSchema.parse(data);
   } catch (err) {
-    return { msg: "Something went wrong. Please try again!" };
+    return { success: false, msg: "Data couldn't be parsed. Check field values." };
   }
-
-  const supabase = await createClient();
 
   const { error } = await supabase.auth.signUp({
     email: parsedData.email,
@@ -34,16 +41,23 @@ export async function signUp(data: z.infer<typeof signUpSchema>) {
 }
 
 export async function signIn(data: z.infer<typeof signInSchema>) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: getUserError,
+  } = await supabase.auth.getUser();
+
+  if (!user) return { success: false, msg: "Unauthorized access." };
+  else if (getUserError) return { success: false, msg: getUserError.message };
+
   let parsedData;
 
   try {
-    const { email, password } = signInSchema.parse(data);
-    parsedData = { email, password };
+    parsedData = signInSchema.parse(data);
   } catch (err) {
-    return { msg: "Something went wrong. Please try again!" };
+    return { success: false, msg: "Data couldn't be parsed. Check field values." };
   }
-
-  const supabase = await createClient();
 
   const { error } = await supabase.auth.signInWithPassword({
     email: parsedData.email,

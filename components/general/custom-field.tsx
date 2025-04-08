@@ -8,6 +8,7 @@ interface CustomFieldProps {
   type?: string;
   placeholder?: string;
   error?: string;
+  className?: string;
 }
 
 export default function CustomField({
@@ -17,13 +18,14 @@ export default function CustomField({
   type,
   placeholder,
   error,
+  className,
 }: CustomFieldProps) {
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className={className}>
           <FormLabel className="text-muted-foreground">{label}</FormLabel>
           <FormControl>
             <Input

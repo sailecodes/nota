@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
-import { emailAddressSchema } from "@/lib/schemas";
+import { emailAddressSchema } from "@/lib/schemas/account.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { changeEmailAddress } from "@/actions/account.actions";
@@ -81,13 +81,13 @@ export default function EmailAddress({ user }: EmailAddressProps) {
               type="submit"
               variant="secondary"
               disabled={emailAddressFormVals.emailAddress === user.email}
-              className="self-end w-[119px]">
+              className="self-end w-[158px]">
               {isChangingEmailAddress ? "Changing..." : "Change email"}
             </Button>
           </form>
         </Form>
         <p className="text-xs text-muted-foreground">
-          You'll receive a verification email to confirm before any change is shown.
+          You'll receive a verification email to confirm before any permanent change is shown.
         </p>
       </CardContent>
     </Card>

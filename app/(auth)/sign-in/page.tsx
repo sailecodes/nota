@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { signInSchema } from "@/lib/schemas/auth";
+import { signInSchema } from "@/lib/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "@/actions/auth.actions";
 import { useState } from "react";
@@ -72,7 +72,7 @@ export default function SignIn() {
             size="lg"
             className="col-span-full mt-1 hover:cursor-pointer"
             disabled={isSigningIn}>
-            Sign in
+            {isSigningIn ? "Signing in..." : "Sign in"}
           </Button>
         </form>
       </Form>

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Form } from "../ui/form";
-import { profileInformationSchema } from "@/lib/schemas";
+import { profileInformationSchema } from "@/lib/schemas/account.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { updateProfileInformation } from "@/actions/account.actions";
@@ -37,7 +37,7 @@ export default function ProfileInformation({ user }: ProfileInformationProps) {
     setIsUpdatingUserInformation(false);
 
     if (res) {
-      console.error("User information update error: ", res.msg);
+      console.error("Profile information update error: ", res.msg);
       toast.error(res.msg, { icon: <CircleX className="w-4 h-4 stroke-red-300" /> });
     } else {
       toast.success("Profile information updated!", {
@@ -55,16 +55,18 @@ export default function ProfileInformation({ user }: ProfileInformationProps) {
         <Form {...userInformationForm}>
           <form
             onSubmit={userInformationForm.handleSubmit(handleUpdateUserInformation)}
-            className="grid grid-cols-2 gap-4">
+            className="flex gap-4">
             <CustomField
               control={userInformationForm.control}
               name="firstName"
               label="First name"
+              className="flex-1"
             />
             <CustomField
               control={userInformationForm.control}
               name="lastName"
               label="Last name"
+              className="flex-1"
             />
             <Button
               type="submit"
@@ -74,7 +76,7 @@ export default function ProfileInformation({ user }: ProfileInformationProps) {
                 (userInformationFormVals.firstName === user.user_metadata.firstName &&
                   userInformationFormVals.lastName === user.user_metadata.lastName)
               }
-              className="col-span-full self-end justify-self-end w-[158px]">
+              className="self-end w-[158px]">
               {isUpdatingUserInformation ? "Updating..." : "Update information"}
             </Button>
           </form>
