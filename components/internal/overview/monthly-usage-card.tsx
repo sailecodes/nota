@@ -1,6 +1,13 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Gauge } from "lucide-react";
-import { Button, buttonVariants } from "../ui/button";
+import { Button, buttonVariants } from "../../ui/button";
 import Link from "next/link";
 
 export default function MonthlyUsageCard() {
@@ -26,7 +33,10 @@ export default function MonthlyUsageCard() {
         <div className="w-full p-[2px] rounded-md hover:cursor-pointer hover:bg-gradient-to-r hover:from-blue-600 hover:via-green-500 hover:to-indigo-400 animate-gradient-x">
           <Link
             href="/dashboard/subscription"
-            className={buttonVariants({ variant: "secondary", className: "w-full hover:bg-secondary/100" })}>
+            className={buttonVariants({
+              variant: "secondary",
+              className: "w-full hover:bg-secondary/100",
+            })}>
             Upgrade subscription
           </Link>
         </div>

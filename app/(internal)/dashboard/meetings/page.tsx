@@ -1,5 +1,5 @@
-import MeetingCard from "@/components/meetings/meeting-card";
-import MeetingCardSkeleton from "@/components/meetings/meeting-card-skeleton";
+import MeetingCard from "@/components/internal/meetings/meeting-card";
+import MeetingCardSkeleton from "@/components/internal/meetings/meeting-card-skeleton";
 
 const meetingsData = [
   {

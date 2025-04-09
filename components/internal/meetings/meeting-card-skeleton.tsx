@@ -1,8 +1,15 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Calendar, ListTodo } from "lucide-react";
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "../../ui/skeleton";
 
 interface MeetingCardSkeletonProps {
   title: string;
@@ -10,7 +17,11 @@ interface MeetingCardSkeletonProps {
   dateUploaded: string;
 }
 
-export default function MeetingCardSkeleton({ title, uploadedBy, dateUploaded }: MeetingCardSkeletonProps) {
+export default function MeetingCardSkeleton({
+  title,
+  uploadedBy,
+  dateUploaded,
+}: MeetingCardSkeletonProps) {
   return (
     <Card className="bg-background">
       <CardHeader>

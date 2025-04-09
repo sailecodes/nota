@@ -4,7 +4,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "../ui/sidebar";
+} from "../../ui/sidebar";
 import { ForwardRefExoticComponent, ReactNode, RefAttributes } from "react";
 import { LucideProps } from "lucide-react";
 import Link from "next/link";

@@ -1,4 +1,4 @@
-import NavLinks from "@/components/home/nav-links";
+import NavLinks from "@/components/external/nav-links";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 

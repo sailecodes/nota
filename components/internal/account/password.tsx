@@ -1,8 +1,8 @@
 "use client";
 
 import { toast } from "sonner";
-import { Button } from "../ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { sendPasswordResetLink } from "@/actions/account.actions";
 import { CheckCircle2, CircleX } from "lucide-react";
 import { User } from "@supabase/supabase-js";

@@ -1,4 +1,4 @@
-import ActionItemCard from "@/components/action-items/action-item-card";
+import ActionItemCard from "@/components/internal/action-items/action-item-card";
 
 const actionItemsData = [
   {
