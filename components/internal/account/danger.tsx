@@ -23,7 +23,8 @@ export default function Danger() {
       <CardHeader>
         <CardTitle className="text-red-400">Danger zone</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="flex flex-col gap-3">
+        <span className="text-sm text-muted-foreground">Permanently delete your account and all associated data.</span>
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
@@ -36,8 +37,8 @@ export default function Danger() {
             <AlertDialogHeader>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your account and remove
-                your data from our servers.
+                This action cannot be undone. To reiterate, this will permanently delete your account and remove your
+                data from our servers.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -52,9 +53,6 @@ export default function Danger() {
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
-          <p className="text-xs text-muted-foreground">
-            You'll need to reconfirm this action as the results are permanent.
-          </p>
         </AlertDialog>
       </CardContent>
     </Card>
