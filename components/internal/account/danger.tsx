@@ -9,9 +9,9 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
-import { AlertDialogHeader, AlertDialogFooter } from "../ui/alert-dialog";
-import { Button } from "../ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
+import { AlertDialogHeader, AlertDialogFooter } from "../../ui/alert-dialog";
+import { Button } from "../../ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "../../ui/card";
 import { deleteAccount } from "@/actions/account.actions";
 import { useRouter } from "next/navigation";
 

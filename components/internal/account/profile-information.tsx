@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button } from "../ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Form } from "../ui/form";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { Form } from "../../ui/form";
 import { profileInformationSchema } from "@/lib/schemas/account.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { updateProfileInformation } from "@/actions/account.actions";
 import { User } from "@supabase/supabase-js";
-import CustomField from "../general/custom-field";
+import CustomField from "../../general/custom-field";
 import { toast } from "sonner";
 import { CheckCircle2, CircleX } from "lucide-react";
 

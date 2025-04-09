@@ -2,16 +2,16 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button } from "../ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Input } from "../ui/input";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
+import { Input } from "../../ui/input";
 import { emailAddressSchema } from "@/lib/schemas/account.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { changeEmailAddress } from "@/actions/account.actions";
 import { CheckCircle2, CircleX, Verified } from "lucide-react";
-import { Badge } from "../ui/badge";
+import { Badge } from "../../ui/badge";
 import { User } from "@supabase/supabase-js";
 import { toast } from "sonner";
 

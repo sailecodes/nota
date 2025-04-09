@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   Sidebar,
   SidebarContent,
@@ -9,7 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "../ui/sidebar";
+} from "../../ui/sidebar";
 import {
   CircleHelp,
   FileText,
@@ -22,10 +21,11 @@ import {
 } from "lucide-react";
 import CustomSidebarGroup from "./custom-sidebar-group";
 import CustomSidebarSingle from "./custom-sidebar-single";
-import { buttonVariants } from "../ui/button";
+import { Button } from "../../ui/button";
 import CustomSidebarHeader from "./custom-sidebar-header";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { signOut } from "@/actions/auth.actions";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import { useUploadThing } from "@/lib/utils/uploadthing";
+import UploadButton from "./upload-btn";
 
 const sidebarData = {
   dashboard: {
@@ -95,12 +95,7 @@ export default function CustomSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link
-                    href="/dashboard/upload"
-                    className={buttonVariants({})}>
-                    <PlusCircle />
-                    <span>Upload meeting</span>
-                  </Link>
+                  <UploadButton />
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
