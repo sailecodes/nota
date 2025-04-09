@@ -21,7 +21,7 @@ export default function Danger() {
   return (
     <Card className="col-span-full border-red-400">
       <CardHeader>
-        <CardTitle className="text-red-400">Danger zone</CardTitle>
+        <CardTitle className="text-red-400">Danger Zone</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         <span className="text-sm text-muted-foreground">Permanently delete your account and all associated data.</span>

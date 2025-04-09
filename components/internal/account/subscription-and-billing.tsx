@@ -6,7 +6,7 @@ export default function SubscriptionAndBilling() {
   return (
     <Card className="bg-background">
       <CardHeader>
-        <CardTitle>Subscription & billing</CardTitle>
+        <CardTitle>Subscription & Billing</CardTitle>
       </CardHeader>
       <CardContent className="flex justify-between">
         <div className="flex flex-col justify-between gap-4">

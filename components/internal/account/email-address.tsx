@@ -50,7 +50,7 @@ export default function EmailAddress({ user }: EmailAddressProps) {
   return (
     <Card className="col-span-full bg-background">
       <CardHeader>
-        <CardTitle>Email address</CardTitle>
+        <CardTitle>Email Address</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <Form {...emailAddressForm}>

@@ -49,7 +49,7 @@ export default function ProfileInformation({ user }: ProfileInformationProps) {
   return (
     <Card className="col-span-full bg-background">
       <CardHeader>
-        <CardTitle>Profile information</CardTitle>
+        <CardTitle>Profile Information</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...userInformationForm}>
