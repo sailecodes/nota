@@ -1,7 +1,7 @@
 import AccountSkeleton from "@/components/internal/account/account-skeleton";
 import ProfileInformation from "@/components/internal/account/profile-information";
 import EmailAddress from "@/components/internal/account/email-address";
-import { createClient } from "@/lib/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server";
 import Password from "@/components/internal/account/password";
 import SubscriptionAndBilling from "@/components/internal/account/subscription-and-billing";
 import Danger from "@/components/internal/account/danger";

@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import CustomField from "@/components/general/custom-field";
-import { passwordSchema } from "@/lib/schemas/account.schema";
+import { passwordSchema } from "@/schemas/account.schema";
 import { resetPassword } from "@/actions/account.actions";
-import { createClient } from "@/lib/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { CircleX } from "lucide-react";
 

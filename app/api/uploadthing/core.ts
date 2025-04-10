@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
@@ -12,14 +12,12 @@ export const ourFileRouter = {
     },
   })
     .middleware(async () => {
-      const supabase = await createClient();
       const {
         data: { user },
         error,
-      } = await supabase.auth.getUser();
+      } = await (await createClient()).auth.getUser();
 
-      // TODO: Maybe implement better error handling
-      if (!user) throw new UploadThingError("Unauthorized");
+      if (!user) throw new UploadThingError("Unauthorized access");
       else if (error) throw new UploadThingError(error.message);
 
       return {
@@ -30,9 +28,14 @@ export const ourFileRouter = {
         },
       };
     })
-    .onUploadComplete(async ({ metadata, file }) => {
-      return { fileUrl: file.ufsUrl, fileName: file.name, user: metadata.user };
-    }),
+    .onUploadComplete(async ({ metadata, file: { name, size, ufsUrl } }) => ({
+      file: {
+        name,
+        size,
+        url: ufsUrl,
+      },
+      user: metadata.user,
+    })),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

@@ -48,7 +48,7 @@ export type ActionItem = $Result.DefaultSelection<Prisma.$ActionItemPayload>
  * Enums
  */
 export namespace $Enums {
-  export const ProcessingStatus: {
+  export const ProcessStatus: {
   TRANSCRIBING: 'TRANSCRIBING',
   SUMMARIZING: 'SUMMARIZING',
   EXTRACTING: 'EXTRACTING',
@@ -56,7 +56,7 @@ export namespace $Enums {
   FAILED: 'FAILED'
 };
 
-export type ProcessingStatus = (typeof ProcessingStatus)[keyof typeof ProcessingStatus]
+export type ProcessStatus = (typeof ProcessStatus)[keyof typeof ProcessStatus]
 
 
 export const DueStatus: {
@@ -65,16 +65,17 @@ export const DueStatus: {
   UPCOMING: 'UPCOMING',
   DUE_SOON: 'DUE_SOON',
   COMPLETED: 'COMPLETED',
-  OVERDUE: 'OVERDUE'
+  OVERDUE: 'OVERDUE',
+  NO_DUE_DATE: 'NO_DUE_DATE'
 };
 
 export type DueStatus = (typeof DueStatus)[keyof typeof DueStatus]
 
 }
 
-export type ProcessingStatus = $Enums.ProcessingStatus
+export type ProcessStatus = $Enums.ProcessStatus
 
-export const ProcessingStatus: typeof $Enums.ProcessingStatus
+export const ProcessStatus: typeof $Enums.ProcessStatus
 
 export type DueStatus = $Enums.DueStatus
 
@@ -3631,6 +3632,7 @@ export namespace Prisma {
     id: string | null
     title: string | null
     fileUrl: string | null
+    processStatus: $Enums.ProcessStatus | null
     uploaderId: string | null
     teamId: string | null
     createdAt: Date | null
@@ -3641,6 +3643,7 @@ export namespace Prisma {
     id: string | null
     title: string | null
     fileUrl: string | null
+    processStatus: $Enums.ProcessStatus | null
     uploaderId: string | null
     teamId: string | null
     createdAt: Date | null
@@ -3651,6 +3654,7 @@ export namespace Prisma {
     id: number
     title: number
     fileUrl: number
+    processStatus: number
     uploaderId: number
     teamId: number
     createdAt: number
@@ -3663,6 +3667,7 @@ export namespace Prisma {
     id?: true
     title?: true
     fileUrl?: true
+    processStatus?: true
     uploaderId?: true
     teamId?: true
     createdAt?: true
@@ -3673,6 +3678,7 @@ export namespace Prisma {
     id?: true
     title?: true
     fileUrl?: true
+    processStatus?: true
     uploaderId?: true
     teamId?: true
     createdAt?: true
@@ -3683,6 +3689,7 @@ export namespace Prisma {
     id?: true
     title?: true
     fileUrl?: true
+    processStatus?: true
     uploaderId?: true
     teamId?: true
     createdAt?: true
@@ -3766,6 +3773,7 @@ export namespace Prisma {
     id: string
     title: string
     fileUrl: string
+    processStatus: $Enums.ProcessStatus
     uploaderId: string
     teamId: string
     createdAt: Date
@@ -3793,19 +3801,21 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     fileUrl?: boolean
+    processStatus?: boolean
     uploaderId?: boolean
     teamId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    result?: boolean | Upload$resultArgs<ExtArgs>
     uploader?: boolean | UserDefaultArgs<ExtArgs>
     team?: boolean | TeamDefaultArgs<ExtArgs>
-    result?: boolean | Upload$resultArgs<ExtArgs>
   }, ExtArgs["result"]["upload"]>
 
   export type UploadSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
     fileUrl?: boolean
+    processStatus?: boolean
     uploaderId?: boolean
     teamId?: boolean
     createdAt?: boolean
@@ -3818,6 +3828,7 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     fileUrl?: boolean
+    processStatus?: boolean
     uploaderId?: boolean
     teamId?: boolean
     createdAt?: boolean
@@ -3830,17 +3841,18 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     fileUrl?: boolean
+    processStatus?: boolean
     uploaderId?: boolean
     teamId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UploadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "fileUrl" | "uploaderId" | "teamId" | "createdAt" | "updatedAt", ExtArgs["result"]["upload"]>
+  export type UploadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "fileUrl" | "processStatus" | "uploaderId" | "teamId" | "createdAt" | "updatedAt", ExtArgs["result"]["upload"]>
   export type UploadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    result?: boolean | Upload$resultArgs<ExtArgs>
     uploader?: boolean | UserDefaultArgs<ExtArgs>
     team?: boolean | TeamDefaultArgs<ExtArgs>
-    result?: boolean | Upload$resultArgs<ExtArgs>
   }
   export type UploadIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     uploader?: boolean | UserDefaultArgs<ExtArgs>
@@ -3854,14 +3866,15 @@ export namespace Prisma {
   export type $UploadPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Upload"
     objects: {
+      result: Prisma.$ResultPayload<ExtArgs> | null
       uploader: Prisma.$UserPayload<ExtArgs>
       team: Prisma.$TeamPayload<ExtArgs>
-      result: Prisma.$ResultPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       title: string
       fileUrl: string
+      processStatus: $Enums.ProcessStatus
       uploaderId: string
       teamId: string
       createdAt: Date
@@ -4260,9 +4273,9 @@ export namespace Prisma {
    */
   export interface Prisma__UploadClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    result<T extends Upload$resultArgs<ExtArgs> = {}>(args?: Subset<T, Upload$resultArgs<ExtArgs>>): Prisma__ResultClient<$Result.GetResult<Prisma.$ResultPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     uploader<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     team<T extends TeamDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TeamDefaultArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    result<T extends Upload$resultArgs<ExtArgs> = {}>(args?: Subset<T, Upload$resultArgs<ExtArgs>>): Prisma__ResultClient<$Result.GetResult<Prisma.$ResultPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4295,6 +4308,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Upload", 'String'>
     readonly title: FieldRef<"Upload", 'String'>
     readonly fileUrl: FieldRef<"Upload", 'String'>
+    readonly processStatus: FieldRef<"Upload", 'ProcessStatus'>
     readonly uploaderId: FieldRef<"Upload", 'String'>
     readonly teamId: FieldRef<"Upload", 'String'>
     readonly createdAt: FieldRef<"Upload", 'DateTime'>
@@ -4745,8 +4759,6 @@ export namespace Prisma {
   export type ResultMinAggregateOutputType = {
     id: string | null
     summary: string | null
-    processingStatus: $Enums.ProcessingStatus | null
-    dueStatus: $Enums.DueStatus | null
     uploadId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -4755,8 +4767,6 @@ export namespace Prisma {
   export type ResultMaxAggregateOutputType = {
     id: string | null
     summary: string | null
-    processingStatus: $Enums.ProcessingStatus | null
-    dueStatus: $Enums.DueStatus | null
     uploadId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -4765,8 +4775,6 @@ export namespace Prisma {
   export type ResultCountAggregateOutputType = {
     id: number
     summary: number
-    processingStatus: number
-    dueStatus: number
     uploadId: number
     createdAt: number
     updatedAt: number
@@ -4777,8 +4785,6 @@ export namespace Prisma {
   export type ResultMinAggregateInputType = {
     id?: true
     summary?: true
-    processingStatus?: true
-    dueStatus?: true
     uploadId?: true
     createdAt?: true
     updatedAt?: true
@@ -4787,8 +4793,6 @@ export namespace Prisma {
   export type ResultMaxAggregateInputType = {
     id?: true
     summary?: true
-    processingStatus?: true
-    dueStatus?: true
     uploadId?: true
     createdAt?: true
     updatedAt?: true
@@ -4797,8 +4801,6 @@ export namespace Prisma {
   export type ResultCountAggregateInputType = {
     id?: true
     summary?: true
-    processingStatus?: true
-    dueStatus?: true
     uploadId?: true
     createdAt?: true
     updatedAt?: true
@@ -4880,8 +4882,6 @@ export namespace Prisma {
   export type ResultGroupByOutputType = {
     id: string
     summary: string
-    processingStatus: $Enums.ProcessingStatus
-    dueStatus: $Enums.DueStatus
     uploadId: string
     createdAt: Date
     updatedAt: Date
@@ -4907,8 +4907,6 @@ export namespace Prisma {
   export type ResultSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     summary?: boolean
-    processingStatus?: boolean
-    dueStatus?: boolean
     uploadId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4920,8 +4918,6 @@ export namespace Prisma {
   export type ResultSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     summary?: boolean
-    processingStatus?: boolean
-    dueStatus?: boolean
     uploadId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4931,8 +4927,6 @@ export namespace Prisma {
   export type ResultSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     summary?: boolean
-    processingStatus?: boolean
-    dueStatus?: boolean
     uploadId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4942,14 +4936,12 @@ export namespace Prisma {
   export type ResultSelectScalar = {
     id?: boolean
     summary?: boolean
-    processingStatus?: boolean
-    dueStatus?: boolean
     uploadId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "summary" | "processingStatus" | "dueStatus" | "uploadId" | "createdAt" | "updatedAt", ExtArgs["result"]["result"]>
+  export type ResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "summary" | "uploadId" | "createdAt" | "updatedAt", ExtArgs["result"]["result"]>
   export type ResultInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     actionItems?: boolean | Result$actionItemsArgs<ExtArgs>
     upload?: boolean | UploadDefaultArgs<ExtArgs>
@@ -4971,8 +4963,6 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       summary: string
-      processingStatus: $Enums.ProcessingStatus
-      dueStatus: $Enums.DueStatus
       uploadId: string
       createdAt: Date
       updatedAt: Date
@@ -5403,8 +5393,6 @@ export namespace Prisma {
   interface ResultFieldRefs {
     readonly id: FieldRef<"Result", 'String'>
     readonly summary: FieldRef<"Result", 'String'>
-    readonly processingStatus: FieldRef<"Result", 'ProcessingStatus'>
-    readonly dueStatus: FieldRef<"Result", 'DueStatus'>
     readonly uploadId: FieldRef<"Result", 'String'>
     readonly createdAt: FieldRef<"Result", 'DateTime'>
     readonly updatedAt: FieldRef<"Result", 'DateTime'>
@@ -5860,6 +5848,7 @@ export namespace Prisma {
     id: string | null
     action: string | null
     dueDate: Date | null
+    dueStatus: $Enums.DueStatus | null
     assigneeId: string | null
     resultId: string | null
     createdAt: Date | null
@@ -5870,6 +5859,7 @@ export namespace Prisma {
     id: string | null
     action: string | null
     dueDate: Date | null
+    dueStatus: $Enums.DueStatus | null
     assigneeId: string | null
     resultId: string | null
     createdAt: Date | null
@@ -5880,6 +5870,7 @@ export namespace Prisma {
     id: number
     action: number
     dueDate: number
+    dueStatus: number
     assigneeId: number
     resultId: number
     createdAt: number
@@ -5892,6 +5883,7 @@ export namespace Prisma {
     id?: true
     action?: true
     dueDate?: true
+    dueStatus?: true
     assigneeId?: true
     resultId?: true
     createdAt?: true
@@ -5902,6 +5894,7 @@ export namespace Prisma {
     id?: true
     action?: true
     dueDate?: true
+    dueStatus?: true
     assigneeId?: true
     resultId?: true
     createdAt?: true
@@ -5912,6 +5905,7 @@ export namespace Prisma {
     id?: true
     action?: true
     dueDate?: true
+    dueStatus?: true
     assigneeId?: true
     resultId?: true
     createdAt?: true
@@ -5995,6 +5989,7 @@ export namespace Prisma {
     id: string
     action: string
     dueDate: Date | null
+    dueStatus: $Enums.DueStatus
     assigneeId: string
     resultId: string
     createdAt: Date
@@ -6022,6 +6017,7 @@ export namespace Prisma {
     id?: boolean
     action?: boolean
     dueDate?: boolean
+    dueStatus?: boolean
     assigneeId?: boolean
     resultId?: boolean
     createdAt?: boolean
@@ -6034,6 +6030,7 @@ export namespace Prisma {
     id?: boolean
     action?: boolean
     dueDate?: boolean
+    dueStatus?: boolean
     assigneeId?: boolean
     resultId?: boolean
     createdAt?: boolean
@@ -6046,6 +6043,7 @@ export namespace Prisma {
     id?: boolean
     action?: boolean
     dueDate?: boolean
+    dueStatus?: boolean
     assigneeId?: boolean
     resultId?: boolean
     createdAt?: boolean
@@ -6058,13 +6056,14 @@ export namespace Prisma {
     id?: boolean
     action?: boolean
     dueDate?: boolean
+    dueStatus?: boolean
     assigneeId?: boolean
     resultId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ActionItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "action" | "dueDate" | "assigneeId" | "resultId" | "createdAt" | "updatedAt", ExtArgs["result"]["actionItem"]>
+  export type ActionItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "action" | "dueDate" | "dueStatus" | "assigneeId" | "resultId" | "createdAt" | "updatedAt", ExtArgs["result"]["actionItem"]>
   export type ActionItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assignee?: boolean | UserDefaultArgs<ExtArgs>
     result?: boolean | ResultDefaultArgs<ExtArgs>
@@ -6088,6 +6087,7 @@ export namespace Prisma {
       id: string
       action: string
       dueDate: Date | null
+      dueStatus: $Enums.DueStatus
       assigneeId: string
       resultId: string
       createdAt: Date
@@ -6520,6 +6520,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ActionItem", 'String'>
     readonly action: FieldRef<"ActionItem", 'String'>
     readonly dueDate: FieldRef<"ActionItem", 'DateTime'>
+    readonly dueStatus: FieldRef<"ActionItem", 'DueStatus'>
     readonly assigneeId: FieldRef<"ActionItem", 'String'>
     readonly resultId: FieldRef<"ActionItem", 'String'>
     readonly createdAt: FieldRef<"ActionItem", 'DateTime'>
@@ -6978,6 +6979,7 @@ export namespace Prisma {
     id: 'id',
     title: 'title',
     fileUrl: 'fileUrl',
+    processStatus: 'processStatus',
     uploaderId: 'uploaderId',
     teamId: 'teamId',
     createdAt: 'createdAt',
@@ -6990,8 +6992,6 @@ export namespace Prisma {
   export const ResultScalarFieldEnum: {
     id: 'id',
     summary: 'summary',
-    processingStatus: 'processingStatus',
-    dueStatus: 'dueStatus',
     uploadId: 'uploadId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -7004,6 +7004,7 @@ export namespace Prisma {
     id: 'id',
     action: 'action',
     dueDate: 'dueDate',
+    dueStatus: 'dueStatus',
     assigneeId: 'assigneeId',
     resultId: 'resultId',
     createdAt: 'createdAt',
@@ -7071,16 +7072,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'ProcessingStatus'
+   * Reference to a field of type 'ProcessStatus'
    */
-  export type EnumProcessingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProcessingStatus'>
+  export type EnumProcessStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProcessStatus'>
     
 
 
   /**
-   * Reference to a field of type 'ProcessingStatus[]'
+   * Reference to a field of type 'ProcessStatus[]'
    */
-  export type ListEnumProcessingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProcessingStatus[]'>
+  export type ListEnumProcessStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProcessStatus[]'>
     
 
 
@@ -7241,26 +7242,28 @@ export namespace Prisma {
     id?: StringFilter<"Upload"> | string
     title?: StringFilter<"Upload"> | string
     fileUrl?: StringFilter<"Upload"> | string
+    processStatus?: EnumProcessStatusFilter<"Upload"> | $Enums.ProcessStatus
     uploaderId?: StringFilter<"Upload"> | string
     teamId?: StringFilter<"Upload"> | string
     createdAt?: DateTimeFilter<"Upload"> | Date | string
     updatedAt?: DateTimeFilter<"Upload"> | Date | string
+    result?: XOR<ResultNullableScalarRelationFilter, ResultWhereInput> | null
     uploader?: XOR<UserScalarRelationFilter, UserWhereInput>
     team?: XOR<TeamScalarRelationFilter, TeamWhereInput>
-    result?: XOR<ResultNullableScalarRelationFilter, ResultWhereInput> | null
   }
 
   export type UploadOrderByWithRelationInput = {
     id?: SortOrder
     title?: SortOrder
     fileUrl?: SortOrder
+    processStatus?: SortOrder
     uploaderId?: SortOrder
     teamId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    result?: ResultOrderByWithRelationInput
     uploader?: UserOrderByWithRelationInput
     team?: TeamOrderByWithRelationInput
-    result?: ResultOrderByWithRelationInput
   }
 
   export type UploadWhereUniqueInput = Prisma.AtLeast<{
@@ -7270,19 +7273,21 @@ export namespace Prisma {
     NOT?: UploadWhereInput | UploadWhereInput[]
     title?: StringFilter<"Upload"> | string
     fileUrl?: StringFilter<"Upload"> | string
+    processStatus?: EnumProcessStatusFilter<"Upload"> | $Enums.ProcessStatus
     uploaderId?: StringFilter<"Upload"> | string
     teamId?: StringFilter<"Upload"> | string
     createdAt?: DateTimeFilter<"Upload"> | Date | string
     updatedAt?: DateTimeFilter<"Upload"> | Date | string
+    result?: XOR<ResultNullableScalarRelationFilter, ResultWhereInput> | null
     uploader?: XOR<UserScalarRelationFilter, UserWhereInput>
     team?: XOR<TeamScalarRelationFilter, TeamWhereInput>
-    result?: XOR<ResultNullableScalarRelationFilter, ResultWhereInput> | null
   }, "id">
 
   export type UploadOrderByWithAggregationInput = {
     id?: SortOrder
     title?: SortOrder
     fileUrl?: SortOrder
+    processStatus?: SortOrder
     uploaderId?: SortOrder
     teamId?: SortOrder
     createdAt?: SortOrder
@@ -7299,6 +7304,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Upload"> | string
     title?: StringWithAggregatesFilter<"Upload"> | string
     fileUrl?: StringWithAggregatesFilter<"Upload"> | string
+    processStatus?: EnumProcessStatusWithAggregatesFilter<"Upload"> | $Enums.ProcessStatus
     uploaderId?: StringWithAggregatesFilter<"Upload"> | string
     teamId?: StringWithAggregatesFilter<"Upload"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Upload"> | Date | string
@@ -7311,8 +7317,6 @@ export namespace Prisma {
     NOT?: ResultWhereInput | ResultWhereInput[]
     id?: StringFilter<"Result"> | string
     summary?: StringFilter<"Result"> | string
-    processingStatus?: EnumProcessingStatusFilter<"Result"> | $Enums.ProcessingStatus
-    dueStatus?: EnumDueStatusFilter<"Result"> | $Enums.DueStatus
     uploadId?: StringFilter<"Result"> | string
     createdAt?: DateTimeFilter<"Result"> | Date | string
     updatedAt?: DateTimeFilter<"Result"> | Date | string
@@ -7323,8 +7327,6 @@ export namespace Prisma {
   export type ResultOrderByWithRelationInput = {
     id?: SortOrder
     summary?: SortOrder
-    processingStatus?: SortOrder
-    dueStatus?: SortOrder
     uploadId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7339,8 +7341,6 @@ export namespace Prisma {
     OR?: ResultWhereInput[]
     NOT?: ResultWhereInput | ResultWhereInput[]
     summary?: StringFilter<"Result"> | string
-    processingStatus?: EnumProcessingStatusFilter<"Result"> | $Enums.ProcessingStatus
-    dueStatus?: EnumDueStatusFilter<"Result"> | $Enums.DueStatus
     createdAt?: DateTimeFilter<"Result"> | Date | string
     updatedAt?: DateTimeFilter<"Result"> | Date | string
     actionItems?: ActionItemListRelationFilter
@@ -7350,8 +7350,6 @@ export namespace Prisma {
   export type ResultOrderByWithAggregationInput = {
     id?: SortOrder
     summary?: SortOrder
-    processingStatus?: SortOrder
-    dueStatus?: SortOrder
     uploadId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7366,8 +7364,6 @@ export namespace Prisma {
     NOT?: ResultScalarWhereWithAggregatesInput | ResultScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Result"> | string
     summary?: StringWithAggregatesFilter<"Result"> | string
-    processingStatus?: EnumProcessingStatusWithAggregatesFilter<"Result"> | $Enums.ProcessingStatus
-    dueStatus?: EnumDueStatusWithAggregatesFilter<"Result"> | $Enums.DueStatus
     uploadId?: StringWithAggregatesFilter<"Result"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Result"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Result"> | Date | string
@@ -7380,6 +7376,7 @@ export namespace Prisma {
     id?: StringFilter<"ActionItem"> | string
     action?: StringFilter<"ActionItem"> | string
     dueDate?: DateTimeNullableFilter<"ActionItem"> | Date | string | null
+    dueStatus?: EnumDueStatusFilter<"ActionItem"> | $Enums.DueStatus
     assigneeId?: StringFilter<"ActionItem"> | string
     resultId?: StringFilter<"ActionItem"> | string
     createdAt?: DateTimeFilter<"ActionItem"> | Date | string
@@ -7392,6 +7389,7 @@ export namespace Prisma {
     id?: SortOrder
     action?: SortOrder
     dueDate?: SortOrderInput | SortOrder
+    dueStatus?: SortOrder
     assigneeId?: SortOrder
     resultId?: SortOrder
     createdAt?: SortOrder
@@ -7407,6 +7405,7 @@ export namespace Prisma {
     NOT?: ActionItemWhereInput | ActionItemWhereInput[]
     action?: StringFilter<"ActionItem"> | string
     dueDate?: DateTimeNullableFilter<"ActionItem"> | Date | string | null
+    dueStatus?: EnumDueStatusFilter<"ActionItem"> | $Enums.DueStatus
     assigneeId?: StringFilter<"ActionItem"> | string
     resultId?: StringFilter<"ActionItem"> | string
     createdAt?: DateTimeFilter<"ActionItem"> | Date | string
@@ -7419,6 +7418,7 @@ export namespace Prisma {
     id?: SortOrder
     action?: SortOrder
     dueDate?: SortOrderInput | SortOrder
+    dueStatus?: SortOrder
     assigneeId?: SortOrder
     resultId?: SortOrder
     createdAt?: SortOrder
@@ -7435,6 +7435,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"ActionItem"> | string
     action?: StringWithAggregatesFilter<"ActionItem"> | string
     dueDate?: DateTimeNullableWithAggregatesFilter<"ActionItem"> | Date | string | null
+    dueStatus?: EnumDueStatusWithAggregatesFilter<"ActionItem"> | $Enums.DueStatus
     assigneeId?: StringWithAggregatesFilter<"ActionItem"> | string
     resultId?: StringWithAggregatesFilter<"ActionItem"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ActionItem"> | Date | string
@@ -7577,17 +7578,19 @@ export namespace Prisma {
     id?: string
     title: string
     fileUrl: string
+    processStatus?: $Enums.ProcessStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    result?: ResultCreateNestedOneWithoutUploadInput
     uploader: UserCreateNestedOneWithoutUploadsInput
     team: TeamCreateNestedOneWithoutUploadsInput
-    result?: ResultCreateNestedOneWithoutUploadInput
   }
 
   export type UploadUncheckedCreateInput = {
     id?: string
     title: string
     fileUrl: string
+    processStatus?: $Enums.ProcessStatus
     uploaderId: string
     teamId: string
     createdAt?: Date | string
@@ -7599,17 +7602,19 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
+    processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    result?: ResultUpdateOneWithoutUploadNestedInput
     uploader?: UserUpdateOneRequiredWithoutUploadsNestedInput
     team?: TeamUpdateOneRequiredWithoutUploadsNestedInput
-    result?: ResultUpdateOneWithoutUploadNestedInput
   }
 
   export type UploadUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
+    processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     uploaderId?: StringFieldUpdateOperationsInput | string
     teamId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7621,6 +7626,7 @@ export namespace Prisma {
     id?: string
     title: string
     fileUrl: string
+    processStatus?: $Enums.ProcessStatus
     uploaderId: string
     teamId: string
     createdAt?: Date | string
@@ -7631,6 +7637,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
+    processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7639,6 +7646,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
+    processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     uploaderId?: StringFieldUpdateOperationsInput | string
     teamId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7648,8 +7656,6 @@ export namespace Prisma {
   export type ResultCreateInput = {
     id?: string
     summary: string
-    processingStatus?: $Enums.ProcessingStatus
-    dueStatus?: $Enums.DueStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     actionItems?: ActionItemCreateNestedManyWithoutResultInput
@@ -7659,8 +7665,6 @@ export namespace Prisma {
   export type ResultUncheckedCreateInput = {
     id?: string
     summary: string
-    processingStatus?: $Enums.ProcessingStatus
-    dueStatus?: $Enums.DueStatus
     uploadId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7670,8 +7674,6 @@ export namespace Prisma {
   export type ResultUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     summary?: StringFieldUpdateOperationsInput | string
-    processingStatus?: EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
-    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     actionItems?: ActionItemUpdateManyWithoutResultNestedInput
@@ -7681,8 +7683,6 @@ export namespace Prisma {
   export type ResultUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     summary?: StringFieldUpdateOperationsInput | string
-    processingStatus?: EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
-    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     uploadId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7692,8 +7692,6 @@ export namespace Prisma {
   export type ResultCreateManyInput = {
     id?: string
     summary: string
-    processingStatus?: $Enums.ProcessingStatus
-    dueStatus?: $Enums.DueStatus
     uploadId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7702,8 +7700,6 @@ export namespace Prisma {
   export type ResultUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     summary?: StringFieldUpdateOperationsInput | string
-    processingStatus?: EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
-    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7711,8 +7707,6 @@ export namespace Prisma {
   export type ResultUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     summary?: StringFieldUpdateOperationsInput | string
-    processingStatus?: EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
-    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     uploadId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7722,6 +7716,7 @@ export namespace Prisma {
     id?: string
     action: string
     dueDate?: Date | string | null
+    dueStatus?: $Enums.DueStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     assignee: UserCreateNestedOneWithoutActionItemsInput
@@ -7732,6 +7727,7 @@ export namespace Prisma {
     id?: string
     action: string
     dueDate?: Date | string | null
+    dueStatus?: $Enums.DueStatus
     assigneeId: string
     resultId: string
     createdAt?: Date | string
@@ -7742,6 +7738,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     action?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignee?: UserUpdateOneRequiredWithoutActionItemsNestedInput
@@ -7752,6 +7749,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     action?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     assigneeId?: StringFieldUpdateOperationsInput | string
     resultId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7762,6 +7760,7 @@ export namespace Prisma {
     id?: string
     action: string
     dueDate?: Date | string | null
+    dueStatus?: $Enums.DueStatus
     assigneeId: string
     resultId: string
     createdAt?: Date | string
@@ -7772,6 +7771,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     action?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7780,6 +7780,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     action?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     assigneeId?: StringFieldUpdateOperationsInput | string
     resultId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7932,6 +7933,18 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type EnumProcessStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProcessStatus | EnumProcessStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProcessStatusFilter<$PrismaModel> | $Enums.ProcessStatus
+  }
+
+  export type ResultNullableScalarRelationFilter = {
+    is?: ResultWhereInput | null
+    isNot?: ResultWhereInput | null
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -7942,15 +7955,11 @@ export namespace Prisma {
     isNot?: TeamWhereInput
   }
 
-  export type ResultNullableScalarRelationFilter = {
-    is?: ResultWhereInput | null
-    isNot?: ResultWhereInput | null
-  }
-
   export type UploadCountOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
     fileUrl?: SortOrder
+    processStatus?: SortOrder
     uploaderId?: SortOrder
     teamId?: SortOrder
     createdAt?: SortOrder
@@ -7961,6 +7970,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     fileUrl?: SortOrder
+    processStatus?: SortOrder
     uploaderId?: SortOrder
     teamId?: SortOrder
     createdAt?: SortOrder
@@ -7971,24 +7981,21 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     fileUrl?: SortOrder
+    processStatus?: SortOrder
     uploaderId?: SortOrder
     teamId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type EnumProcessingStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProcessingStatus | EnumProcessingStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ProcessingStatus[] | ListEnumProcessingStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProcessingStatus[] | ListEnumProcessingStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumProcessingStatusFilter<$PrismaModel> | $Enums.ProcessingStatus
-  }
-
-  export type EnumDueStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.DueStatus | EnumDueStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumDueStatusFilter<$PrismaModel> | $Enums.DueStatus
+  export type EnumProcessStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProcessStatus | EnumProcessStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProcessStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProcessStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProcessStatusFilter<$PrismaModel>
+    _max?: NestedEnumProcessStatusFilter<$PrismaModel>
   }
 
   export type UploadScalarRelationFilter = {
@@ -7999,8 +8006,6 @@ export namespace Prisma {
   export type ResultCountOrderByAggregateInput = {
     id?: SortOrder
     summary?: SortOrder
-    processingStatus?: SortOrder
-    dueStatus?: SortOrder
     uploadId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -8009,8 +8014,6 @@ export namespace Prisma {
   export type ResultMaxOrderByAggregateInput = {
     id?: SortOrder
     summary?: SortOrder
-    processingStatus?: SortOrder
-    dueStatus?: SortOrder
     uploadId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -8019,31 +8022,9 @@ export namespace Prisma {
   export type ResultMinOrderByAggregateInput = {
     id?: SortOrder
     summary?: SortOrder
-    processingStatus?: SortOrder
-    dueStatus?: SortOrder
     uploadId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type EnumProcessingStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProcessingStatus | EnumProcessingStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ProcessingStatus[] | ListEnumProcessingStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProcessingStatus[] | ListEnumProcessingStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumProcessingStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProcessingStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumProcessingStatusFilter<$PrismaModel>
-    _max?: NestedEnumProcessingStatusFilter<$PrismaModel>
-  }
-
-  export type EnumDueStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.DueStatus | EnumDueStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumDueStatusWithAggregatesFilter<$PrismaModel> | $Enums.DueStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumDueStatusFilter<$PrismaModel>
-    _max?: NestedEnumDueStatusFilter<$PrismaModel>
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -8055,6 +8036,13 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type EnumDueStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DueStatus | EnumDueStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDueStatusFilter<$PrismaModel> | $Enums.DueStatus
   }
 
   export type ResultScalarRelationFilter = {
@@ -8071,6 +8059,7 @@ export namespace Prisma {
     id?: SortOrder
     action?: SortOrder
     dueDate?: SortOrder
+    dueStatus?: SortOrder
     assigneeId?: SortOrder
     resultId?: SortOrder
     createdAt?: SortOrder
@@ -8081,6 +8070,7 @@ export namespace Prisma {
     id?: SortOrder
     action?: SortOrder
     dueDate?: SortOrder
+    dueStatus?: SortOrder
     assigneeId?: SortOrder
     resultId?: SortOrder
     createdAt?: SortOrder
@@ -8091,6 +8081,7 @@ export namespace Prisma {
     id?: SortOrder
     action?: SortOrder
     dueDate?: SortOrder
+    dueStatus?: SortOrder
     assigneeId?: SortOrder
     resultId?: SortOrder
     createdAt?: SortOrder
@@ -8109,6 +8100,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type EnumDueStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DueStatus | EnumDueStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDueStatusWithAggregatesFilter<$PrismaModel> | $Enums.DueStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDueStatusFilter<$PrismaModel>
+    _max?: NestedEnumDueStatusFilter<$PrismaModel>
   }
 
   export type TeamCreateNestedManyWithoutMembersInput = {
@@ -8321,6 +8322,12 @@ export namespace Prisma {
     deleteMany?: UploadScalarWhereInput | UploadScalarWhereInput[]
   }
 
+  export type ResultCreateNestedOneWithoutUploadInput = {
+    create?: XOR<ResultCreateWithoutUploadInput, ResultUncheckedCreateWithoutUploadInput>
+    connectOrCreate?: ResultCreateOrConnectWithoutUploadInput
+    connect?: ResultWhereUniqueInput
+  }
+
   export type UserCreateNestedOneWithoutUploadsInput = {
     create?: XOR<UserCreateWithoutUploadsInput, UserUncheckedCreateWithoutUploadsInput>
     connectOrCreate?: UserCreateOrConnectWithoutUploadsInput
@@ -8333,16 +8340,24 @@ export namespace Prisma {
     connect?: TeamWhereUniqueInput
   }
 
-  export type ResultCreateNestedOneWithoutUploadInput = {
+  export type ResultUncheckedCreateNestedOneWithoutUploadInput = {
     create?: XOR<ResultCreateWithoutUploadInput, ResultUncheckedCreateWithoutUploadInput>
     connectOrCreate?: ResultCreateOrConnectWithoutUploadInput
     connect?: ResultWhereUniqueInput
   }
 
-  export type ResultUncheckedCreateNestedOneWithoutUploadInput = {
+  export type EnumProcessStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ProcessStatus
+  }
+
+  export type ResultUpdateOneWithoutUploadNestedInput = {
     create?: XOR<ResultCreateWithoutUploadInput, ResultUncheckedCreateWithoutUploadInput>
     connectOrCreate?: ResultCreateOrConnectWithoutUploadInput
+    upsert?: ResultUpsertWithoutUploadInput
+    disconnect?: ResultWhereInput | boolean
+    delete?: ResultWhereInput | boolean
     connect?: ResultWhereUniqueInput
+    update?: XOR<XOR<ResultUpdateToOneWithWhereWithoutUploadInput, ResultUpdateWithoutUploadInput>, ResultUncheckedUpdateWithoutUploadInput>
   }
 
   export type UserUpdateOneRequiredWithoutUploadsNestedInput = {
@@ -8359,16 +8374,6 @@ export namespace Prisma {
     upsert?: TeamUpsertWithoutUploadsInput
     connect?: TeamWhereUniqueInput
     update?: XOR<XOR<TeamUpdateToOneWithWhereWithoutUploadsInput, TeamUpdateWithoutUploadsInput>, TeamUncheckedUpdateWithoutUploadsInput>
-  }
-
-  export type ResultUpdateOneWithoutUploadNestedInput = {
-    create?: XOR<ResultCreateWithoutUploadInput, ResultUncheckedCreateWithoutUploadInput>
-    connectOrCreate?: ResultCreateOrConnectWithoutUploadInput
-    upsert?: ResultUpsertWithoutUploadInput
-    disconnect?: ResultWhereInput | boolean
-    delete?: ResultWhereInput | boolean
-    connect?: ResultWhereUniqueInput
-    update?: XOR<XOR<ResultUpdateToOneWithWhereWithoutUploadInput, ResultUpdateWithoutUploadInput>, ResultUncheckedUpdateWithoutUploadInput>
   }
 
   export type ResultUncheckedUpdateOneWithoutUploadNestedInput = {
@@ -8399,14 +8404,6 @@ export namespace Prisma {
     connectOrCreate?: ActionItemCreateOrConnectWithoutResultInput | ActionItemCreateOrConnectWithoutResultInput[]
     createMany?: ActionItemCreateManyResultInputEnvelope
     connect?: ActionItemWhereUniqueInput | ActionItemWhereUniqueInput[]
-  }
-
-  export type EnumProcessingStatusFieldUpdateOperationsInput = {
-    set?: $Enums.ProcessingStatus
-  }
-
-  export type EnumDueStatusFieldUpdateOperationsInput = {
-    set?: $Enums.DueStatus
   }
 
   export type ActionItemUpdateManyWithoutResultNestedInput = {
@@ -8459,6 +8456,10 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type EnumDueStatusFieldUpdateOperationsInput = {
+    set?: $Enums.DueStatus
   }
 
   export type UserUpdateOneRequiredWithoutActionItemsNestedInput = {
@@ -8544,38 +8545,21 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedEnumProcessingStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProcessingStatus | EnumProcessingStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ProcessingStatus[] | ListEnumProcessingStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProcessingStatus[] | ListEnumProcessingStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumProcessingStatusFilter<$PrismaModel> | $Enums.ProcessingStatus
+  export type NestedEnumProcessStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProcessStatus | EnumProcessStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProcessStatusFilter<$PrismaModel> | $Enums.ProcessStatus
   }
 
-  export type NestedEnumDueStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.DueStatus | EnumDueStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumDueStatusFilter<$PrismaModel> | $Enums.DueStatus
-  }
-
-  export type NestedEnumProcessingStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProcessingStatus | EnumProcessingStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ProcessingStatus[] | ListEnumProcessingStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProcessingStatus[] | ListEnumProcessingStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumProcessingStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProcessingStatus
+  export type NestedEnumProcessStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProcessStatus | EnumProcessStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProcessStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProcessStatus
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumProcessingStatusFilter<$PrismaModel>
-    _max?: NestedEnumProcessingStatusFilter<$PrismaModel>
-  }
-
-  export type NestedEnumDueStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.DueStatus | EnumDueStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumDueStatusWithAggregatesFilter<$PrismaModel> | $Enums.DueStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumDueStatusFilter<$PrismaModel>
-    _max?: NestedEnumDueStatusFilter<$PrismaModel>
+    _min?: NestedEnumProcessStatusFilter<$PrismaModel>
+    _max?: NestedEnumProcessStatusFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -8587,6 +8571,13 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedEnumDueStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DueStatus | EnumDueStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDueStatusFilter<$PrismaModel> | $Enums.DueStatus
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -8614,6 +8605,16 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedEnumDueStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DueStatus | EnumDueStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DueStatus[] | ListEnumDueStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDueStatusWithAggregatesFilter<$PrismaModel> | $Enums.DueStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDueStatusFilter<$PrismaModel>
+    _max?: NestedEnumDueStatusFilter<$PrismaModel>
+  }
+
   export type TeamCreateWithoutMembersInput = {
     id?: string
     name: string
@@ -8639,16 +8640,18 @@ export namespace Prisma {
     id?: string
     title: string
     fileUrl: string
+    processStatus?: $Enums.ProcessStatus
     createdAt?: Date | string
     updatedAt?: Date | string
-    team: TeamCreateNestedOneWithoutUploadsInput
     result?: ResultCreateNestedOneWithoutUploadInput
+    team: TeamCreateNestedOneWithoutUploadsInput
   }
 
   export type UploadUncheckedCreateWithoutUploaderInput = {
     id?: string
     title: string
     fileUrl: string
+    processStatus?: $Enums.ProcessStatus
     teamId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -8669,6 +8672,7 @@ export namespace Prisma {
     id?: string
     action: string
     dueDate?: Date | string | null
+    dueStatus?: $Enums.DueStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     result: ResultCreateNestedOneWithoutActionItemsInput
@@ -8678,6 +8682,7 @@ export namespace Prisma {
     id?: string
     action: string
     dueDate?: Date | string | null
+    dueStatus?: $Enums.DueStatus
     resultId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -8742,6 +8747,7 @@ export namespace Prisma {
     id?: StringFilter<"Upload"> | string
     title?: StringFilter<"Upload"> | string
     fileUrl?: StringFilter<"Upload"> | string
+    processStatus?: EnumProcessStatusFilter<"Upload"> | $Enums.ProcessStatus
     uploaderId?: StringFilter<"Upload"> | string
     teamId?: StringFilter<"Upload"> | string
     createdAt?: DateTimeFilter<"Upload"> | Date | string
@@ -8771,6 +8777,7 @@ export namespace Prisma {
     id?: StringFilter<"ActionItem"> | string
     action?: StringFilter<"ActionItem"> | string
     dueDate?: DateTimeNullableFilter<"ActionItem"> | Date | string | null
+    dueStatus?: EnumDueStatusFilter<"ActionItem"> | $Enums.DueStatus
     assigneeId?: StringFilter<"ActionItem"> | string
     resultId?: StringFilter<"ActionItem"> | string
     createdAt?: DateTimeFilter<"ActionItem"> | Date | string
@@ -8808,16 +8815,18 @@ export namespace Prisma {
     id?: string
     title: string
     fileUrl: string
+    processStatus?: $Enums.ProcessStatus
     createdAt?: Date | string
     updatedAt?: Date | string
-    uploader: UserCreateNestedOneWithoutUploadsInput
     result?: ResultCreateNestedOneWithoutUploadInput
+    uploader: UserCreateNestedOneWithoutUploadsInput
   }
 
   export type UploadUncheckedCreateWithoutTeamInput = {
     id?: string
     title: string
     fileUrl: string
+    processStatus?: $Enums.ProcessStatus
     uploaderId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -8878,6 +8887,27 @@ export namespace Prisma {
     data: XOR<UploadUpdateManyMutationInput, UploadUncheckedUpdateManyWithoutTeamInput>
   }
 
+  export type ResultCreateWithoutUploadInput = {
+    id?: string
+    summary: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    actionItems?: ActionItemCreateNestedManyWithoutResultInput
+  }
+
+  export type ResultUncheckedCreateWithoutUploadInput = {
+    id?: string
+    summary: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    actionItems?: ActionItemUncheckedCreateNestedManyWithoutResultInput
+  }
+
+  export type ResultCreateOrConnectWithoutUploadInput = {
+    where: ResultWhereUniqueInput
+    create: XOR<ResultCreateWithoutUploadInput, ResultUncheckedCreateWithoutUploadInput>
+  }
+
   export type UserCreateWithoutUploadsInput = {
     id?: string
     supabaseId: string
@@ -8926,29 +8956,31 @@ export namespace Prisma {
     create: XOR<TeamCreateWithoutUploadsInput, TeamUncheckedCreateWithoutUploadsInput>
   }
 
-  export type ResultCreateWithoutUploadInput = {
-    id?: string
-    summary: string
-    processingStatus?: $Enums.ProcessingStatus
-    dueStatus?: $Enums.DueStatus
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    actionItems?: ActionItemCreateNestedManyWithoutResultInput
-  }
-
-  export type ResultUncheckedCreateWithoutUploadInput = {
-    id?: string
-    summary: string
-    processingStatus?: $Enums.ProcessingStatus
-    dueStatus?: $Enums.DueStatus
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    actionItems?: ActionItemUncheckedCreateNestedManyWithoutResultInput
-  }
-
-  export type ResultCreateOrConnectWithoutUploadInput = {
-    where: ResultWhereUniqueInput
+  export type ResultUpsertWithoutUploadInput = {
+    update: XOR<ResultUpdateWithoutUploadInput, ResultUncheckedUpdateWithoutUploadInput>
     create: XOR<ResultCreateWithoutUploadInput, ResultUncheckedCreateWithoutUploadInput>
+    where?: ResultWhereInput
+  }
+
+  export type ResultUpdateToOneWithWhereWithoutUploadInput = {
+    where?: ResultWhereInput
+    data: XOR<ResultUpdateWithoutUploadInput, ResultUncheckedUpdateWithoutUploadInput>
+  }
+
+  export type ResultUpdateWithoutUploadInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    actionItems?: ActionItemUpdateManyWithoutResultNestedInput
+  }
+
+  export type ResultUncheckedUpdateWithoutUploadInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    actionItems?: ActionItemUncheckedUpdateManyWithoutResultNestedInput
   }
 
   export type UserUpsertWithoutUploadsInput = {
@@ -9011,41 +9043,11 @@ export namespace Prisma {
     members?: UserUncheckedUpdateManyWithoutTeamsNestedInput
   }
 
-  export type ResultUpsertWithoutUploadInput = {
-    update: XOR<ResultUpdateWithoutUploadInput, ResultUncheckedUpdateWithoutUploadInput>
-    create: XOR<ResultCreateWithoutUploadInput, ResultUncheckedCreateWithoutUploadInput>
-    where?: ResultWhereInput
-  }
-
-  export type ResultUpdateToOneWithWhereWithoutUploadInput = {
-    where?: ResultWhereInput
-    data: XOR<ResultUpdateWithoutUploadInput, ResultUncheckedUpdateWithoutUploadInput>
-  }
-
-  export type ResultUpdateWithoutUploadInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    summary?: StringFieldUpdateOperationsInput | string
-    processingStatus?: EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
-    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    actionItems?: ActionItemUpdateManyWithoutResultNestedInput
-  }
-
-  export type ResultUncheckedUpdateWithoutUploadInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    summary?: StringFieldUpdateOperationsInput | string
-    processingStatus?: EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
-    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    actionItems?: ActionItemUncheckedUpdateManyWithoutResultNestedInput
-  }
-
   export type ActionItemCreateWithoutResultInput = {
     id?: string
     action: string
     dueDate?: Date | string | null
+    dueStatus?: $Enums.DueStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     assignee: UserCreateNestedOneWithoutActionItemsInput
@@ -9055,6 +9057,7 @@ export namespace Prisma {
     id?: string
     action: string
     dueDate?: Date | string | null
+    dueStatus?: $Enums.DueStatus
     assigneeId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -9074,6 +9077,7 @@ export namespace Prisma {
     id?: string
     title: string
     fileUrl: string
+    processStatus?: $Enums.ProcessStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     uploader: UserCreateNestedOneWithoutUploadsInput
@@ -9084,6 +9088,7 @@ export namespace Prisma {
     id?: string
     title: string
     fileUrl: string
+    processStatus?: $Enums.ProcessStatus
     uploaderId: string
     teamId: string
     createdAt?: Date | string
@@ -9126,6 +9131,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
+    processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     uploader?: UserUpdateOneRequiredWithoutUploadsNestedInput
@@ -9136,6 +9142,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
+    processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     uploaderId?: StringFieldUpdateOperationsInput | string
     teamId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9172,8 +9179,6 @@ export namespace Prisma {
   export type ResultCreateWithoutActionItemsInput = {
     id?: string
     summary: string
-    processingStatus?: $Enums.ProcessingStatus
-    dueStatus?: $Enums.DueStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     upload: UploadCreateNestedOneWithoutResultInput
@@ -9182,8 +9187,6 @@ export namespace Prisma {
   export type ResultUncheckedCreateWithoutActionItemsInput = {
     id?: string
     summary: string
-    processingStatus?: $Enums.ProcessingStatus
-    dueStatus?: $Enums.DueStatus
     uploadId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -9241,8 +9244,6 @@ export namespace Prisma {
   export type ResultUpdateWithoutActionItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     summary?: StringFieldUpdateOperationsInput | string
-    processingStatus?: EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
-    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     upload?: UploadUpdateOneRequiredWithoutResultNestedInput
@@ -9251,8 +9252,6 @@ export namespace Prisma {
   export type ResultUncheckedUpdateWithoutActionItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     summary?: StringFieldUpdateOperationsInput | string
-    processingStatus?: EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
-    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     uploadId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9262,6 +9261,7 @@ export namespace Prisma {
     id?: string
     title: string
     fileUrl: string
+    processStatus?: $Enums.ProcessStatus
     teamId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -9271,6 +9271,7 @@ export namespace Prisma {
     id?: string
     action: string
     dueDate?: Date | string | null
+    dueStatus?: $Enums.DueStatus
     resultId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -9303,16 +9304,18 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
+    processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    team?: TeamUpdateOneRequiredWithoutUploadsNestedInput
     result?: ResultUpdateOneWithoutUploadNestedInput
+    team?: TeamUpdateOneRequiredWithoutUploadsNestedInput
   }
 
   export type UploadUncheckedUpdateWithoutUploaderInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
+    processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     teamId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9323,6 +9326,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
+    processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     teamId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9332,6 +9336,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     action?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     result?: ResultUpdateOneRequiredWithoutActionItemsNestedInput
@@ -9341,6 +9346,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     action?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     resultId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9350,6 +9356,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     action?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     resultId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9359,6 +9366,7 @@ export namespace Prisma {
     id?: string
     title: string
     fileUrl: string
+    processStatus?: $Enums.ProcessStatus
     uploaderId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -9399,16 +9407,18 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
+    processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    uploader?: UserUpdateOneRequiredWithoutUploadsNestedInput
     result?: ResultUpdateOneWithoutUploadNestedInput
+    uploader?: UserUpdateOneRequiredWithoutUploadsNestedInput
   }
 
   export type UploadUncheckedUpdateWithoutTeamInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
+    processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     uploaderId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9419,6 +9429,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
+    processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     uploaderId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9428,6 +9439,7 @@ export namespace Prisma {
     id?: string
     action: string
     dueDate?: Date | string | null
+    dueStatus?: $Enums.DueStatus
     assigneeId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -9437,6 +9449,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     action?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignee?: UserUpdateOneRequiredWithoutActionItemsNestedInput
@@ -9446,6 +9459,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     action?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     assigneeId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9455,6 +9469,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     action?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
     assigneeId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

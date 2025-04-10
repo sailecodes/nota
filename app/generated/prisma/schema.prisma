@@ -42,15 +42,16 @@ model Team {
  * - All related uploads should NOT be deleted...
  */
 model Upload {
-  id      String @id @default(uuid())
-  title   String
-  fileUrl String
+  id            String        @id @default(uuid())
+  title         String
+  fileUrl       String
+  processStatus ProcessStatus @default(TRANSCRIBING)
 
+  result     Result?
   uploader   User    @relation(fields: [uploaderId], references: [id])
   uploaderId String
   team       Team    @relation(fields: [teamId], references: [id], onDelete: Cascade)
   teamId     String
-  result     Result?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -60,20 +61,19 @@ model Result {
   id      String @id @default(uuid())
   summary String
 
-  processingStatus ProcessingStatus @default(TRANSCRIBING)
-  dueStatus        DueStatus        @default(TBD)
-  actionItems      ActionItem[]
-  upload           Upload           @relation(fields: [uploadId], references: [id], onDelete: Cascade)
-  uploadId         String           @unique
+  actionItems ActionItem[]
+  upload      Upload       @relation(fields: [uploadId], references: [id], onDelete: Cascade)
+  uploadId    String       @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model ActionItem {
-  id      String    @id @default(uuid())
-  action  String
-  dueDate DateTime?
+  id        String    @id @default(uuid())
+  action    String
+  dueDate   DateTime?
+  dueStatus DueStatus @default(TBD)
 
   assignee   User   @relation(fields: [assigneeId], references: [id])
   assigneeId String
@@ -84,7 +84,7 @@ model ActionItem {
   updatedAt DateTime @updatedAt
 }
 
-enum ProcessingStatus {
+enum ProcessStatus {
   TRANSCRIBING
   SUMMARIZING
   EXTRACTING
@@ -99,4 +99,5 @@ enum DueStatus {
   DUE_SOON
   COMPLETED
   OVERDUE
+  NO_DUE_DATE
 }

@@ -137,6 +137,7 @@ exports.Prisma.UploadScalarFieldEnum = {
   id: 'id',
   title: 'title',
   fileUrl: 'fileUrl',
+  processStatus: 'processStatus',
   uploaderId: 'uploaderId',
   teamId: 'teamId',
   createdAt: 'createdAt',
@@ -146,8 +147,6 @@ exports.Prisma.UploadScalarFieldEnum = {
 exports.Prisma.ResultScalarFieldEnum = {
   id: 'id',
   summary: 'summary',
-  processingStatus: 'processingStatus',
-  dueStatus: 'dueStatus',
   uploadId: 'uploadId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -157,6 +156,7 @@ exports.Prisma.ActionItemScalarFieldEnum = {
   id: 'id',
   action: 'action',
   dueDate: 'dueDate',
+  dueStatus: 'dueStatus',
   assigneeId: 'assigneeId',
   resultId: 'resultId',
   createdAt: 'createdAt',
@@ -177,7 +177,7 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.ProcessingStatus = exports.$Enums.ProcessingStatus = {
+exports.ProcessStatus = exports.$Enums.ProcessStatus = {
   TRANSCRIBING: 'TRANSCRIBING',
   SUMMARIZING: 'SUMMARIZING',
   EXTRACTING: 'EXTRACTING',
@@ -191,7 +191,8 @@ exports.DueStatus = exports.$Enums.DueStatus = {
   UPCOMING: 'UPCOMING',
   DUE_SOON: 'DUE_SOON',
   COMPLETED: 'COMPLETED',
-  OVERDUE: 'OVERDUE'
+  OVERDUE: 'OVERDUE',
+  NO_DUE_DATE: 'NO_DUE_DATE'
 };
 
 exports.Prisma.ModelName = {
