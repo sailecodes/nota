@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import Link from "next/link";
 import { toast } from "sonner";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, CircleX } from "lucide-react";
 import { useRouter } from "next/navigation";
 import CustomField from "@/components/general/custom-field";
 import { Separator } from "@/components/ui/separator";
@@ -25,7 +25,6 @@ export default function SignUp() {
       lastName: "",
     },
   });
-  const emailWatch = signUpForm.watch(["email"]);
   const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
   const [signUpErrMessage, setSignUpErrMessage] = useState<string>("");
   const router = useRouter();
@@ -38,7 +37,11 @@ export default function SignUp() {
     setIsSigningUp(false);
 
     if (res) {
-      setSignUpErrMessage("Email already exists");
+      if (res.error === "Email already exists") setSignUpErrMessage("Email already exists");
+      else
+        toast.error(`${res.error}`, {
+          icon: <CircleX className="w-4 h-4 stroke-red-300" />,
+        });
     } else {
       // TODO: Confirmation email functionality can be added later on.
       //       Caveat of not knowing if email is duplicate

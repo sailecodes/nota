@@ -40,30 +40,21 @@ export default function UploadButton() {
               "ut-ready:bg-primary ut-ready:text-background ut-ready:font-medium ut-ready:text-sm ut-readying:bg-primary ut-readying:text-sm ut-readying:text-background ut-uploading:bg-green-500",
           }}
           onClientUploadComplete={async (res) => {
-            const {
-              file: { name, size, url },
-              user: { userId, firstName, lastName },
-            } = res[0].serverData;
+            const { transcript, uploadId } = res[0].serverData;
+
+            console.log(transcript);
 
             toast.success("Uploaded successfully!", {
-              description: `${name} is secured in our trusted storage servers`,
+              description: `Your file is safely stored in our trusted servers`,
               icon: <CheckCircle2 className="w-4 h-4 stroke-green-300" />,
             });
 
-            const { transcript, model } = await transcribe(url);
-
             // TODO:
-            //  upload to neon (postgres db)
-            //    - file url
-            //    - file name
-            //    - user id
             //  show in meetings as "transcribing"
-            //  start transcription phase with deepgram
           }}
           onUploadError={(error: Error) => {
             console.error(error.message);
           }}
-          onUploadBegin={() => {}}
         />
       </DialogContent>
     </Dialog>

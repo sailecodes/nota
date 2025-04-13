@@ -26,11 +26,12 @@ export type Team = $Result.DefaultSelection<Prisma.$TeamPayload>
 /**
  * Model Upload
  * *
- *  * TODO: Is this the right logic?
+ *  * FIXME: Is this the right logic?
  *  * What happens if team gets deleted?
  *  * - All related uploads should be deleted...
  *  * What happens if user gets deleted?
  *  * - All related uploads should NOT be deleted...
+ *  * FIXME: Change team to required
  */
 export type Upload = $Result.DefaultSelection<Prisma.$UploadPayload>
 /**
@@ -3775,7 +3776,7 @@ export namespace Prisma {
     fileUrl: string
     processStatus: $Enums.ProcessStatus
     uploaderId: string
-    teamId: string
+    teamId: string | null
     createdAt: Date
     updatedAt: Date
     _count: UploadCountAggregateOutputType | null
@@ -3808,7 +3809,7 @@ export namespace Prisma {
     updatedAt?: boolean
     result?: boolean | Upload$resultArgs<ExtArgs>
     uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | TeamDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
   }, ExtArgs["result"]["upload"]>
 
   export type UploadSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3821,7 +3822,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | TeamDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
   }, ExtArgs["result"]["upload"]>
 
   export type UploadSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3834,7 +3835,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | TeamDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
   }, ExtArgs["result"]["upload"]>
 
   export type UploadSelectScalar = {
@@ -3852,15 +3853,15 @@ export namespace Prisma {
   export type UploadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     result?: boolean | Upload$resultArgs<ExtArgs>
     uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | TeamDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
   }
   export type UploadIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | TeamDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
   }
   export type UploadIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | TeamDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
   }
 
   export type $UploadPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3868,7 +3869,7 @@ export namespace Prisma {
     objects: {
       result: Prisma.$ResultPayload<ExtArgs> | null
       uploader: Prisma.$UserPayload<ExtArgs>
-      team: Prisma.$TeamPayload<ExtArgs>
+      team: Prisma.$TeamPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3876,7 +3877,7 @@ export namespace Prisma {
       fileUrl: string
       processStatus: $Enums.ProcessStatus
       uploaderId: string
-      teamId: string
+      teamId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["upload"]>
@@ -4275,7 +4276,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     result<T extends Upload$resultArgs<ExtArgs> = {}>(args?: Subset<T, Upload$resultArgs<ExtArgs>>): Prisma__ResultClient<$Result.GetResult<Prisma.$ResultPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     uploader<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    team<T extends TeamDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TeamDefaultArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    team<T extends Upload$teamArgs<ExtArgs> = {}>(args?: Subset<T, Upload$teamArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4725,6 +4726,25 @@ export namespace Prisma {
      */
     include?: ResultInclude<ExtArgs> | null
     where?: ResultWhereInput
+  }
+
+  /**
+   * Upload.team
+   */
+  export type Upload$teamArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    where?: TeamWhereInput
   }
 
   /**
@@ -7244,12 +7264,12 @@ export namespace Prisma {
     fileUrl?: StringFilter<"Upload"> | string
     processStatus?: EnumProcessStatusFilter<"Upload"> | $Enums.ProcessStatus
     uploaderId?: StringFilter<"Upload"> | string
-    teamId?: StringFilter<"Upload"> | string
+    teamId?: StringNullableFilter<"Upload"> | string | null
     createdAt?: DateTimeFilter<"Upload"> | Date | string
     updatedAt?: DateTimeFilter<"Upload"> | Date | string
     result?: XOR<ResultNullableScalarRelationFilter, ResultWhereInput> | null
     uploader?: XOR<UserScalarRelationFilter, UserWhereInput>
-    team?: XOR<TeamScalarRelationFilter, TeamWhereInput>
+    team?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
   }
 
   export type UploadOrderByWithRelationInput = {
@@ -7258,7 +7278,7 @@ export namespace Prisma {
     fileUrl?: SortOrder
     processStatus?: SortOrder
     uploaderId?: SortOrder
-    teamId?: SortOrder
+    teamId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     result?: ResultOrderByWithRelationInput
@@ -7275,12 +7295,12 @@ export namespace Prisma {
     fileUrl?: StringFilter<"Upload"> | string
     processStatus?: EnumProcessStatusFilter<"Upload"> | $Enums.ProcessStatus
     uploaderId?: StringFilter<"Upload"> | string
-    teamId?: StringFilter<"Upload"> | string
+    teamId?: StringNullableFilter<"Upload"> | string | null
     createdAt?: DateTimeFilter<"Upload"> | Date | string
     updatedAt?: DateTimeFilter<"Upload"> | Date | string
     result?: XOR<ResultNullableScalarRelationFilter, ResultWhereInput> | null
     uploader?: XOR<UserScalarRelationFilter, UserWhereInput>
-    team?: XOR<TeamScalarRelationFilter, TeamWhereInput>
+    team?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
   }, "id">
 
   export type UploadOrderByWithAggregationInput = {
@@ -7289,7 +7309,7 @@ export namespace Prisma {
     fileUrl?: SortOrder
     processStatus?: SortOrder
     uploaderId?: SortOrder
-    teamId?: SortOrder
+    teamId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UploadCountOrderByAggregateInput
@@ -7306,7 +7326,7 @@ export namespace Prisma {
     fileUrl?: StringWithAggregatesFilter<"Upload"> | string
     processStatus?: EnumProcessStatusWithAggregatesFilter<"Upload"> | $Enums.ProcessStatus
     uploaderId?: StringWithAggregatesFilter<"Upload"> | string
-    teamId?: StringWithAggregatesFilter<"Upload"> | string
+    teamId?: StringNullableWithAggregatesFilter<"Upload"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Upload"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Upload"> | Date | string
   }
@@ -7583,7 +7603,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     result?: ResultCreateNestedOneWithoutUploadInput
     uploader: UserCreateNestedOneWithoutUploadsInput
-    team: TeamCreateNestedOneWithoutUploadsInput
+    team?: TeamCreateNestedOneWithoutUploadsInput
   }
 
   export type UploadUncheckedCreateInput = {
@@ -7592,7 +7612,7 @@ export namespace Prisma {
     fileUrl: string
     processStatus?: $Enums.ProcessStatus
     uploaderId: string
-    teamId: string
+    teamId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     result?: ResultUncheckedCreateNestedOneWithoutUploadInput
@@ -7607,7 +7627,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     result?: ResultUpdateOneWithoutUploadNestedInput
     uploader?: UserUpdateOneRequiredWithoutUploadsNestedInput
-    team?: TeamUpdateOneRequiredWithoutUploadsNestedInput
+    team?: TeamUpdateOneWithoutUploadsNestedInput
   }
 
   export type UploadUncheckedUpdateInput = {
@@ -7616,7 +7636,7 @@ export namespace Prisma {
     fileUrl?: StringFieldUpdateOperationsInput | string
     processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     uploaderId?: StringFieldUpdateOperationsInput | string
-    teamId?: StringFieldUpdateOperationsInput | string
+    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     result?: ResultUncheckedUpdateOneWithoutUploadNestedInput
@@ -7628,7 +7648,7 @@ export namespace Prisma {
     fileUrl: string
     processStatus?: $Enums.ProcessStatus
     uploaderId: string
-    teamId: string
+    teamId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7648,7 +7668,7 @@ export namespace Prisma {
     fileUrl?: StringFieldUpdateOperationsInput | string
     processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     uploaderId?: StringFieldUpdateOperationsInput | string
-    teamId?: StringFieldUpdateOperationsInput | string
+    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7940,6 +7960,21 @@ export namespace Prisma {
     not?: NestedEnumProcessStatusFilter<$PrismaModel> | $Enums.ProcessStatus
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type ResultNullableScalarRelationFilter = {
     is?: ResultWhereInput | null
     isNot?: ResultWhereInput | null
@@ -7950,9 +7985,14 @@ export namespace Prisma {
     isNot?: UserWhereInput
   }
 
-  export type TeamScalarRelationFilter = {
-    is?: TeamWhereInput
-    isNot?: TeamWhereInput
+  export type TeamNullableScalarRelationFilter = {
+    is?: TeamWhereInput | null
+    isNot?: TeamWhereInput | null
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type UploadCountOrderByAggregateInput = {
@@ -7996,6 +8036,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumProcessStatusFilter<$PrismaModel>
     _max?: NestedEnumProcessStatusFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type UploadScalarRelationFilter = {
@@ -8048,11 +8106,6 @@ export namespace Prisma {
   export type ResultScalarRelationFilter = {
     is?: ResultWhereInput
     isNot?: ResultWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type ActionItemCountOrderByAggregateInput = {
@@ -8368,12 +8421,18 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUploadsInput, UserUpdateWithoutUploadsInput>, UserUncheckedUpdateWithoutUploadsInput>
   }
 
-  export type TeamUpdateOneRequiredWithoutUploadsNestedInput = {
+  export type TeamUpdateOneWithoutUploadsNestedInput = {
     create?: XOR<TeamCreateWithoutUploadsInput, TeamUncheckedCreateWithoutUploadsInput>
     connectOrCreate?: TeamCreateOrConnectWithoutUploadsInput
     upsert?: TeamUpsertWithoutUploadsInput
+    disconnect?: TeamWhereInput | boolean
+    delete?: TeamWhereInput | boolean
     connect?: TeamWhereUniqueInput
     update?: XOR<XOR<TeamUpdateToOneWithWhereWithoutUploadsInput, TeamUpdateWithoutUploadsInput>, TeamUncheckedUpdateWithoutUploadsInput>
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type ResultUncheckedUpdateOneWithoutUploadNestedInput = {
@@ -8552,6 +8611,20 @@ export namespace Prisma {
     not?: NestedEnumProcessStatusFilter<$PrismaModel> | $Enums.ProcessStatus
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedEnumProcessStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ProcessStatus | EnumProcessStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
@@ -8560,6 +8633,34 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumProcessStatusFilter<$PrismaModel>
     _max?: NestedEnumProcessStatusFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -8592,17 +8693,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumDueStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -8644,7 +8734,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     result?: ResultCreateNestedOneWithoutUploadInput
-    team: TeamCreateNestedOneWithoutUploadsInput
+    team?: TeamCreateNestedOneWithoutUploadsInput
   }
 
   export type UploadUncheckedCreateWithoutUploaderInput = {
@@ -8652,7 +8742,7 @@ export namespace Prisma {
     title: string
     fileUrl: string
     processStatus?: $Enums.ProcessStatus
-    teamId: string
+    teamId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     result?: ResultUncheckedCreateNestedOneWithoutUploadInput
@@ -8749,7 +8839,7 @@ export namespace Prisma {
     fileUrl?: StringFilter<"Upload"> | string
     processStatus?: EnumProcessStatusFilter<"Upload"> | $Enums.ProcessStatus
     uploaderId?: StringFilter<"Upload"> | string
-    teamId?: StringFilter<"Upload"> | string
+    teamId?: StringNullableFilter<"Upload"> | string | null
     createdAt?: DateTimeFilter<"Upload"> | Date | string
     updatedAt?: DateTimeFilter<"Upload"> | Date | string
   }
@@ -9081,7 +9171,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     uploader: UserCreateNestedOneWithoutUploadsInput
-    team: TeamCreateNestedOneWithoutUploadsInput
+    team?: TeamCreateNestedOneWithoutUploadsInput
   }
 
   export type UploadUncheckedCreateWithoutResultInput = {
@@ -9090,7 +9180,7 @@ export namespace Prisma {
     fileUrl: string
     processStatus?: $Enums.ProcessStatus
     uploaderId: string
-    teamId: string
+    teamId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9135,7 +9225,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     uploader?: UserUpdateOneRequiredWithoutUploadsNestedInput
-    team?: TeamUpdateOneRequiredWithoutUploadsNestedInput
+    team?: TeamUpdateOneWithoutUploadsNestedInput
   }
 
   export type UploadUncheckedUpdateWithoutResultInput = {
@@ -9144,7 +9234,7 @@ export namespace Prisma {
     fileUrl?: StringFieldUpdateOperationsInput | string
     processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     uploaderId?: StringFieldUpdateOperationsInput | string
-    teamId?: StringFieldUpdateOperationsInput | string
+    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9262,7 +9352,7 @@ export namespace Prisma {
     title: string
     fileUrl: string
     processStatus?: $Enums.ProcessStatus
-    teamId: string
+    teamId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9308,7 +9398,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     result?: ResultUpdateOneWithoutUploadNestedInput
-    team?: TeamUpdateOneRequiredWithoutUploadsNestedInput
+    team?: TeamUpdateOneWithoutUploadsNestedInput
   }
 
   export type UploadUncheckedUpdateWithoutUploaderInput = {
@@ -9316,7 +9406,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
     processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
-    teamId?: StringFieldUpdateOperationsInput | string
+    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     result?: ResultUncheckedUpdateOneWithoutUploadNestedInput
@@ -9327,7 +9417,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
     processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
-    teamId?: StringFieldUpdateOperationsInput | string
+    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
