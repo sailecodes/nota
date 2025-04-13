@@ -1,7 +1,7 @@
 import AccountSkeleton from "@/components/internal/account/account-skeleton";
 import ProfileInformation from "@/components/internal/account/profile-information";
 import EmailAddress from "@/components/internal/account/email-address";
-import { createClient } from "@/lib/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server";
 import Password from "@/components/internal/account/password";
 import SubscriptionAndBilling from "@/components/internal/account/subscription-and-billing";
 import Danger from "@/components/internal/account/danger";
@@ -12,7 +12,7 @@ export default async function AccountPage() {
   } = await (await createClient()).auth.getUser();
 
   return (
-    <div className="grid grid-cols-2 gap-3 max-w-7xl mx-auto p-4">
+    <div className="flex flex-col gap-3 max-w-7xl mx-auto p-4">
       {!user && <AccountSkeleton />}
       {user && (
         <>

@@ -1,12 +1,8 @@
 "use server";
 
-import {
-  emailAddressSchema,
-  passwordSchema,
-  profileInformationSchema,
-} from "@/lib/schemas/account.schema";
-import { supabaseAdmin } from "@/lib/utils/supabase/admin";
-import { createClient } from "@/lib/utils/supabase/server";
+import { emailAddressSchema, passwordSchema, profileInformationSchema } from "@/schemas/account.schema";
+import { supabaseAdmin } from "@/utils/supabase/admin";
+import { createClient } from "@/utils/supabase/server";
 import { z } from "zod";
 
 export const updateProfileInformation = async (data: z.infer<typeof profileInformationSchema>) => {

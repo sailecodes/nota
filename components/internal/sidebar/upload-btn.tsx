@@ -8,11 +8,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { UploadDropzone } from "@/lib/utils/uploadthing";
+import { UploadDropzone } from "@/utils/uploadthing/uploader";
 import { CheckCircle2, PlusCircle } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { toast } from "sonner";
+import { transcribe } from "@/actions/transcribe.action";
 
 export default function UploadButton() {
   return (
@@ -38,13 +39,18 @@ export default function UploadButton() {
             button:
               "ut-ready:bg-primary ut-ready:text-background ut-ready:font-medium ut-ready:text-sm ut-readying:bg-primary ut-readying:text-sm ut-readying:text-background ut-uploading:bg-green-500",
           }}
-          onClientUploadComplete={(res) => {
-            toast.success("Uploaded successfuly!", {
-              description: `${res[0].serverData.fileName}`,
+          onClientUploadComplete={async (res) => {
+            const {
+              file: { name, size, url },
+              user: { userId, firstName, lastName },
+            } = res[0].serverData;
+
+            toast.success("Uploaded successfully!", {
+              description: `${name} is secured in our trusted storage servers`,
               icon: <CheckCircle2 className="w-4 h-4 stroke-green-300" />,
             });
 
-            console.log(res[0]);
+            const { transcript, model } = await transcribe(url);
 
             // TODO:
             //  upload to neon (postgres db)
@@ -57,9 +63,7 @@ export default function UploadButton() {
           onUploadError={(error: Error) => {
             console.error(error.message);
           }}
-          onUploadBegin={() => {
-            console.log("begin upload");
-          }}
+          onUploadBegin={() => {}}
         />
       </DialogContent>
     </Dialog>

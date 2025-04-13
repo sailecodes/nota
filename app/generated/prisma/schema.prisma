@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String @id @default(uuid())
+  supabaseId String @unique
+  firstName  String
+  lastName   String
+
+  teams       Team[]       @relation("TeamMembers")
+  uploads     Upload[]
+  actionItems ActionItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// TODO: Delete team if sole member deletes themselves
+model Team {
+  id   String @id @default(uuid())
+  name String
+
+  members User[]   @relation("TeamMembers")
+  uploads Upload[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/**
+ * TODO: Is this the right logic?
+ * What happens if team gets deleted?
+ * - All related uploads should be deleted...
+ * What happens if user gets deleted?
+ * - All related uploads should NOT be deleted...
+ */
+model Upload {
+  id            String        @id @default(uuid())
+  title         String
+  fileUrl       String
+  processStatus ProcessStatus @default(TRANSCRIBING)
+
+  result     Result?
+  uploader   User    @relation(fields: [uploaderId], references: [id])
+  uploaderId String
+  team       Team    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId     String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Result {
+  id      String @id @default(uuid())
+  summary String
+
+  actionItems ActionItem[]
+  upload      Upload       @relation(fields: [uploadId], references: [id], onDelete: Cascade)
+  uploadId    String       @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ActionItem {
+  id        String    @id @default(uuid())
+  action    String
+  dueDate   DateTime?
+  dueStatus DueStatus @default(TBD)
+
+  assignee   User   @relation(fields: [assigneeId], references: [id])
+  assigneeId String
+  result     Result @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  resultId   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ProcessStatus {
+  TRANSCRIBING
+  SUMMARIZING
+  EXTRACTING
+  COMPLETED
+  FAILED
+}
+
+enum DueStatus {
+  TBD
+  NEW
+  UPCOMING
+  DUE_SOON
+  COMPLETED
+  OVERDUE
+  NO_DUE_DATE
+}

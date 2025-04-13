@@ -6,7 +6,7 @@ import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
 import { Input } from "../../ui/input";
-import { emailAddressSchema } from "@/lib/schemas/account.schema";
+import { emailAddressSchema } from "@/schemas/account.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { changeEmailAddress } from "@/actions/account.actions";
@@ -50,7 +50,7 @@ export default function EmailAddress({ user }: EmailAddressProps) {
   return (
     <Card className="col-span-full bg-background">
       <CardHeader>
-        <CardTitle>Email address</CardTitle>
+        <CardTitle>Email Address</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <Form {...emailAddressForm}>

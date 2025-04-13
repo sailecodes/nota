@@ -1,7 +1,7 @@
 "use server";
 
-import { signInSchema, signUpSchema } from "@/lib/schemas/auth.schema";
-import { createClient } from "@/lib/utils/supabase/server";
+import { signInSchema, signUpSchema } from "@/schemas/auth.schema";
+import { createClient } from "@/utils/supabase/server";
 import { z } from "zod";
 
 export async function signUp(data: z.infer<typeof signUpSchema>) {

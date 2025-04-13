@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { Form } from "../../ui/form";
-import { profileInformationSchema } from "@/lib/schemas/account.schema";
+import { profileInformationSchema } from "@/schemas/account.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { updateProfileInformation } from "@/actions/account.actions";
@@ -49,7 +49,7 @@ export default function ProfileInformation({ user }: ProfileInformationProps) {
   return (
     <Card className="col-span-full bg-background">
       <CardHeader>
-        <CardTitle>Profile information</CardTitle>
+        <CardTitle>Profile Information</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...userInformationForm}>

@@ -1,14 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { getMeetingStatusBadgeColor, MeetingStatus } from "@/lib/utils/general";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { getMeetingStatusBadgeColor, MeetingStatus } from "@/utils/general";
 import { Calendar, ListTodo } from "lucide-react";
 import Link from "next/link";
 
