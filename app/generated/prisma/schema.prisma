@@ -35,7 +35,7 @@ model Team {
 }
 
 /**
- * TODO: Is this the right logic?
+ * FIXME: Is this the right logic?
  * What happens if team gets deleted?
  * - All related uploads should be deleted...
  * What happens if user gets deleted?
@@ -50,7 +50,7 @@ model Upload {
   result     Result?
   uploader   User    @relation(fields: [uploaderId], references: [id])
   uploaderId String
-  team       Team    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  team       Team?   @relation(fields: [teamId], references: [id], onDelete: Cascade)
   teamId     String
 
   createdAt DateTime @default(now())

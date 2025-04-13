@@ -1,21 +1,26 @@
 "use server";
 
+import { z } from "zod";
+import prisma from "@/utils/prisma";
 import { signInSchema, signUpSchema } from "@/schemas/auth.schema";
 import { createClient } from "@/utils/supabase/server";
-import { z } from "zod";
+import { supabaseAdmin } from "@/utils/supabase/admin";
 
-export async function signUp(data: z.infer<typeof signUpSchema>) {
-  const supabase = await createClient();
-
+export async function signUp(signUpData: z.infer<typeof signUpSchema>) {
   let parsedData;
 
   try {
-    parsedData = signUpSchema.parse(data);
-  } catch (err) {
-    return { success: false, msg: "Data couldn't be parsed. Check field values." };
+    parsedData = signUpSchema.parse(signUpData);
+  } catch (e) {
+    return { error: "Data couldn't be parsed" };
   }
 
-  const { error } = await supabase.auth.signUp({
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: signUpError,
+  } = await supabase.auth.signUp({
     email: parsedData.email,
     password: parsedData.password,
     options: {
@@ -29,7 +34,22 @@ export async function signUp(data: z.infer<typeof signUpSchema>) {
   });
 
   // Only accounting for existing email error
-  if (error?.message) return { success: false, msg: "Email already exists" };
+  if (signUpError?.message) return { error: "Email already exists" };
+
+  try {
+    await prisma.user.create({
+      data: {
+        supabaseId: user!.id,
+        firstName: user!.user_metadata.firstName,
+        lastName: user!.user_metadata.lastName,
+      },
+    });
+  } catch (e) {
+    // Rollback previous Supabase auth table modification
+    const { error: deleteUserError } = await supabaseAdmin.auth.admin.deleteUser(user!.id);
+
+    if (deleteUserError) return { error: deleteUserError.message };
+  }
 }
 
 export async function signIn(data: z.infer<typeof signInSchema>) {
@@ -38,7 +58,7 @@ export async function signIn(data: z.infer<typeof signInSchema>) {
   try {
     parsedData = signInSchema.parse(data);
   } catch (err) {
-    return { success: false, msg: "Data couldn't be parsed. Check field values." };
+    return { msg: "Data couldn't be parsed. Check field values." };
   }
 
   const supabase = await createClient();
@@ -48,7 +68,7 @@ export async function signIn(data: z.infer<typeof signInSchema>) {
     password: parsedData.password,
   });
 
-  if (signInError?.message) return { success: false, msg: signInError?.message };
+  if (signInError?.message) return { msg: signInError?.message };
 }
 
 export async function signOut() {}

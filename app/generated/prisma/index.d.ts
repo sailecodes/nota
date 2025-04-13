@@ -26,7 +26,7 @@ export type Team = $Result.DefaultSelection<Prisma.$TeamPayload>
 /**
  * Model Upload
  * *
- *  * TODO: Is this the right logic?
+ *  * FIXME: Is this the right logic?
  *  * What happens if team gets deleted?
  *  * - All related uploads should be deleted...
  *  * What happens if user gets deleted?
@@ -3808,7 +3808,7 @@ export namespace Prisma {
     updatedAt?: boolean
     result?: boolean | Upload$resultArgs<ExtArgs>
     uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | TeamDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
   }, ExtArgs["result"]["upload"]>
 
   export type UploadSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3821,7 +3821,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | TeamDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
   }, ExtArgs["result"]["upload"]>
 
   export type UploadSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3834,7 +3834,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | TeamDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
   }, ExtArgs["result"]["upload"]>
 
   export type UploadSelectScalar = {
@@ -3852,15 +3852,15 @@ export namespace Prisma {
   export type UploadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     result?: boolean | Upload$resultArgs<ExtArgs>
     uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | TeamDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
   }
   export type UploadIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | TeamDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
   }
   export type UploadIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | TeamDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
   }
 
   export type $UploadPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3868,7 +3868,7 @@ export namespace Prisma {
     objects: {
       result: Prisma.$ResultPayload<ExtArgs> | null
       uploader: Prisma.$UserPayload<ExtArgs>
-      team: Prisma.$TeamPayload<ExtArgs>
+      team: Prisma.$TeamPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4275,7 +4275,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     result<T extends Upload$resultArgs<ExtArgs> = {}>(args?: Subset<T, Upload$resultArgs<ExtArgs>>): Prisma__ResultClient<$Result.GetResult<Prisma.$ResultPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     uploader<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    team<T extends TeamDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TeamDefaultArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    team<T extends Upload$teamArgs<ExtArgs> = {}>(args?: Subset<T, Upload$teamArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4725,6 +4725,25 @@ export namespace Prisma {
      */
     include?: ResultInclude<ExtArgs> | null
     where?: ResultWhereInput
+  }
+
+  /**
+   * Upload.team
+   */
+  export type Upload$teamArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    where?: TeamWhereInput
   }
 
   /**
@@ -7249,7 +7268,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Upload"> | Date | string
     result?: XOR<ResultNullableScalarRelationFilter, ResultWhereInput> | null
     uploader?: XOR<UserScalarRelationFilter, UserWhereInput>
-    team?: XOR<TeamScalarRelationFilter, TeamWhereInput>
+    team?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
   }
 
   export type UploadOrderByWithRelationInput = {
@@ -7280,7 +7299,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Upload"> | Date | string
     result?: XOR<ResultNullableScalarRelationFilter, ResultWhereInput> | null
     uploader?: XOR<UserScalarRelationFilter, UserWhereInput>
-    team?: XOR<TeamScalarRelationFilter, TeamWhereInput>
+    team?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
   }, "id">
 
   export type UploadOrderByWithAggregationInput = {
@@ -7583,7 +7602,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     result?: ResultCreateNestedOneWithoutUploadInput
     uploader: UserCreateNestedOneWithoutUploadsInput
-    team: TeamCreateNestedOneWithoutUploadsInput
+    team?: TeamCreateNestedOneWithoutUploadsInput
   }
 
   export type UploadUncheckedCreateInput = {
@@ -7607,7 +7626,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     result?: ResultUpdateOneWithoutUploadNestedInput
     uploader?: UserUpdateOneRequiredWithoutUploadsNestedInput
-    team?: TeamUpdateOneRequiredWithoutUploadsNestedInput
+    team?: TeamUpdateOneWithoutUploadsNestedInput
   }
 
   export type UploadUncheckedUpdateInput = {
@@ -7950,9 +7969,9 @@ export namespace Prisma {
     isNot?: UserWhereInput
   }
 
-  export type TeamScalarRelationFilter = {
-    is?: TeamWhereInput
-    isNot?: TeamWhereInput
+  export type TeamNullableScalarRelationFilter = {
+    is?: TeamWhereInput | null
+    isNot?: TeamWhereInput | null
   }
 
   export type UploadCountOrderByAggregateInput = {
@@ -8368,10 +8387,12 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUploadsInput, UserUpdateWithoutUploadsInput>, UserUncheckedUpdateWithoutUploadsInput>
   }
 
-  export type TeamUpdateOneRequiredWithoutUploadsNestedInput = {
+  export type TeamUpdateOneWithoutUploadsNestedInput = {
     create?: XOR<TeamCreateWithoutUploadsInput, TeamUncheckedCreateWithoutUploadsInput>
     connectOrCreate?: TeamCreateOrConnectWithoutUploadsInput
     upsert?: TeamUpsertWithoutUploadsInput
+    disconnect?: TeamWhereInput | boolean
+    delete?: TeamWhereInput | boolean
     connect?: TeamWhereUniqueInput
     update?: XOR<XOR<TeamUpdateToOneWithWhereWithoutUploadsInput, TeamUpdateWithoutUploadsInput>, TeamUncheckedUpdateWithoutUploadsInput>
   }
@@ -8644,7 +8665,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     result?: ResultCreateNestedOneWithoutUploadInput
-    team: TeamCreateNestedOneWithoutUploadsInput
+    team?: TeamCreateNestedOneWithoutUploadsInput
   }
 
   export type UploadUncheckedCreateWithoutUploaderInput = {
@@ -9081,7 +9102,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     uploader: UserCreateNestedOneWithoutUploadsInput
-    team: TeamCreateNestedOneWithoutUploadsInput
+    team?: TeamCreateNestedOneWithoutUploadsInput
   }
 
   export type UploadUncheckedCreateWithoutResultInput = {
@@ -9135,7 +9156,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     uploader?: UserUpdateOneRequiredWithoutUploadsNestedInput
-    team?: TeamUpdateOneRequiredWithoutUploadsNestedInput
+    team?: TeamUpdateOneWithoutUploadsNestedInput
   }
 
   export type UploadUncheckedUpdateWithoutResultInput = {
@@ -9308,7 +9329,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     result?: ResultUpdateOneWithoutUploadNestedInput
-    team?: TeamUpdateOneRequiredWithoutUploadsNestedInput
+    team?: TeamUpdateOneWithoutUploadsNestedInput
   }
 
   export type UploadUncheckedUpdateWithoutUploaderInput = {
