@@ -1,13 +1,19 @@
 "use client";
 
-import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { UploadDropzone } from "@/utils/uploadthing/uploader";
 import { CheckCircle2, PlusCircle } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { toast } from "sonner";
-import { transcribeWithDeepgram } from "@/utils/deepgram/transcription";
+import { transcribe } from "@/actions/transcribe.action";
 
 export default function UploadButton() {
   return (
@@ -44,9 +50,9 @@ export default function UploadButton() {
               icon: <CheckCircle2 className="w-4 h-4 stroke-green-300" />,
             });
 
-            // const { transcript } = await transcribeWithDeepgram(url);
+            const { transcript, model } = await transcribe(url);
 
-            // console.log(transcript);
+            console.log(model, "\n", transcript);
 
             // TODO:
             //  upload to neon (postgres db)
