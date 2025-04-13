@@ -52,8 +52,6 @@ export default function UploadButton() {
 
             const { transcript, model } = await transcribe(url);
 
-            console.log(model, "\n", transcript);
-
             // TODO:
             //  upload to neon (postgres db)
             //    - file url

@@ -35,7 +35,7 @@ model Team {
 }
 
 /**
- * TODO: Is this the right logic?
+ * FIXME: Is this the right logic?
  * What happens if team gets deleted?
  * - All related uploads should be deleted...
  * What happens if user gets deleted?
