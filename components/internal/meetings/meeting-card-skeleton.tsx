@@ -10,15 +10,19 @@ import {
 } from "@/components/ui/card";
 import { Calendar, ListTodo } from "lucide-react";
 import { Skeleton } from "../../ui/skeleton";
+import { getMeetingStatusBadgeColor } from "@/utils/general";
+import { ProcessStatus } from "@/schemas";
 
 interface MeetingCardSkeletonProps {
   title: string;
+  status: string;
   uploadedBy: string;
   dateUploaded: string;
 }
 
 export default function MeetingCardSkeleton({
   title,
+  status,
   uploadedBy,
   dateUploaded,
 }: MeetingCardSkeletonProps) {
@@ -27,7 +31,9 @@ export default function MeetingCardSkeleton({
       <CardHeader>
         <div className="flex items-center justify-between gap-6">
           <CardTitle className="line-clamp-2">{title}</CardTitle>
-          <Badge className="bg-yellow-100 text-yellow-800">Processing</Badge>
+          <Badge className={getMeetingStatusBadgeColor(status as ProcessStatus)}>
+            {status.charAt(0) + status.slice(1).toLocaleLowerCase()}
+          </Badge>
         </div>
         <CardDescription>Uploaded by {uploadedBy}</CardDescription>
       </CardHeader>

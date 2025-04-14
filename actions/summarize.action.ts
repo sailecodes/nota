@@ -1,6 +1,6 @@
 "use server";
 
-import { outputSchema } from "@/schemas";
+import { geminiResponseSchema } from "@/schemas";
 import { gemini } from "@/utils/gemini";
 import { generateText } from "ai";
 
@@ -66,7 +66,7 @@ Return the result in the following JSON format:
       .replace(/^```(?:json)?\n?/, "")
       .replace(/```$/, "")
   );
-  const { data: parsedData, error } = outputSchema.safeParse(jsonData);
+  const { data: parsedData, error } = geminiResponseSchema.safeParse(jsonData);
 
   if (error) return { error: "Data couldn't be parsed" };
 

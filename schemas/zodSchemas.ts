@@ -31,8 +31,18 @@ export const passwordSchema = z.object({
   newPassword: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-export const outputSchema = z.object({
+export const geminiResponseSchema = z.object({
   summary: z.string(),
+  actionItems: z.array(
+    z.object({
+      action: z.string(),
+      assignee: z.string().optional(),
+      dueDate: z.string().optional(),
+    })
+  ),
+});
+
+export const actionItemSchema = z.object({
   actionItems: z.array(
     z.object({
       action: z.string(),

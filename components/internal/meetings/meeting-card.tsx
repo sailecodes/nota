@@ -1,7 +1,15 @@
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { getMeetingStatusBadgeColor, MeetingStatus } from "@/utils/general";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ProcessStatus } from "@/schemas";
+import { getMeetingStatusBadgeColor } from "@/utils/general";
 import { Calendar, ListTodo } from "lucide-react";
 import Link from "next/link";
 
@@ -9,7 +17,7 @@ interface MeetingCardProps {
   title: string;
   status: string;
   uploadedBy: string;
-  dateUploaded: string;
+  dateUploaded: Date;
   summary: string;
   numOfActionItems: number;
   id: string;
@@ -28,16 +36,17 @@ export default function MeetingCard({
     <Card className="bg-background">
       <CardHeader>
         <div className="flex items-center justify-between gap-6">
-          {/* TODO: line-clamp cuts off previous line */}
-          <CardTitle className="line-clamp-2">{title}</CardTitle>
-          <Badge className={getMeetingStatusBadgeColor(status as MeetingStatus)}>{status}</Badge>
+          <CardTitle className="line-clamp-2 leading-5">{title}</CardTitle>
+          <Badge className={getMeetingStatusBadgeColor(status as ProcessStatus)}>
+            {status.charAt(0) + status.slice(1).toLocaleLowerCase()}
+          </Badge>
         </div>
         <CardDescription>Uploaded by {uploadedBy}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Calendar className="h-4 w-4" />
-          <span>{dateUploaded}</span>
+          <span>{dateUploaded.getDate()}</span>
         </div>
         <p className="text-sm text-muted-foreground line-clamp-2">{summary}</p>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -50,6 +59,7 @@ export default function MeetingCard({
         </div>
       </CardContent>
       <CardFooter className="mt-auto">
+        {/* TODO: */}
         <Link
           href={`/dashboard/meetings/${id}`}
           className={buttonVariants({ variant: "secondary", className: "w-full" })}>
