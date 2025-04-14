@@ -3,7 +3,7 @@
 import { toast } from "sonner";
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
-import { sendPasswordResetLink } from "@/actions/account.actions";
+import { sendPasswordResetLink } from "@/actions/account.action";
 import { CheckCircle2, CircleX } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 

@@ -8,12 +8,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { UploadDropzone } from "@/utils/uploadthing/uploader";
-import { CheckCircle2, PlusCircle } from "lucide-react";
+import { UploadDropzone } from "@/utils/uploadthing";
+import { CheckCircle2, Info, PlusCircle } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { toast } from "sonner";
-import { transcribe } from "@/actions/transcribe.action";
+import { summarize } from "@/actions/summarize.action";
 
 export default function UploadButton() {
   return (
@@ -48,6 +48,12 @@ export default function UploadButton() {
               description: `Your file is safely stored in our trusted servers`,
               icon: <CheckCircle2 className="w-4 h-4 stroke-green-300" />,
             });
+
+            toast.info("Starting summarization and extraction process", {
+              icon: <Info className="w-4 h-4" />,
+            });
+
+            await summarize(transcript!);
 
             // TODO:
             //  show in meetings as "transcribing"
