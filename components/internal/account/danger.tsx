@@ -12,7 +12,7 @@ import {
 import { AlertDialogHeader, AlertDialogFooter } from "../../ui/alert-dialog";
 import { Button } from "../../ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../../ui/card";
-import { deleteAccount } from "@/actions/account.actions";
+import { deleteAccount } from "@/actions/account.action";
 import { useRouter } from "next/navigation";
 
 export default function Danger() {
@@ -24,7 +24,9 @@ export default function Danger() {
         <CardTitle className="text-red-400">Danger Zone</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
-        <span className="text-sm text-muted-foreground">Permanently delete your account and all associated data.</span>
+        <span className="text-sm text-muted-foreground">
+          Permanently delete your account and all associated data.
+        </span>
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
@@ -37,8 +39,8 @@ export default function Danger() {
             <AlertDialogHeader>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. To reiterate, this will permanently delete your account and remove your
-                data from our servers.
+                This action cannot be undone. To reiterate, this will permanently delete your
+                account and remove your data from our servers.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

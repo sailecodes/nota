@@ -74,10 +74,10 @@ model ActionItem {
   id        String    @id @default(uuid())
   action    String
   dueDate   DateTime?
-  dueStatus DueStatus @default(TBD)
+  dueStatus DueStatus @default(NEW)
 
-  assignee   User   @relation(fields: [assigneeId], references: [id])
-  assigneeId String
+  assignee   User?   @relation(fields: [assigneeId], references: [id])
+  assigneeId String?
   result     Result @relation(fields: [resultId], references: [id], onDelete: Cascade)
   resultId   String
 
@@ -94,7 +94,6 @@ enum ProcessStatus {
 }
 
 enum DueStatus {
-  TBD
   NEW
   UPCOMING
   DUE_SOON

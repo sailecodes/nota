@@ -17,3 +17,27 @@ export const signInSchema = z.object({
     .email({ message: "Please provide a valid email address" }),
   password: z.string().nonempty("Please provide a password"),
 });
+
+export const profileInformationSchema = z.object({
+  firstName: z.string().nonempty({ message: "First name cannot be blank" }),
+  lastName: z.string().nonempty({ message: "Last name cannot be blank" }),
+});
+
+export const emailAddressSchema = z.object({
+  emailAddress: z.string().email({ message: "Must be a valid email" }),
+});
+
+export const passwordSchema = z.object({
+  newPassword: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+export const outputSchema = z.object({
+  summary: z.string(),
+  actionItems: z.array(
+    z.object({
+      action: z.string(),
+      assignee: z.string().optional(),
+      dueDate: z.string().optional(),
+    })
+  ),
+});

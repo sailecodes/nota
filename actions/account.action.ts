@@ -1,6 +1,6 @@
 "use server";
 
-import { emailAddressSchema, passwordSchema, profileInformationSchema } from "@/schemas/account.schema";
+import { emailAddressSchema, passwordSchema, profileInformationSchema } from "@/schemas";
 import { supabaseAdmin } from "@/utils/supabase/admin";
 import { createClient } from "@/utils/supabase/server";
 import { z } from "zod";

@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import prisma from "@/utils/prisma";
-import { signInSchema, signUpSchema } from "@/schemas/auth.schema";
+import { signInSchema, signUpSchema } from "@/schemas";
 import { createClient } from "@/utils/supabase/server";
 import { supabaseAdmin } from "@/utils/supabase/admin";
 
