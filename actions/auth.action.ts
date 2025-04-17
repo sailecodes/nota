@@ -1,10 +1,10 @@
 "use server";
 
 import { z } from "zod";
-import prisma from "@/utils/prisma";
+import prisma from "@/lib/prisma";
 import { signInSchema, signUpSchema } from "@/schemas";
-import { createClient } from "@/utils/supabase/server";
-import { supabaseAdmin } from "@/utils/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 
 export async function signUp(signUpData: z.infer<typeof signUpSchema>) {
   let parsedData;

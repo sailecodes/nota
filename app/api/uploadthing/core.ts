@@ -1,7 +1,7 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
-import prisma from "@/utils/prisma";
-import { createClient } from "@/utils/supabase/server";
+import prisma from "@/lib/prisma";
+import { createClient } from "@/lib/supabase/server";
 import { transcribe } from "@/actions/transcribe.action";
 
 const f = createUploadthing();

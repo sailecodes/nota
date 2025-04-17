@@ -24,7 +24,7 @@ import CustomSidebarSingle from "./custom-sidebar-single";
 import { Button } from "../../ui/button";
 import CustomSidebarHeader from "./custom-sidebar-header";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
-import { useUploadThing } from "@/utils/uploadthing";
+import { useUploadThing } from "@/lib/uploadthing";
 import UploadButton from "./upload-btn";
 
 const sidebarData = {

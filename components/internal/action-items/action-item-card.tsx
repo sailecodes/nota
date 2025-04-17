@@ -2,7 +2,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
-import { ActionItemStatus, getActionItemCardAccentColor, getActionItemStatusBadgeColor } from "@/utils/general";
+import {
+  ActionItemStatus,
+  getActionItemCardAccentColor,
+  getActionItemStatusBadgeColor,
+} from "@/utils/utils";
 import { CalendarClock } from "lucide-react";
 import Link from "next/link";
 
@@ -15,7 +19,14 @@ interface ActionItemCardProps {
   assignedTo: string;
 }
 
-export default function ActionItemCard({ id, action, status, from, dueDate, assignedTo }: ActionItemCardProps) {
+export default function ActionItemCard({
+  id,
+  action,
+  status,
+  from,
+  dueDate,
+  assignedTo,
+}: ActionItemCardProps) {
   return (
     <Card className="relative justify-between bg-background overflow-hidden">
       <div
@@ -27,7 +38,9 @@ export default function ActionItemCard({ id, action, status, from, dueDate, assi
         <div className="flex items-center justify-between gap-6">
           {/* TODO: line-clamp cuts off previous line */}
           <CardTitle className="line-clamp-2">{action}</CardTitle>
-          <Badge className={getActionItemStatusBadgeColor(status as ActionItemStatus)}>{status}</Badge>
+          <Badge className={getActionItemStatusBadgeColor(status as ActionItemStatus)}>
+            {status}
+          </Badge>
         </div>
         <div className="text-sm text-muted-foreground">
           Captured in <span className="font-medium">{from}</span>

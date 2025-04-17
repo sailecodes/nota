@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import CustomField from "@/components/general/custom-field";
 import { passwordSchema } from "@/schemas";
 import { resetPassword } from "@/actions/account.action";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { CircleX } from "lucide-react";
 

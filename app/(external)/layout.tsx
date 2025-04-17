@@ -4,9 +4,11 @@ import { ModeToggle } from "@/components/ui/mode-toggle";
 
 import Link from "next/link";
 import { ReactNode } from "react";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
-export default async function UnauthenticatedLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default async function UnauthenticatedLayout({
+  children,
+}: Readonly<{ children: ReactNode }>) {
   const {
     data: { user },
   } = await (await createClient()).auth.getUser();
@@ -49,7 +51,8 @@ export default async function UnauthenticatedLayout({ children }: Readonly<{ chi
         <div className="max-w-[350px]">
           <p className="text-3xl font-bold mb-4">Nota</p>
           <p className="text-muted-foreground text-sm">
-            AI Platform with a mission to deliver structured, actionable meeting summaries to everyone.
+            AI Platform with a mission to deliver structured, actionable meeting summaries to
+            everyone.
           </p>
         </div>
       </footer>

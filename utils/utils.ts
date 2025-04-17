@@ -15,6 +15,13 @@ export function getMeetingStatusBadgeColor(status: ProcessStatus) {
   else return "bg-gray-100 text-gray-800";
 }
 
+export function getMeetingSkeletonColor(status: ProcessStatus) {
+  if (status === "TRANSCRIBING") return "bg-violet-200/50";
+  else if (status === "SUMMARIZING") return "bg-blue-200/50";
+  else if (status === "EXTRACTING") return "bg-cyan-200/50";
+  else return "bg-gray-200/50";
+}
+
 export function getActionItemStatusBadgeColor(status: DueStatus) {
   if (status === "NEW") return "text-teal-800 bg-teal-100";
   else if (status === "UPCOMING") return "text-violet-800 bg-violet-100";

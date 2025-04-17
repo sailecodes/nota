@@ -1,7 +1,7 @@
 "use server";
 
 import { geminiResponseSchema } from "@/schemas";
-import { gemini } from "@/utils/gemini";
+import { gemini } from "@/lib/gemini";
 import { generateText } from "ai";
 
 export async function summarize(transcript: string) {

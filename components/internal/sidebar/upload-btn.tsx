@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { UploadDropzone } from "@/utils/uploadthing";
+import { UploadDropzone } from "@/lib/uploadthing";
 import { CheckCircle2, Info, PlusCircle } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";

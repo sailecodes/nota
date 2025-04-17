@@ -9,46 +9,46 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ProcessStatus } from "@/schemas";
-import { getMeetingStatusBadgeColor } from "@/utils/general";
+import { getMeetingStatusBadgeColor } from "@/utils/utils";
 import { Calendar, ListTodo } from "lucide-react";
 import Link from "next/link";
 
 interface MeetingCardProps {
   title: string;
-  status: string;
-  uploadedBy: string;
+  processStatus: ProcessStatus;
+  uploader: string;
   dateUploaded: Date;
   summary: string;
   numOfActionItems: number;
-  id: string;
+  uploadId: string;
 }
 
 export default function MeetingCard({
   title,
-  status,
-  uploadedBy,
+  processStatus,
+  uploader,
   dateUploaded,
   summary,
   numOfActionItems,
-  id,
+  uploadId,
 }: MeetingCardProps) {
   return (
-    <Card className="bg-background">
+    <Card className="bg-background justify-between">
       <CardHeader>
         <div className="flex items-center justify-between gap-6">
           <CardTitle className="line-clamp-2 leading-5">{title}</CardTitle>
-          <Badge className={getMeetingStatusBadgeColor(status as ProcessStatus)}>
-            {status.charAt(0) + status.slice(1).toLocaleLowerCase()}
+          <Badge className={getMeetingStatusBadgeColor(processStatus)}>
+            {processStatus.charAt(0) + processStatus.slice(1).toLocaleLowerCase()}
           </Badge>
         </div>
-        <CardDescription>Uploaded by {uploadedBy}</CardDescription>
+        <CardDescription>Uploaded by {uploader}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Calendar className="h-4 w-4" />
           <span>{dateUploaded.getDate()}</span>
         </div>
-        <p className="text-sm text-muted-foreground line-clamp-2">{summary}</p>
+        <p className="text-sm text-muted-foreground line-clamp-2 leading-5">{summary}</p>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <ListTodo className="h-4 w-4" />
           <Link
@@ -58,10 +58,10 @@ export default function MeetingCard({
           </Link>
         </div>
       </CardContent>
-      <CardFooter className="mt-auto">
+      <CardFooter>
         {/* TODO: */}
         <Link
-          href={`/dashboard/meetings/${id}`}
+          href={`/dashboard/meetings/${uploadId}`}
           className={buttonVariants({ variant: "secondary", className: "w-full" })}>
           View details
         </Link>
