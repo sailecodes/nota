@@ -52,10 +52,11 @@ export default function EmailAddress({ user }: EmailAddressProps) {
       <CardHeader>
         <CardTitle>Email Address</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-6">
         <Form {...emailAddressForm}>
           <form
-            className="flex justify-between gap-4"
+            // className="flex justify-between gap-4"
+            className="flex flex-col xs:flex-row justify-between gap-4"
             onSubmit={emailAddressForm.handleSubmit(handleChangeEmailAddress)}>
             <FormField
               control={emailAddressForm.control}
@@ -81,7 +82,7 @@ export default function EmailAddress({ user }: EmailAddressProps) {
               type="submit"
               variant="secondary"
               disabled={emailAddressFormVals.emailAddress === user.email}
-              className="self-end w-[158px]">
+              className="xs:self-end w-[158px]">
               {isChangingEmailAddress ? "Changing..." : "Change email"}
             </Button>
           </form>

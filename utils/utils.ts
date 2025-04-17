@@ -22,6 +22,10 @@ export function getMeetingSkeletonColor(status: ProcessStatus) {
   else return "bg-gray-200/50";
 }
 
+export function getUploader(firstName: string, lastName: string) {
+  return firstName + " " + lastName.charAt(0) + ".";
+}
+
 export function getActionItemStatusBadgeColor(status: DueStatus) {
   if (status === "NEW") return "text-teal-800 bg-teal-100";
   else if (status === "UPCOMING") return "text-violet-800 bg-violet-100";

@@ -58,11 +58,6 @@ const sidebarData = {
         title: "Account",
         href: "/dashboard/account",
       },
-      {
-        icon: Wallet,
-        title: "Subscription",
-        href: "/dashboard/subscription",
-      },
     ],
     inSidebarContent: true,
   },

@@ -48,7 +48,7 @@ export default function MeetingCard({
           <Calendar className="h-4 w-4" />
           <span>{dateUploaded.getDate()}</span>
         </div>
-        <p className="text-sm text-muted-foreground line-clamp-2 leading-5">{summary}</p>
+        <p className="text-sm text-muted-foreground line-clamp-2">{summary}</p>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <ListTodo className="h-4 w-4" />
           <Link

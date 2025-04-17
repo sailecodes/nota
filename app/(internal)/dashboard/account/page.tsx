@@ -12,21 +12,11 @@ export default async function AccountPage() {
 
   return (
     <div className="flex flex-col gap-3 max-w-7xl mx-auto p-4">
-      {!user && (
-        // FIXME:
-        <span className="text-lg font-semibold">
-          Uh...something went wrong. Please refresh the page.
-        </span>
-      )}
-      {user && (
-        <>
-          <ProfileInformation user={user} />
-          <EmailAddress user={user} />
-          <Password user={user} />
-          <SubscriptionAndBilling />
-          <Danger />
-        </>
-      )}
+      <ProfileInformation user={user!} />
+      <EmailAddress user={user!} />
+      <Password user={user!} />
+      {/* <SubscriptionAndBilling /> */}
+      <Danger />
     </div>
   );
 }
