@@ -13,9 +13,8 @@ model User {
   supabaseId String @unique
   firstName  String
   lastName   String
-
   teams       Team[]       @relation("TeamMembers")
-  uploads     Upload[]
+  meetings     Meeting[]
   actionItems ActionItem[]
 
   createdAt DateTime @default(now())
@@ -28,7 +27,7 @@ model Team {
   name String
 
   members User[]   @relation("TeamMembers")
-  uploads Upload[]
+  meetings Meeting[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -37,17 +36,16 @@ model Team {
 /**
  * FIXME: Is this the right logic?
  * What happens if team gets deleted?
- * - All related uploads should be deleted...
+ * - All related meetings should be deleted...
  * What happens if user gets deleted?
- * - All related uploads should NOT be deleted...
+ * - All related meetings should NOT be deleted...
  * FIXME: Change team to required when ready
  */
-model Upload {
+model Meeting {
   id            String        @id @default(uuid())
   title         String
   fileUrl       String
   processStatus ProcessStatus @default(TRANSCRIBING)
-
   result     Result?
   uploader   User    @relation(fields: [uploaderId], references: [id])
   uploaderId String
@@ -63,8 +61,8 @@ model Result {
   summary String
 
   actionItems ActionItem[]
-  upload      Upload       @relation(fields: [uploadId], references: [id], onDelete: Cascade)
-  uploadId    String       @unique
+  meeting      Meeting       @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  meetingId    String       @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -88,7 +86,6 @@ model ActionItem {
 enum ProcessStatus {
   TRANSCRIBING
   SUMMARIZING
-  EXTRACTING
   COMPLETED
   FAILED
 }

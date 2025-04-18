@@ -10,6 +10,8 @@ import { summarize } from "@/actions/summarize.action";
 import { useDropzone } from "@uploadthing/react";
 import { generateClientDropzoneAccept, generatePermittedFileTypes } from "uploadthing/client";
 import { useCallback, useState } from "react";
+import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export default function UploadButton() {
   const [files, setFiles] = useState<File[]>([]);
@@ -27,11 +29,34 @@ export default function UploadButton() {
         icon: <CheckCircle2 className="size-4 stroke-green-300" />,
       });
 
-      toast.info("Starting summarization and extraction process...", {
+      toast.info("Starting summarization process...", {
         icon: <Info className="size-4" />,
       });
 
+      const meeting = await prisma.upload.findUnique({ where: { id: uploadId } });
+      meeting!.processStatus = "SUMMARIZING";
+
+      revalidatePath("/dashboard/meetings");
+
       const result = await summarize(transcript!);
+
+      if ("error" in result) {
+        console.error(result.error); // TODO:
+      } else {
+        meeting!.processStatus = "COMPLETED";
+
+        const dbResult = await prisma.result.create({
+          include: {
+            upload: true,
+            actionItems: true,
+          },
+          data: {
+            summary: result.summary,
+            actionItems: result.actionItems,
+            uploadId: meeting?.id,
+          },
+        });
+      }
 
       // TODO:
       //  show in meetings as "transcribing"

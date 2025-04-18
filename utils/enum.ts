@@ -4,7 +4,6 @@
 
 export enum ProcessingStatus {
   TRANSCRIBING,
-  SUMMARIZING,
   EXTRACTING,
   COMPLETED,
   FAILED,
