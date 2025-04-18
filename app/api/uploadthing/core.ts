@@ -4,9 +4,8 @@ import prisma from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { transcribe } from "@/actions/transcribe.action";
 import { summarize } from "@/actions/summarize.action";
-import { ProcessStatus } from "@/utils/enum";
-import { Result, User } from "@/app/generated/prisma";
 import { revalidatePath } from "next/cache";
+import { ProcessStatus, Result, User } from "@/app/generated/prisma";
 
 const f = createUploadthing();
 
@@ -91,24 +90,23 @@ export const ourFileRouter = {
 
         const newResult = await prisma.result.create({
           include: {
-            actionItems: true,
             meeting: true,
           },
           data: {
             summary: result.summary,
-            // actionItems: {
-            //   createMany: {
-            //     data: modifyActionItems(result.actionItems),
-            //   },
-            // },
             meetingId: newUpload.id,
           },
+        });
+
+        // 7. Create related ActionItem records
+
+        await prisma.actionItem.createMany({
+          data: await formatActionItems(result.actionItems, newResult.id),
         });
 
         revalidatePath("/dashboard/meetings");
       } catch (e) {
         // TODO: Implement failure
-        console.log("error route api");
         console.error((e as Error).message);
         throw new UploadThingError((e as Error).message);
       }
@@ -117,20 +115,43 @@ export const ourFileRouter = {
 
 export type OurFileRouter = typeof ourFileRouter;
 
-// export function modifyActionItems(
-//   actionItems: {
-//     action: string;
-//     dueDate?: string | undefined;
-//     assignee?: string | undefined;
-//   }[],
-//   assignee: User | undefined,
-//   result: Result
-// ): {
-//   action: string,
-//   dueDate?: string | undefined,
-//   assignee?: string | undefined,
-// } {
-//   return actionItems.map((actionItem) => {
-//     let a = { ...actionItem, assigneeId: assignee?.id, resultId: result.id };
-//   });
-// }
+const isValidDate = (date: string) => {
+  const d = new Date(date);
+  return !isNaN(d.getTime());
+};
+
+type RawActionItem = {
+  action: string;
+  assignee?: string;
+  dueDate?: string;
+};
+
+export async function formatActionItems(items: RawActionItem[], resultId: string) {
+  return await Promise.all(
+    items.map(async (item) => {
+      let assigneeId: string | undefined = undefined;
+
+      if (item.assignee) {
+        // FIXME: Temporary logic...
+        //        Only finding first user that matches assignee
+        const user = await prisma.user.findFirst({
+          where: {
+            OR: [{ firstName: item.assignee }, { lastName: item.assignee }],
+          },
+        });
+
+        if (user) assigneeId = user.id;
+      }
+
+      const dueDate =
+        item.dueDate && isValidDate(item.dueDate) ? new Date(item.dueDate) : undefined;
+
+      return {
+        action: item.action,
+        dueDate,
+        assigneeId,
+        resultId,
+      };
+    })
+  );
+}
