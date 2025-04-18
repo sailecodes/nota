@@ -133,7 +133,7 @@ exports.Prisma.TeamScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.UploadScalarFieldEnum = {
+exports.Prisma.MeetingScalarFieldEnum = {
   id: 'id',
   title: 'title',
   fileUrl: 'fileUrl',
@@ -147,7 +147,7 @@ exports.Prisma.UploadScalarFieldEnum = {
 exports.Prisma.ResultScalarFieldEnum = {
   id: 'id',
   summary: 'summary',
-  uploadId: 'uploadId',
+  meetingId: 'meetingId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -180,13 +180,11 @@ exports.Prisma.NullsOrder = {
 exports.ProcessStatus = exports.$Enums.ProcessStatus = {
   TRANSCRIBING: 'TRANSCRIBING',
   SUMMARIZING: 'SUMMARIZING',
-  EXTRACTING: 'EXTRACTING',
   COMPLETED: 'COMPLETED',
   FAILED: 'FAILED'
 };
 
 exports.DueStatus = exports.$Enums.DueStatus = {
-  TBD: 'TBD',
   NEW: 'NEW',
   UPCOMING: 'UPCOMING',
   DUE_SOON: 'DUE_SOON',
@@ -198,7 +196,7 @@ exports.DueStatus = exports.$Enums.DueStatus = {
 exports.Prisma.ModelName = {
   User: 'User',
   Team: 'Team',
-  Upload: 'Upload',
+  Meeting: 'Meeting',
   Result: 'Result',
   ActionItem: 'ActionItem'
 };

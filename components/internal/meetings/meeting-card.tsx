@@ -54,7 +54,7 @@ export default function MeetingCard({
           <Link
             href="/dashboard/action-items"
             className="hover:underline">
-            {numOfActionItems} {numOfActionItems > 1 ? " action items" : "action item"}
+            {numOfActionItems} {numOfActionItems !== 1 ? " action items" : " action item"}
           </Link>
         </div>
       </CardContent>

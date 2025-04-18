@@ -9,7 +9,6 @@ export function cn(...inputs: ClassValue[]) {
 export function getMeetingStatusBadgeColor(status: ProcessStatus) {
   if (status === "TRANSCRIBING") return "bg-violet-100 text-violet-800";
   else if (status === "SUMMARIZING") return "bg-blue-100 text-blue-800";
-  else if (status === "EXTRACTING") return "bg-cyan-100 text-cyan-800";
   else if (status === "COMPLETED") return "bg-green-100 text-green-800";
   else if (status === "FAILED") return "bg-red-100 text-red-800";
   else return "bg-gray-100 text-gray-800";
@@ -18,7 +17,6 @@ export function getMeetingStatusBadgeColor(status: ProcessStatus) {
 export function getMeetingSkeletonColor(status: ProcessStatus) {
   if (status === "TRANSCRIBING") return "bg-violet-200/50";
   else if (status === "SUMMARIZING") return "bg-blue-200/50";
-  else if (status === "EXTRACTING") return "bg-cyan-200/50";
   else return "bg-gray-200/50";
 }
 
