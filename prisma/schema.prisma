@@ -9,12 +9,12 @@ datasource db {
 }
 
 model User {
-  id         String @id @default(uuid())
-  supabaseId String @unique
-  firstName  String
-  lastName   String
+  id          String       @id @default(uuid())
+  supabaseId  String       @unique
+  firstName   String
+  lastName    String
   teams       Team[]       @relation("TeamMembers")
-  meetings     Meeting[]
+  meetings    Meeting[]
   actionItems ActionItem[]
 
   createdAt DateTime @default(now())
@@ -26,7 +26,7 @@ model Team {
   id   String @id @default(uuid())
   name String
 
-  members User[]   @relation("TeamMembers")
+  members  User[]    @relation("TeamMembers")
   meetings Meeting[]
 
   createdAt DateTime @default(now())
@@ -46,11 +46,11 @@ model Meeting {
   title         String
   fileUrl       String
   processStatus ProcessStatus @default(TRANSCRIBING)
-  result     Result?
-  uploader   User    @relation(fields: [uploaderId], references: [id])
-  uploaderId String
-  team       Team?    @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  teamId     String?
+  result        Result?
+  uploader      User          @relation(fields: [uploaderId], references: [id])
+  uploaderId    String
+  team          Team?         @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId        String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -61,8 +61,8 @@ model Result {
   summary String
 
   actionItems ActionItem[]
-  meeting      Meeting       @relation(fields: [meetingId], references: [id], onDelete: Cascade)
-  meetingId    String       @unique
+  meeting     Meeting      @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  meetingId   String       @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -76,7 +76,7 @@ model ActionItem {
 
   assignee   User?   @relation(fields: [assigneeId], references: [id])
   assigneeId String?
-  result     Result @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  result     Result  @relation(fields: [resultId], references: [id], onDelete: Cascade)
   resultId   String
 
   createdAt DateTime @default(now())

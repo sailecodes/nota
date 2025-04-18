@@ -2,18 +2,18 @@
 // === Prisma Schema
 // ===
 
-export enum ProcessingStatus {
-  TRANSCRIBING,
-  EXTRACTING,
-  COMPLETED,
-  FAILED,
+export enum ProcessStatus {
+  TRANSCRIBING = "TRANSCRIBING",
+  SUMMARIZING = "SUMMARIZING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
 }
 
 export enum DueStatus {
-  TBD,
-  NEW,
-  UPCOMING,
-  DUE_SOON,
-  COMPLETED,
-  OVERDUE,
+  TBD = "TBD",
+  NEW = "NEW",
+  UPCOMING = "UPCOMING",
+  DUE_SOON = "DUE_SOON",
+  COMPLETED = "COMPLETED",
+  OVERDUE = "OVERDUE",
 }
