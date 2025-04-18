@@ -87,11 +87,12 @@ export const ourFileRouter = {
 
         // 6. Create new Result record
         // TODO: Include team
+        // TODO: Action items
 
         const newResult = await prisma.result.create({
           include: {
             actionItems: true,
-            upload: true,
+            meeting: true,
           },
           data: {
             summary: result.summary,
@@ -100,16 +101,14 @@ export const ourFileRouter = {
             //     data: modifyActionItems(result.actionItems),
             //   },
             // },
-            uploadId: newUpload.id,
+            meetingId: newUpload.id,
           },
         });
-
-        console.log("result:\n", result);
-        console.log("new result:\n", result);
 
         revalidatePath("/dashboard/meetings");
       } catch (e) {
         // TODO: Implement failure
+        console.log("error route api");
         console.error((e as Error).message);
         throw new UploadThingError((e as Error).message);
       }

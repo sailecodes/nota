@@ -15,11 +15,13 @@ import { toast } from "sonner";
 import { useDropzone } from "@uploadthing/react";
 import { generateClientDropzoneAccept, generatePermittedFileTypes } from "uploadthing/client";
 import { useCallback, useState } from "react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function UploadButton() {
   const [files, setFiles] = useState<File[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+  const router = useRouter();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setFiles(acceptedFiles);
@@ -28,9 +30,10 @@ export default function UploadButton() {
   const { startUpload, routeConfig } = useUploadThing("audioUploader", {
     onClientUploadComplete: async () => {
       setIsDialogOpen(false);
-      redirect("/dashboard/meetings");
+      router.push("/dashboard/meetings");
     },
     onUploadError: (e) => {
+      console.error(e.message);
       toast.error(e.message, {
         icon: <CircleX className="size-4 stroke-red-300" />,
       });
@@ -72,6 +75,7 @@ export default function UploadButton() {
         <div
           {...getRootProps()}
           className="flex flex-col justify-center items-center gap-4">
+          {/* FIXME: Button shouldn't make file explorer popup */}
           <input {...getInputProps()} />
           <Upload className="size-12" />
           <div className="flex flex-col items-center">
