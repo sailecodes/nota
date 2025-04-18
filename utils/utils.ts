@@ -26,6 +26,14 @@ export function getUploader(firstName: string, lastName: string) {
   return firstName + " " + lastName.charAt(0) + ".";
 }
 
+export function getDate(date: Date) {
+  return date.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 export function getActionItemStatusBadgeColor(status: DueStatus) {
   if (status === "NEW") return "text-teal-800 bg-teal-100";
   else if (status === "UPCOMING") return "text-violet-800 bg-violet-100";

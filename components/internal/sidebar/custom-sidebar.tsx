@@ -9,22 +9,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "../../ui/sidebar";
-import {
-  CircleHelp,
-  FileText,
-  LayoutDashboardIcon,
-  MessageCircle,
-  Route,
-  PlusCircle,
-  User,
-  Wallet,
-} from "lucide-react";
+import { FileText, LayoutDashboardIcon, Route, User } from "lucide-react";
 import CustomSidebarGroup from "./custom-sidebar-group";
 import CustomSidebarSingle from "./custom-sidebar-single";
-import { Button } from "../../ui/button";
 import CustomSidebarHeader from "./custom-sidebar-header";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
-import { useUploadThing } from "@/lib/uploadthing";
 import UploadButton from "./upload-btn";
 
 const sidebarData = {
@@ -61,21 +50,6 @@ const sidebarData = {
     ],
     inSidebarContent: true,
   },
-  support: {
-    content: [
-      {
-        icon: CircleHelp,
-        title: "FAQ",
-        href: "/dashboard/faq",
-      },
-      {
-        icon: MessageCircle,
-        title: "Feedback",
-        href: "/dashboard/feedback",
-      },
-    ],
-    inSidebarContent: true,
-  },
 };
 
 export default function CustomSidebar() {
@@ -90,6 +64,7 @@ export default function CustomSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
+                  {/* Upload button for meetings */}
                   <UploadButton />
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -99,10 +74,6 @@ export default function CustomSidebar() {
         <CustomSidebarSingle data={sidebarData.dashboard} />
         <CustomSidebarGroup data={sidebarData.workspace} />
         <CustomSidebarGroup data={sidebarData.preferences} />
-        <CustomSidebarGroup
-          className="mt-auto"
-          data={sidebarData.support}
-        />
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>

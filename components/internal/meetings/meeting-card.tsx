@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ProcessStatus } from "@/schemas";
-import { getMeetingStatusBadgeColor } from "@/utils/utils";
+import { getDate, getMeetingStatusBadgeColor } from "@/utils/utils";
 import { Calendar, ListTodo } from "lucide-react";
 import Link from "next/link";
 
@@ -46,7 +46,7 @@ export default function MeetingCard({
       <CardContent className="space-y-2">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Calendar className="h-4 w-4" />
-          <span>{dateUploaded.getDate()}</span>
+          <span>{getDate(dateUploaded)}</span>
         </div>
         <p className="text-sm text-muted-foreground line-clamp-2">{summary}</p>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
