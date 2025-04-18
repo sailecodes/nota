@@ -1,67 +1,94 @@
 "use client";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { UploadDropzone } from "@/lib/uploadthing";
-import { CheckCircle2, Info, PlusCircle } from "lucide-react";
-import { twMerge } from "tailwind-merge";
+import { useUploadThing } from "@/lib/uploadthing";
+import { CheckCircle2, CircleX, Info, PlusCircle, Upload } from "lucide-react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { toast } from "sonner";
 import { summarize } from "@/actions/summarize.action";
+import { useDropzone } from "@uploadthing/react";
+import { generateClientDropzoneAccept, generatePermittedFileTypes } from "uploadthing/client";
+import { useCallback, useState } from "react";
 
 export default function UploadButton() {
+  const [files, setFiles] = useState<File[]>([]);
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    setFiles(acceptedFiles);
+  }, []);
+
+  const { startUpload, routeConfig } = useUploadThing("audioUploader", {
+    onClientUploadComplete: async (res) => {
+      const { transcript, uploadId } = res[0].serverData;
+
+      toast.success("Uploaded successfully!", {
+        description: `Your file has been safely stored in our dedicated servers`,
+        icon: <CheckCircle2 className="size-4 stroke-green-300" />,
+      });
+
+      toast.info("Starting summarization and extraction process...", {
+        icon: <Info className="size-4" />,
+      });
+
+      const result = await summarize(transcript!);
+
+      // TODO:
+      //  show in meetings as "transcribing"
+    },
+    onUploadError: (e) => {
+      toast.error(e.message, {
+        icon: <CircleX className="size-4 stroke-red-300" />,
+      });
+    },
+    onUploadBegin: () => {
+      toast.info("Uploading file...", {
+        icon: <Info className="size-4" />,
+      });
+    },
+  });
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: generateClientDropzoneAccept(generatePermittedFileTypes(routeConfig).fileTypes),
+  });
+
+  const handleDialogOpenChange = () => setFiles([]);
+
+  const isFileReady = files.length > 0;
+
   return (
-    <Dialog>
+    <Dialog onOpenChange={handleDialogOpenChange}>
       <DialogTrigger asChild>
         <Button className="w-full hover:cursor-pointer">
           <PlusCircle />
           <span>Upload meeting</span>
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="h-[320px]">
         <VisuallyHidden>
-          {/* TODO: Update text */}
           <DialogTitle>Upload file</DialogTitle>
-          <DialogDescription>Upload your files here</DialogDescription>
+          <DialogDescription>Choose a file or drag and drop</DialogDescription>
         </VisuallyHidden>
-        <UploadDropzone
-          endpoint="audioUploader"
-          config={{ cn: twMerge }}
-          appearance={{
-            label: "text-base text-primary",
-            allowedContent: "text-sm text-muted-foreground",
-            button:
-              "ut-ready:bg-primary ut-ready:text-background ut-ready:font-medium ut-ready:text-sm ut-readying:bg-primary ut-readying:text-sm ut-readying:text-background ut-uploading:bg-green-500",
-          }}
-          onClientUploadComplete={async (res) => {
-            const { transcript, uploadId } = res[0].serverData;
-
-            console.log(transcript);
-
-            toast.success("Uploaded successfully!", {
-              description: `Your file is safely stored in our trusted servers`,
-              icon: <CheckCircle2 className="w-4 h-4 stroke-green-300" />,
-            });
-
-            toast.info("Starting summarization and extraction process", {
-              icon: <Info className="w-4 h-4" />,
-            });
-
-            await summarize(transcript!);
-
-            // TODO:
-            //  show in meetings as "transcribing"
-          }}
-          onUploadError={(error: Error) => {
-            console.error(error.message);
-          }}
-        />
+        <div
+          {...getRootProps()}
+          className="flex flex-col justify-center items-center gap-4">
+          <input {...getInputProps()} />
+          <Upload className="size-12" />
+          <div className="flex flex-col items-center">
+            <span className="text-base font-medium">
+              {isFileReady ? files[0].name : "Choose a file or drag and drop"}
+            </span>
+            <span className="text-muted-foreground">Audio (32MB)</span>
+          </div>
+          <Button
+            onClick={() => startUpload(files)}
+            disabled={!isFileReady}
+            variant={isFileReady ? "default" : "secondary"}
+            className="w-[150px] hover:cursor-pointer">
+            {isFileReady ? "Upload file" : "Select file"}
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );
