@@ -40,7 +40,7 @@ model Team {
  * - All related uploads should be deleted...
  * What happens if user gets deleted?
  * - All related uploads should NOT be deleted...
- * FIXME: Change team to required
+ * FIXME: Change team to required when ready
  */
 model Upload {
   id            String        @id @default(uuid())

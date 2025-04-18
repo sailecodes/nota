@@ -47,7 +47,7 @@ export default function ProfileInformation({ user }: ProfileInformationProps) {
   };
 
   return (
-    <Card className="col-span-full bg-background">
+    <Card className="bg-background">
       <CardHeader>
         <CardTitle>Profile Information</CardTitle>
       </CardHeader>
@@ -55,7 +55,7 @@ export default function ProfileInformation({ user }: ProfileInformationProps) {
         <Form {...userInformationForm}>
           <form
             onSubmit={userInformationForm.handleSubmit(handleUpdateUserInformation)}
-            className="flex gap-4">
+            className="flex flex-col gap-4 xs:flex-row">
             <CustomField
               control={userInformationForm.control}
               name="firstName"
@@ -76,7 +76,7 @@ export default function ProfileInformation({ user }: ProfileInformationProps) {
                 (userInformationFormVals.firstName === user.user_metadata.firstName &&
                   userInformationFormVals.lastName === user.user_metadata.lastName)
               }
-              className="self-end w-[158px]">
+              className="xs:self-end w-[158px]">
               {isUpdatingUserInformation ? "Updating..." : "Update information"}
             </Button>
           </form>
