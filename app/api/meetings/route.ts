@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
           actionItems: true,
         },
       },
+      uploader: true,
     },
   });
 
