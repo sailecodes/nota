@@ -61,7 +61,7 @@ export default function MeetingCard({
       <CardFooter>
         {/* TODO: */}
         <Link
-          href={`/dashboard/meetings/${uploadId}`}
+          href={`/dashboard/meetings/meeting/${uploadId}`}
           className={buttonVariants({ variant: "secondary", className: "w-full" })}>
           View details
         </Link>
