@@ -11,12 +11,11 @@ import {
 import { Calendar, ListTodo } from "lucide-react";
 import { Skeleton } from "../../ui/skeleton";
 import { getDate, getMeetingSkeletonColor, getMeetingStatusBadgeColor } from "@/utils/utils";
-import { ProcessStatus } from "@/schemas";
-import Link from "next/link";
+import { ProcessStatus as ProcessStatusType } from "@/schemas";
 
 interface MeetingCardSkeletonProps {
   title: string;
-  processStatus: ProcessStatus;
+  processStatus: ProcessStatusType;
   uploader: string;
   dateUploaded: Date;
 }

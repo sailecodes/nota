@@ -8,14 +8,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ProcessStatus } from "@/schemas";
+import { ProcessStatus as ProcessStatusType } from "@/schemas";
+import { ProcessStatus } from "@/utils/enum";
 import { getDate, getMeetingStatusBadgeColor } from "@/utils/utils";
-import { Calendar, ListTodo } from "lucide-react";
+import { Calendar, CircleAlert, ListTodo } from "lucide-react";
 import Link from "next/link";
 
 interface MeetingCardProps {
   title: string;
-  processStatus: ProcessStatus;
+  processStatus: ProcessStatusType;
   uploader: string;
   dateUploaded: Date;
   summary: string;
@@ -59,12 +60,18 @@ export default function MeetingCard({
         </div>
       </CardContent>
       <CardFooter>
-        {/* TODO: */}
-        <Link
-          href={`/dashboard/meetings/meeting/${uploadId}`}
-          className={buttonVariants({ variant: "secondary", className: "w-full" })}>
-          View details
-        </Link>
+        {processStatus === ProcessStatus.FAILED ? (
+          <div className="flex gap-2 items-center text-sm font-medium text-red-400">
+            <CircleAlert className="size-4 stroke-red-400" /> An error occurred. Please retry
+            uploading the file.
+          </div>
+        ) : (
+          <Link
+            href={`/dashboard/meetings/meeting/${uploadId}`}
+            className={buttonVariants({ variant: "secondary", className: "w-full" })}>
+            View details
+          </Link>
+        )}
       </CardFooter>
     </Card>
   );
