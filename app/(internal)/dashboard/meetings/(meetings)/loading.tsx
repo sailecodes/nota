@@ -9,12 +9,14 @@ export default function Loading() {
       <div
         className="grid [grid-template-columns:repeat(auto-fit,minmax(0,408px))] auto-rows-[300px]
       justify-center gap-3">
-        {Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9]).map(() => (
-          <Card className="bg-background justify-between">
+        {Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9]).map((ind) => (
+          <Card
+            key={ind}
+            className="bg-background justify-between">
             <CardHeader>
               <div className="flex items-center justify-between gap-6">
                 <Skeleton className="w-[100px] h-[26px]" />
-                <Skeleton className="w-[24px] h-[24px]" />
+                <Skeleton className="size-[24px]" />
               </div>
               <CardDescription>
                 <Skeleton className="w-[140px] h-[20px]" />

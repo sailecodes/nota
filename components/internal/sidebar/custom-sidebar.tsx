@@ -12,7 +12,6 @@ import {
 import { FileText, LayoutDashboardIcon, Route, User } from "lucide-react";
 import CustomSidebarGroup from "./custom-sidebar-group";
 import CustomSidebarSingle from "./custom-sidebar-single";
-import CustomSidebarHeader from "./custom-sidebar-header";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import UploadButton from "./upload-btn";
 
@@ -51,7 +50,7 @@ export default function CustomSidebar() {
   return (
     <Sidebar className="border-none">
       <SidebarHeader>
-        <CustomSidebarHeader />
+        <span className="text-2xl font-bold p-2 pb-0">Nota</span>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup className="p-4">

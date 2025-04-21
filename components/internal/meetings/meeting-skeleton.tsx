@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function MeetingSkeleton() {
   return (
-    <>
+    <section className="max-w-7xl mx-auto p-4 pb-[25px] space-y-10">
       <div className="space-y-1">
         <Skeleton className="w-[250px] h-[32px] mb-2" />
         <span className="flex gap-2 items-center text-muted-foreground">
@@ -72,7 +72,7 @@ export default function MeetingSkeleton() {
                 <Skeleton className="w-[100px] h-[24px]" />
                 <Skeleton className="w-[150px] h-[20px]" />
               </div>
-              <Skeleton className="w-[50px] h-[22px] self-start justify-self-end" />
+              <Skeleton className="size-[24px] self-start justify-self-end" />
               <div className="space-y-1">
                 <span className="flex gap-2 items-center text-muted-foreground">
                   <CalendarClock className="w-4 h-4" />
@@ -96,7 +96,7 @@ export default function MeetingSkeleton() {
                 <Skeleton className="w-[100px] h-[24px]" />
                 <Skeleton className="w-[150px] h-[20px]" />
               </div>
-              <Skeleton className="w-[50px] h-[22px] self-start justify-self-end" />
+              <Skeleton className="size-[24px] self-start justify-self-end" />
               <div className="space-y-1">
                 <span className="flex gap-2 items-center text-muted-foreground">
                   <CalendarClock className="w-4 h-4" />
@@ -117,6 +117,6 @@ export default function MeetingSkeleton() {
           </CardContent>
         </Card>
       </div>
-    </>
+    </section>
   );
 }
