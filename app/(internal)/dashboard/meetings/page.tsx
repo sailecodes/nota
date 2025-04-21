@@ -2,7 +2,7 @@ import { ProcessStatus } from "@/app/generated/prisma";
 import MeetingCard from "@/components/internal/meetings/meeting-card";
 import MeetingCardSkeleton from "@/components/internal/meetings/meeting-card-skeleton";
 import prisma from "@/lib/prisma";
-import { getUploader } from "@/utils/utils";
+import { parseName } from "@/utils/utils";
 
 export default async function Meetings() {
   // FIXME: Find all meetings related to User's team
@@ -31,7 +31,7 @@ export default async function Meetings() {
                   uploadId={meeting.id}
                   title={meeting.title}
                   processStatus={meeting.processStatus}
-                  uploader={getUploader(meeting.uploader.firstName, meeting.uploader.lastName)}
+                  uploader={parseName(meeting.uploader.firstName, meeting.uploader.lastName)}
                   dateUploaded={meeting.createdAt}
                   summary={meeting.result!.summary}
                   numOfActionItems={meeting.result!.actionItems.length}
@@ -44,7 +44,7 @@ export default async function Meetings() {
                   key={meeting.id}
                   title={meeting.title}
                   processStatus={meeting.processStatus}
-                  uploader={getUploader(meeting.uploader.firstName, meeting.uploader.lastName)}
+                  uploader={parseName(meeting.uploader.firstName, meeting.uploader.lastName)}
                   dateUploaded={meeting.createdAt}
                 />
               );

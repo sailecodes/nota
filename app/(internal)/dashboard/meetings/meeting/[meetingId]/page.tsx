@@ -14,9 +14,10 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { ProcessStatus } from "@/utils/enum";
-import { getActionItemDueStatusBadgeColor, getDate, getUploader } from "@/utils/utils";
+import { getActionItemDueStatusBadgeColor, getDate, parseName } from "@/utils/utils";
 import { Calendar, CalendarClock, UserCheck2Icon, UserCircle2 } from "lucide-react";
 import { use, useEffect, useState } from "react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 type Meeting = {
   id: string;
@@ -36,7 +37,6 @@ type ActionItem = {};
 export default function Meeting({ params }: { params: Promise<{ meetingId: string }> }) {
   const { meetingId } = use(params);
   const [meeting, setMeeting] = useState<Meeting | undefined>(undefined);
-  const [view, setView] = useState("summary");
 
   useEffect(() => {
     const getMeeting = async () => {
@@ -62,18 +62,45 @@ export default function Meeting({ params }: { params: Promise<{ meetingId: strin
             </span>
             <span className="flex gap-2 items-center text-muted-foreground text-sm">
               <UserCircle2 className="w-4 h-4" />{" "}
-              {getUploader(meeting.uploader.firstName, meeting.uploader.lastName)}
+              {parseName(meeting.uploader.firstName, meeting.uploader.lastName)}
             </span>
           </div>
           <div className="flex flex-col gap-4 overflow-y-auto min-[1150px]:flex-row">
             <Card className="bg-background flex-5/10 min-[1450px]:flex-6/10">
-              <CardContent className="space-y-6">
-                <div className="flex flex-col gap-4">
-                  <span className="font-semibold text-lg">
-                    {view.charAt(0).toUpperCase() + view.slice(1)}
-                  </span>
-                  <span className="text-muted-foreground">{meeting.result.summary}</span>
-                </div>
+              {/* <CardContent className="space-y-6"> */}
+              <CardContent>
+                <Tabs
+                  defaultValue="summary"
+                  className="space-y-5">
+                  <TabsList className="bg-background border">
+                    <TabsTrigger
+                      value="summary"
+                      className="border-none hover:cursor-pointer">
+                      Summary
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="transcript"
+                      className="border-none hover:cursor-pointer">
+                      Transcript
+                    </TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="summary">
+                    <div className="flex flex-col gap-4">
+                      <span className="font-semibold text-lg">Summary</span>
+                      <span className="text-muted-foreground">{meeting.result.summary}</span>
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="transcript">
+                    <div className="flex flex-col gap-4">
+                      <span className="font-semibold text-lg">Transcript</span>
+                      <span className="text-muted-foreground">
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cum, iste neque?
+                        Iste molestiae dolorum culpa sequi aliquam laudantium facilis consequuntur
+                        quasi deserunt in, mollitia cum eveniet quos quo, omnis vitae?
+                      </span>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
             <Card className="bg-background flex-5/10 min-[1450px]:flex-4/10">

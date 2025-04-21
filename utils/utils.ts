@@ -20,7 +20,7 @@ export function getMeetingSkeletonColor(status: ProcessStatus) {
   else return "bg-gray-200/50";
 }
 
-export function getUploader(firstName: string, lastName: string) {
+export function parseName(firstName: string, lastName: string) {
   return firstName + " " + lastName.charAt(0) + ".";
 }
 

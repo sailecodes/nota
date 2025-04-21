@@ -35,7 +35,7 @@ export default function ActionItemSnippet({
       <div className="space-y-1">
         <span className="block font-semibold line-clamp-1">{action}</span>
         <span className="text-sm text-muted-foreground line-clamp-2">
-          Captured in <span className="font-semibold">{fileName}</span>
+          Captured in <span className="font-medium">{fileName}</span>
         </span>
       </div>
       <Badge className={`self-start justify-self-end  ${getActionItemDueStatusBadgeColor(status)}`}>
@@ -53,7 +53,7 @@ export default function ActionItemSnippet({
       </div>
       <Button
         className="max-[475px]:row-start-3 max-[475px]:col-start-1 min-[475px]:self-end min-[475px]:justify-self-end w-[165px] hover:cursor-pointer"
-        variant="outline"
+        variant="secondary"
         onClick={handleMarkAsComplete}>
         {status === "COMPLETED" ? "Unmark as complete" : "Mark as complete"}
       </Button>
