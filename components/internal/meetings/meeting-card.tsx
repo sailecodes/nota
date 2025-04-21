@@ -67,7 +67,7 @@ export default function MeetingCard({
           </div>
         ) : (
           <Link
-            href={`/dashboard/meetings/meeting/${uploadId}`}
+            href={`/dashboard/meetings/${uploadId}`}
             className={buttonVariants({ variant: "secondary", className: "w-full" })}>
             View details
           </Link>
