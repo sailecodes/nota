@@ -32,7 +32,15 @@ export function getDate(date: Date) {
   });
 }
 
-export function getActionItemStatusBadgeColor(status: DueStatus) {
+export function parseActionItemDueStatus(dueStatus: DueStatus) {
+  return dueStatus
+    .toLowerCase()
+    .split("_")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+export function getActionItemDueStatusBadgeColor(status: DueStatus) {
   if (status === "NEW") return "text-teal-800 bg-teal-100";
   else if (status === "UPCOMING") return "text-violet-800 bg-violet-100";
   else if (status === "DUE_SOON") return "text-orange-800 bg-orange-100";
