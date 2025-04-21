@@ -31,11 +31,6 @@ const sidebarData = {
         title: "Meetings",
         href: "/dashboard/meetings",
       },
-      {
-        icon: Route,
-        title: "Action Items",
-        href: "/dashboard/action-items",
-      },
     ],
     inSidebarContent: true,
   },

@@ -12,7 +12,7 @@ export default async function AuthenticatedLayout({ children }: { children: Reac
       defaultOpen={defaultOpen}
       className="bg-primary-foreground">
       <CustomSidebar />
-      <main className="w-full bg-background rounded-md m-2">
+      <main className="w-full bg-background rounded-md m-2 ml-0">
         <SidebarTrigger className="mx-4 mt-[9px] hover:cursor-pointer" />
         <Separator className="my-[9px]" />
         {children}
