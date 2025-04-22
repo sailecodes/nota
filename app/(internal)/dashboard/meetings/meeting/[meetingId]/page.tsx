@@ -5,7 +5,7 @@ import ActionItemSnippet from "@/components/internal/meetings/action-item-snippe
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ProcessStatus } from "@/utils/enum";
-import { parseName } from "@/utils/utils";
+import { parseName } from "@/utils";
 import { Calendar, UserCircle2 } from "lucide-react";
 import { use, useEffect, useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -51,8 +51,7 @@ export default function Meeting({ params }: { params: Promise<{ meetingId: strin
           <Calendar className="w-4 h-4" /> {"Jan 1, 2025"}
         </span>
         <span className="flex gap-2 items-center text-muted-foreground text-sm">
-          <UserCircle2 className="w-4 h-4" />{" "}
-          {parseName(meeting.uploader.firstName, meeting.uploader.lastName)}
+          <UserCircle2 className="w-4 h-4" /> {parseName(meeting.uploader.firstName, meeting.uploader.lastName)}
         </span>
       </div>
       <div className="flex flex-col gap-4 overflow-y-auto min-[1150px]:flex-row">
@@ -76,27 +75,23 @@ export default function Meeting({ params }: { params: Promise<{ meetingId: strin
               <TabsContent value="summary">
                 <div className="flex flex-col gap-4">
                   <span className="font-semibold text-lg">Summary</span>
-                  <span className="text-muted-foreground text-sm leading-6">
-                    {meeting.result.summary}
-                  </span>
+                  <span className="text-muted-foreground text-sm leading-6">{meeting.result.summary}</span>
                 </div>
               </TabsContent>
               <TabsContent value="transcript">
                 <div className="flex flex-col gap-4">
                   <span className="font-semibold text-lg">Transcript</span>
                   <span className="text-muted-foreground text-sm leading-6">
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cum, iste neque? Iste
-                    molestiae dolorum culpa sequi aliquam laudantium facilis consequuntur quasi
-                    deserunt in, mollitia cum eveniet quos quo, omnis vitae? Lorem ipsum dolor sit
-                    amet consectetur adipisicing elit. Dolores quasi totam rem laudantium. Aperiam,
-                    adipisci, placeat, animi laboriosam repellat laudantium impedit itaque
-                    dignissimos quae doloremque explicabo nesciunt aut amet atque. Lorem ipsum dolor
-                    sit, amet consectetur adipisicing elit. Cum, iste neque? Iste molestiae dolorum
-                    culpa sequi aliquam laudantium facilis consequuntur quasi deserunt in, mollitia
-                    cum eveniet quos quo, omnis vitae? Lorem ipsum dolor sit amet consectetur
-                    adipisicing elit. Dolores quasi totam rem laudantium. Aperiam, adipisci,
-                    placeat, animi laboriosam repellat laudantium impedit itaque dignissimos quae
-                    doloremque explicabo nesciunt aut amet atque.
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cum, iste neque? Iste molestiae dolorum
+                    culpa sequi aliquam laudantium facilis consequuntur quasi deserunt in, mollitia cum eveniet quos
+                    quo, omnis vitae? Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quasi totam rem
+                    laudantium. Aperiam, adipisci, placeat, animi laboriosam repellat laudantium impedit itaque
+                    dignissimos quae doloremque explicabo nesciunt aut amet atque. Lorem ipsum dolor sit, amet
+                    consectetur adipisicing elit. Cum, iste neque? Iste molestiae dolorum culpa sequi aliquam laudantium
+                    facilis consequuntur quasi deserunt in, mollitia cum eveniet quos quo, omnis vitae? Lorem ipsum
+                    dolor sit amet consectetur adipisicing elit. Dolores quasi totam rem laudantium. Aperiam, adipisci,
+                    placeat, animi laboriosam repellat laudantium impedit itaque dignissimos quae doloremque explicabo
+                    nesciunt aut amet atque.
                   </span>
                 </div>
               </TabsContent>

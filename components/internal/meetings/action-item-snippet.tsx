@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DueStatus } from "@/schemas";
-import { getActionItemDueStatusBadgeColor, getDate, parseActionItemDueStatus } from "@/utils/utils";
+import { getActionItemDueStatusBadgeColor, getDate, parseActionItemDueStatus } from "@/utils";
 import { CalendarClock, UserCheck2Icon } from "lucide-react";
 import { useState } from "react";
 
@@ -15,13 +15,7 @@ interface ActionItemSnippetProps {
   dueStatus: DueStatus;
 }
 
-export default function ActionItemSnippet({
-  action,
-  fileName,
-  dueDate,
-  assignee,
-  dueStatus,
-}: ActionItemSnippetProps) {
+export default function ActionItemSnippet({ action, fileName, dueDate, assignee, dueStatus }: ActionItemSnippetProps) {
   const [status, setStatus] = useState<DueStatus>(dueStatus);
 
   const handleMarkAsComplete = () => {

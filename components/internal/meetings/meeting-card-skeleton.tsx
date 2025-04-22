@@ -1,16 +1,9 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, ListTodo } from "lucide-react";
 import { Skeleton } from "../../ui/skeleton";
-import { getDate, getMeetingSkeletonColor, getMeetingStatusBadgeColor } from "@/utils/utils";
+import { getDate, getMeetingSkeletonColor, getMeetingStatusBadgeColor } from "@/utils";
 import { ProcessStatus as ProcessStatusType } from "@/schemas";
 
 interface MeetingCardSkeletonProps {

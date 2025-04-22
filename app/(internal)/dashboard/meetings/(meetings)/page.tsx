@@ -2,7 +2,7 @@ import MeetingCard from "@/components/internal/meetings/meeting-card";
 import MeetingCardSkeleton from "@/components/internal/meetings/meeting-card-skeleton";
 import prisma from "@/lib/prisma";
 import { ProcessStatus } from "@/utils/enum";
-import { parseName } from "@/utils/utils";
+import { parseName } from "@/utils";
 
 export default async function Meetings() {
   const meetings = await prisma.meeting.findMany({

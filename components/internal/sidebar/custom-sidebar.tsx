@@ -18,8 +18,8 @@ import UploadButton from "./upload-btn";
 const sidebarData = {
   dashboard: {
     icon: LayoutDashboardIcon,
-    title: "Overview",
-    href: "/dashboard/overview",
+    title: "Dashboard",
+    href: "/dashboard",
     inSidebarContent: true,
   },
   workspace: {
