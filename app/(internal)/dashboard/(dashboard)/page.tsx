@@ -5,11 +5,10 @@ import prisma from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function Dashboard() {
-  const supabase = await createClient();
   const {
     data: { user: sUser },
     error,
-  } = await supabase.auth.getUser();
+  } = await (await createClient()).auth.getUser();
 
   const pUser = await prisma.user.findUnique({
     where: { sbId: sUser!.id },

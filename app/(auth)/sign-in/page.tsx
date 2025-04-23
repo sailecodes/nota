@@ -41,7 +41,7 @@ export default function SignIn() {
       toast.success("Welcome back!", {
         icon: <CheckCircle2 className="w-4 h-4 stroke-green-300" />,
       });
-      router.push("/dashboard/overview");
+      router.push("/dashboard");
     }
   };
 
