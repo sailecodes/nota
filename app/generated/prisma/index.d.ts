@@ -24,16 +24,15 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type Team = $Result.DefaultSelection<Prisma.$TeamPayload>
 /**
- * Model Meeting
- * *
- *  * FIXME: Is this the right logic?
- *  * What happens if team gets deleted?
- *  * - All related meetings should be deleted...
- *  * What happens if user gets deleted?
- *  * - All related meetings should NOT be deleted...
- *  * FIXME: Change team to required when ready
+ * Model Role
+ * 
  */
-export type Meeting = $Result.DefaultSelection<Prisma.$MeetingPayload>
+export type Role = $Result.DefaultSelection<Prisma.$RolePayload>
+/**
+ * Model Upload
+ * 
+ */
+export type Upload = $Result.DefaultSelection<Prisma.$UploadPayload>
 /**
  * Model Result
  * 
@@ -49,7 +48,24 @@ export type ActionItem = $Result.DefaultSelection<Prisma.$ActionItemPayload>
  * Enums
  */
 export namespace $Enums {
-  export const ProcessStatus: {
+  export const Subscription: {
+  STARTER: 'STARTER',
+  TEAM: 'TEAM',
+  ORGANIZATION: 'ORGANIZATION'
+};
+
+export type Subscription = (typeof Subscription)[keyof typeof Subscription]
+
+
+export const RoleType: {
+  MEMBER: 'MEMBER',
+  LEAD: 'LEAD'
+};
+
+export type RoleType = (typeof RoleType)[keyof typeof RoleType]
+
+
+export const ProcessStatus: {
   TRANSCRIBING: 'TRANSCRIBING',
   SUMMARIZING: 'SUMMARIZING',
   COMPLETED: 'COMPLETED',
@@ -60,17 +76,25 @@ export type ProcessStatus = (typeof ProcessStatus)[keyof typeof ProcessStatus]
 
 
 export const DueStatus: {
+  TBD: 'TBD',
   NEW: 'NEW',
   UPCOMING: 'UPCOMING',
   DUE_SOON: 'DUE_SOON',
   COMPLETED: 'COMPLETED',
-  OVERDUE: 'OVERDUE',
-  NO_DUE_DATE: 'NO_DUE_DATE'
+  OVERDUE: 'OVERDUE'
 };
 
 export type DueStatus = (typeof DueStatus)[keyof typeof DueStatus]
 
 }
+
+export type Subscription = $Enums.Subscription
+
+export const Subscription: typeof $Enums.Subscription
+
+export type RoleType = $Enums.RoleType
+
+export const RoleType: typeof $Enums.RoleType
 
 export type ProcessStatus = $Enums.ProcessStatus
 
@@ -226,14 +250,24 @@ export class PrismaClient<
   get team(): Prisma.TeamDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.meeting`: Exposes CRUD operations for the **Meeting** model.
+   * `prisma.role`: Exposes CRUD operations for the **Role** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Meetings
-    * const meetings = await prisma.meeting.findMany()
+    * // Fetch zero or more Roles
+    * const roles = await prisma.role.findMany()
     * ```
     */
-  get meeting(): Prisma.MeetingDelegate<ExtArgs, ClientOptions>;
+  get role(): Prisma.RoleDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.upload`: Exposes CRUD operations for the **Upload** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Uploads
+    * const uploads = await prisma.upload.findMany()
+    * ```
+    */
+  get upload(): Prisma.UploadDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.result`: Exposes CRUD operations for the **Result** model.
@@ -696,7 +730,8 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     Team: 'Team',
-    Meeting: 'Meeting',
+    Role: 'Role',
+    Upload: 'Upload',
     Result: 'Result',
     ActionItem: 'ActionItem'
   };
@@ -717,7 +752,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "team" | "meeting" | "result" | "actionItem"
+      modelProps: "user" | "team" | "role" | "upload" | "result" | "actionItem"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -869,77 +904,151 @@ export namespace Prisma {
           }
         }
       }
-      Meeting: {
-        payload: Prisma.$MeetingPayload<ExtArgs>
-        fields: Prisma.MeetingFieldRefs
+      Role: {
+        payload: Prisma.$RolePayload<ExtArgs>
+        fields: Prisma.RoleFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.MeetingFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MeetingPayload> | null
+            args: Prisma.RoleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.MeetingFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+            args: Prisma.RoleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>
           }
           findFirst: {
-            args: Prisma.MeetingFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MeetingPayload> | null
+            args: Prisma.RoleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.MeetingFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+            args: Prisma.RoleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>
           }
           findMany: {
-            args: Prisma.MeetingFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>[]
+            args: Prisma.RoleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>[]
           }
           create: {
-            args: Prisma.MeetingCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+            args: Prisma.RoleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>
           }
           createMany: {
-            args: Prisma.MeetingCreateManyArgs<ExtArgs>
+            args: Prisma.RoleCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.MeetingCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>[]
+            args: Prisma.RoleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>[]
           }
           delete: {
-            args: Prisma.MeetingDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+            args: Prisma.RoleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>
           }
           update: {
-            args: Prisma.MeetingUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+            args: Prisma.RoleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>
           }
           deleteMany: {
-            args: Prisma.MeetingDeleteManyArgs<ExtArgs>
+            args: Prisma.RoleDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.MeetingUpdateManyArgs<ExtArgs>
+            args: Prisma.RoleUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.MeetingUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>[]
+            args: Prisma.RoleUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>[]
           }
           upsert: {
-            args: Prisma.MeetingUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+            args: Prisma.RoleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RolePayload>
           }
           aggregate: {
-            args: Prisma.MeetingAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateMeeting>
+            args: Prisma.RoleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRole>
           }
           groupBy: {
-            args: Prisma.MeetingGroupByArgs<ExtArgs>
-            result: $Utils.Optional<MeetingGroupByOutputType>[]
+            args: Prisma.RoleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RoleGroupByOutputType>[]
           }
           count: {
-            args: Prisma.MeetingCountArgs<ExtArgs>
-            result: $Utils.Optional<MeetingCountAggregateOutputType> | number
+            args: Prisma.RoleCountArgs<ExtArgs>
+            result: $Utils.Optional<RoleCountAggregateOutputType> | number
+          }
+        }
+      }
+      Upload: {
+        payload: Prisma.$UploadPayload<ExtArgs>
+        fields: Prisma.UploadFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UploadFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UploadPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UploadFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UploadPayload>
+          }
+          findFirst: {
+            args: Prisma.UploadFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UploadPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UploadFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UploadPayload>
+          }
+          findMany: {
+            args: Prisma.UploadFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UploadPayload>[]
+          }
+          create: {
+            args: Prisma.UploadCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UploadPayload>
+          }
+          createMany: {
+            args: Prisma.UploadCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UploadCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UploadPayload>[]
+          }
+          delete: {
+            args: Prisma.UploadDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UploadPayload>
+          }
+          update: {
+            args: Prisma.UploadUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UploadPayload>
+          }
+          deleteMany: {
+            args: Prisma.UploadDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UploadUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UploadUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UploadPayload>[]
+          }
+          upsert: {
+            args: Prisma.UploadUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UploadPayload>
+          }
+          aggregate: {
+            args: Prisma.UploadAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUpload>
+          }
+          groupBy: {
+            args: Prisma.UploadGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UploadGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UploadCountArgs<ExtArgs>
+            result: $Utils.Optional<UploadCountAggregateOutputType> | number
           }
         }
       }
@@ -1177,7 +1286,8 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     user?: UserOmit
     team?: TeamOmit
-    meeting?: MeetingOmit
+    role?: RoleOmit
+    upload?: UploadOmit
     result?: ResultOmit
     actionItem?: ActionItemOmit
   }
@@ -1275,13 +1385,15 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     teams: number
-    meetings: number
+    roles: number
+    uploads: number
     actionItems: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     teams?: boolean | UserCountOutputTypeCountTeamsArgs
-    meetings?: boolean | UserCountOutputTypeCountMeetingsArgs
+    roles?: boolean | UserCountOutputTypeCountRolesArgs
+    uploads?: boolean | UserCountOutputTypeCountUploadsArgs
     actionItems?: boolean | UserCountOutputTypeCountActionItemsArgs
   }
 
@@ -1306,8 +1418,15 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountMeetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MeetingWhereInput
+  export type UserCountOutputTypeCountRolesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoleWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountUploadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UploadWhereInput
   }
 
   /**
@@ -1324,12 +1443,14 @@ export namespace Prisma {
 
   export type TeamCountOutputType = {
     members: number
-    meetings: number
+    roles: number
+    uploads: number
   }
 
   export type TeamCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     members?: boolean | TeamCountOutputTypeCountMembersArgs
-    meetings?: boolean | TeamCountOutputTypeCountMeetingsArgs
+    roles?: boolean | TeamCountOutputTypeCountRolesArgs
+    uploads?: boolean | TeamCountOutputTypeCountUploadsArgs
   }
 
   // Custom InputTypes
@@ -1353,8 +1474,15 @@ export namespace Prisma {
   /**
    * TeamCountOutputType without action
    */
-  export type TeamCountOutputTypeCountMeetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MeetingWhereInput
+  export type TeamCountOutputTypeCountRolesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoleWhereInput
+  }
+
+  /**
+   * TeamCountOutputType without action
+   */
+  export type TeamCountOutputTypeCountUploadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UploadWhereInput
   }
 
 
@@ -1399,62 +1527,98 @@ export namespace Prisma {
 
   export type AggregateUser = {
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
 
+  export type UserAvgAggregateOutputType = {
+    totalMonthlyUploads: number | null
+  }
+
+  export type UserSumAggregateOutputType = {
+    totalMonthlyUploads: number | null
+  }
+
   export type UserMinAggregateOutputType = {
     id: string | null
-    supabaseId: string | null
+    sbId: string | null
+    username: string | null
     firstName: string | null
     lastName: string | null
+    totalMonthlyUploads: number | null
+    subscription: $Enums.Subscription | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type UserMaxAggregateOutputType = {
     id: string | null
-    supabaseId: string | null
+    sbId: string | null
+    username: string | null
     firstName: string | null
     lastName: string | null
+    totalMonthlyUploads: number | null
+    subscription: $Enums.Subscription | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type UserCountAggregateOutputType = {
     id: number
-    supabaseId: number
+    sbId: number
+    username: number
     firstName: number
     lastName: number
+    totalMonthlyUploads: number
+    subscription: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
 
+  export type UserAvgAggregateInputType = {
+    totalMonthlyUploads?: true
+  }
+
+  export type UserSumAggregateInputType = {
+    totalMonthlyUploads?: true
+  }
+
   export type UserMinAggregateInputType = {
     id?: true
-    supabaseId?: true
+    sbId?: true
+    username?: true
     firstName?: true
     lastName?: true
+    totalMonthlyUploads?: true
+    subscription?: true
     createdAt?: true
     updatedAt?: true
   }
 
   export type UserMaxAggregateInputType = {
     id?: true
-    supabaseId?: true
+    sbId?: true
+    username?: true
     firstName?: true
     lastName?: true
+    totalMonthlyUploads?: true
+    subscription?: true
     createdAt?: true
     updatedAt?: true
   }
 
   export type UserCountAggregateInputType = {
     id?: true
-    supabaseId?: true
+    sbId?: true
+    username?: true
     firstName?: true
     lastName?: true
+    totalMonthlyUploads?: true
+    subscription?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1498,6 +1662,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: UserAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserMinAggregateInputType
@@ -1528,18 +1704,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserCountAggregateInputType | true
+    _avg?: UserAvgAggregateInputType
+    _sum?: UserSumAggregateInputType
     _min?: UserMinAggregateInputType
     _max?: UserMaxAggregateInputType
   }
 
   export type UserGroupByOutputType = {
     id: string
-    supabaseId: string
+    sbId: string
+    username: string
     firstName: string
     lastName: string
+    totalMonthlyUploads: number
+    subscription: $Enums.Subscription
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
@@ -1560,48 +1743,62 @@ export namespace Prisma {
 
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    supabaseId?: boolean
+    sbId?: boolean
+    username?: boolean
     firstName?: boolean
     lastName?: boolean
+    totalMonthlyUploads?: boolean
+    subscription?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     teams?: boolean | User$teamsArgs<ExtArgs>
-    meetings?: boolean | User$meetingsArgs<ExtArgs>
+    roles?: boolean | User$rolesArgs<ExtArgs>
+    uploads?: boolean | User$uploadsArgs<ExtArgs>
     actionItems?: boolean | User$actionItemsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    supabaseId?: boolean
+    sbId?: boolean
+    username?: boolean
     firstName?: boolean
     lastName?: boolean
+    totalMonthlyUploads?: boolean
+    subscription?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    supabaseId?: boolean
+    sbId?: boolean
+    username?: boolean
     firstName?: boolean
     lastName?: boolean
+    totalMonthlyUploads?: boolean
+    subscription?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
     id?: boolean
-    supabaseId?: boolean
+    sbId?: boolean
+    username?: boolean
     firstName?: boolean
     lastName?: boolean
+    totalMonthlyUploads?: boolean
+    subscription?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "supabaseId" | "firstName" | "lastName" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sbId" | "username" | "firstName" | "lastName" | "totalMonthlyUploads" | "subscription" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     teams?: boolean | User$teamsArgs<ExtArgs>
-    meetings?: boolean | User$meetingsArgs<ExtArgs>
+    roles?: boolean | User$rolesArgs<ExtArgs>
+    uploads?: boolean | User$uploadsArgs<ExtArgs>
     actionItems?: boolean | User$actionItemsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -1612,14 +1809,18 @@ export namespace Prisma {
     name: "User"
     objects: {
       teams: Prisma.$TeamPayload<ExtArgs>[]
-      meetings: Prisma.$MeetingPayload<ExtArgs>[]
+      roles: Prisma.$RolePayload<ExtArgs>[]
+      uploads: Prisma.$UploadPayload<ExtArgs>[]
       actionItems: Prisma.$ActionItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      supabaseId: string
+      sbId: string
+      username: string
       firstName: string
       lastName: string
+      totalMonthlyUploads: number
+      subscription: $Enums.Subscription
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -2017,7 +2218,8 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     teams<T extends User$teamsArgs<ExtArgs> = {}>(args?: Subset<T, User$teamsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    meetings<T extends User$meetingsArgs<ExtArgs> = {}>(args?: Subset<T, User$meetingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    roles<T extends User$rolesArgs<ExtArgs> = {}>(args?: Subset<T, User$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    uploads<T extends User$uploadsArgs<ExtArgs> = {}>(args?: Subset<T, User$uploadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UploadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     actionItems<T extends User$actionItemsArgs<ExtArgs> = {}>(args?: Subset<T, User$actionItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActionItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2049,9 +2251,12 @@ export namespace Prisma {
    */
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'String'>
-    readonly supabaseId: FieldRef<"User", 'String'>
+    readonly sbId: FieldRef<"User", 'String'>
+    readonly username: FieldRef<"User", 'String'>
     readonly firstName: FieldRef<"User", 'String'>
     readonly lastName: FieldRef<"User", 'String'>
+    readonly totalMonthlyUploads: FieldRef<"User", 'Int'>
+    readonly subscription: FieldRef<"User", 'Subscription'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -2466,27 +2671,51 @@ export namespace Prisma {
   }
 
   /**
-   * User.meetings
+   * User.roles
    */
-  export type User$meetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$rolesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Meeting
+     * Select specific fields to fetch from the Role
      */
-    select?: MeetingSelect<ExtArgs> | null
+    select?: RoleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Meeting
+     * Omit specific fields from the Role
      */
-    omit?: MeetingOmit<ExtArgs> | null
+    omit?: RoleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MeetingInclude<ExtArgs> | null
-    where?: MeetingWhereInput
-    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
-    cursor?: MeetingWhereUniqueInput
+    include?: RoleInclude<ExtArgs> | null
+    where?: RoleWhereInput
+    orderBy?: RoleOrderByWithRelationInput | RoleOrderByWithRelationInput[]
+    cursor?: RoleWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
+    distinct?: RoleScalarFieldEnum | RoleScalarFieldEnum[]
+  }
+
+  /**
+   * User.uploads
+   */
+  export type User$uploadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Upload
+     */
+    select?: UploadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Upload
+     */
+    omit?: UploadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UploadInclude<ExtArgs> | null
+    where?: UploadWhereInput
+    orderBy?: UploadOrderByWithRelationInput | UploadOrderByWithRelationInput[]
+    cursor?: UploadWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UploadScalarFieldEnum | UploadScalarFieldEnum[]
   }
 
   /**
@@ -2545,6 +2774,7 @@ export namespace Prisma {
   export type TeamMinAggregateOutputType = {
     id: string | null
     name: string | null
+    organization: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2552,6 +2782,7 @@ export namespace Prisma {
   export type TeamMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    organization: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2559,6 +2790,7 @@ export namespace Prisma {
   export type TeamCountAggregateOutputType = {
     id: number
     name: number
+    organization: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2568,6 +2800,7 @@ export namespace Prisma {
   export type TeamMinAggregateInputType = {
     id?: true
     name?: true
+    organization?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2575,6 +2808,7 @@ export namespace Prisma {
   export type TeamMaxAggregateInputType = {
     id?: true
     name?: true
+    organization?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2582,6 +2816,7 @@ export namespace Prisma {
   export type TeamCountAggregateInputType = {
     id?: true
     name?: true
+    organization?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2662,6 +2897,7 @@ export namespace Prisma {
   export type TeamGroupByOutputType = {
     id: string
     name: string
+    organization: string | null
     createdAt: Date
     updatedAt: Date
     _count: TeamCountAggregateOutputType | null
@@ -2686,16 +2922,19 @@ export namespace Prisma {
   export type TeamSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    organization?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     members?: boolean | Team$membersArgs<ExtArgs>
-    meetings?: boolean | Team$meetingsArgs<ExtArgs>
+    roles?: boolean | Team$rolesArgs<ExtArgs>
+    uploads?: boolean | Team$uploadsArgs<ExtArgs>
     _count?: boolean | TeamCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["team"]>
 
   export type TeamSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    organization?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["team"]>
@@ -2703,6 +2942,7 @@ export namespace Prisma {
   export type TeamSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    organization?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["team"]>
@@ -2710,14 +2950,16 @@ export namespace Prisma {
   export type TeamSelectScalar = {
     id?: boolean
     name?: boolean
+    organization?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type TeamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["team"]>
+  export type TeamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "organization" | "createdAt" | "updatedAt", ExtArgs["result"]["team"]>
   export type TeamInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     members?: boolean | Team$membersArgs<ExtArgs>
-    meetings?: boolean | Team$meetingsArgs<ExtArgs>
+    roles?: boolean | Team$rolesArgs<ExtArgs>
+    uploads?: boolean | Team$uploadsArgs<ExtArgs>
     _count?: boolean | TeamCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TeamIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2727,11 +2969,13 @@ export namespace Prisma {
     name: "Team"
     objects: {
       members: Prisma.$UserPayload<ExtArgs>[]
-      meetings: Prisma.$MeetingPayload<ExtArgs>[]
+      roles: Prisma.$RolePayload<ExtArgs>[]
+      uploads: Prisma.$UploadPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      organization: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["team"]>
@@ -3129,7 +3373,8 @@ export namespace Prisma {
   export interface Prisma__TeamClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     members<T extends Team$membersArgs<ExtArgs> = {}>(args?: Subset<T, Team$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    meetings<T extends Team$meetingsArgs<ExtArgs> = {}>(args?: Subset<T, Team$meetingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    roles<T extends Team$rolesArgs<ExtArgs> = {}>(args?: Subset<T, Team$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    uploads<T extends Team$uploadsArgs<ExtArgs> = {}>(args?: Subset<T, Team$uploadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UploadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3161,6 +3406,7 @@ export namespace Prisma {
   interface TeamFieldRefs {
     readonly id: FieldRef<"Team", 'String'>
     readonly name: FieldRef<"Team", 'String'>
+    readonly organization: FieldRef<"Team", 'String'>
     readonly createdAt: FieldRef<"Team", 'DateTime'>
     readonly updatedAt: FieldRef<"Team", 'DateTime'>
   }
@@ -3575,27 +3821,51 @@ export namespace Prisma {
   }
 
   /**
-   * Team.meetings
+   * Team.roles
    */
-  export type Team$meetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Team$rolesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Meeting
+     * Select specific fields to fetch from the Role
      */
-    select?: MeetingSelect<ExtArgs> | null
+    select?: RoleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Meeting
+     * Omit specific fields from the Role
      */
-    omit?: MeetingOmit<ExtArgs> | null
+    omit?: RoleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MeetingInclude<ExtArgs> | null
-    where?: MeetingWhereInput
-    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
-    cursor?: MeetingWhereUniqueInput
+    include?: RoleInclude<ExtArgs> | null
+    where?: RoleWhereInput
+    orderBy?: RoleOrderByWithRelationInput | RoleOrderByWithRelationInput[]
+    cursor?: RoleWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
+    distinct?: RoleScalarFieldEnum | RoleScalarFieldEnum[]
+  }
+
+  /**
+   * Team.uploads
+   */
+  export type Team$uploadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Upload
+     */
+    select?: UploadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Upload
+     */
+    omit?: UploadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UploadInclude<ExtArgs> | null
+    where?: UploadWhereInput
+    orderBy?: UploadOrderByWithRelationInput | UploadOrderByWithRelationInput[]
+    cursor?: UploadWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UploadScalarFieldEnum | UploadScalarFieldEnum[]
   }
 
   /**
@@ -3618,43 +3888,37 @@ export namespace Prisma {
 
 
   /**
-   * Model Meeting
+   * Model Role
    */
 
-  export type AggregateMeeting = {
-    _count: MeetingCountAggregateOutputType | null
-    _min: MeetingMinAggregateOutputType | null
-    _max: MeetingMaxAggregateOutputType | null
+  export type AggregateRole = {
+    _count: RoleCountAggregateOutputType | null
+    _min: RoleMinAggregateOutputType | null
+    _max: RoleMaxAggregateOutputType | null
   }
 
-  export type MeetingMinAggregateOutputType = {
+  export type RoleMinAggregateOutputType = {
     id: string | null
-    title: string | null
-    fileUrl: string | null
-    processStatus: $Enums.ProcessStatus | null
-    uploaderId: string | null
+    userId: string | null
+    type: $Enums.RoleType | null
     teamId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
-  export type MeetingMaxAggregateOutputType = {
+  export type RoleMaxAggregateOutputType = {
     id: string | null
-    title: string | null
-    fileUrl: string | null
-    processStatus: $Enums.ProcessStatus | null
-    uploaderId: string | null
+    userId: string | null
+    type: $Enums.RoleType | null
     teamId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
-  export type MeetingCountAggregateOutputType = {
+  export type RoleCountAggregateOutputType = {
     id: number
-    title: number
-    fileUrl: number
-    processStatus: number
-    uploaderId: number
+    userId: number
+    type: number
     teamId: number
     createdAt: number
     updatedAt: number
@@ -3662,352 +3926,331 @@ export namespace Prisma {
   }
 
 
-  export type MeetingMinAggregateInputType = {
+  export type RoleMinAggregateInputType = {
     id?: true
-    title?: true
-    fileUrl?: true
-    processStatus?: true
-    uploaderId?: true
+    userId?: true
+    type?: true
     teamId?: true
     createdAt?: true
     updatedAt?: true
   }
 
-  export type MeetingMaxAggregateInputType = {
+  export type RoleMaxAggregateInputType = {
     id?: true
-    title?: true
-    fileUrl?: true
-    processStatus?: true
-    uploaderId?: true
+    userId?: true
+    type?: true
     teamId?: true
     createdAt?: true
     updatedAt?: true
   }
 
-  export type MeetingCountAggregateInputType = {
+  export type RoleCountAggregateInputType = {
     id?: true
-    title?: true
-    fileUrl?: true
-    processStatus?: true
-    uploaderId?: true
+    userId?: true
+    type?: true
     teamId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
   }
 
-  export type MeetingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Meeting to aggregate.
+     * Filter which Role to aggregate.
      */
-    where?: MeetingWhereInput
+    where?: RoleWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Meetings to fetch.
+     * Determine the order of Roles to fetch.
      */
-    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    orderBy?: RoleOrderByWithRelationInput | RoleOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: MeetingWhereUniqueInput
+    cursor?: RoleWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Meetings from the position of the cursor.
+     * Take `±n` Roles from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Meetings.
+     * Skip the first `n` Roles.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Meetings
+     * Count returned Roles
     **/
-    _count?: true | MeetingCountAggregateInputType
+    _count?: true | RoleCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: MeetingMinAggregateInputType
+    _min?: RoleMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: MeetingMaxAggregateInputType
+    _max?: RoleMaxAggregateInputType
   }
 
-  export type GetMeetingAggregateType<T extends MeetingAggregateArgs> = {
-        [P in keyof T & keyof AggregateMeeting]: P extends '_count' | 'count'
+  export type GetRoleAggregateType<T extends RoleAggregateArgs> = {
+        [P in keyof T & keyof AggregateRole]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateMeeting[P]>
-      : GetScalarType<T[P], AggregateMeeting[P]>
+        : GetScalarType<T[P], AggregateRole[P]>
+      : GetScalarType<T[P], AggregateRole[P]>
   }
 
 
 
 
-  export type MeetingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MeetingWhereInput
-    orderBy?: MeetingOrderByWithAggregationInput | MeetingOrderByWithAggregationInput[]
-    by: MeetingScalarFieldEnum[] | MeetingScalarFieldEnum
-    having?: MeetingScalarWhereWithAggregatesInput
+  export type RoleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoleWhereInput
+    orderBy?: RoleOrderByWithAggregationInput | RoleOrderByWithAggregationInput[]
+    by: RoleScalarFieldEnum[] | RoleScalarFieldEnum
+    having?: RoleScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: MeetingCountAggregateInputType | true
-    _min?: MeetingMinAggregateInputType
-    _max?: MeetingMaxAggregateInputType
+    _count?: RoleCountAggregateInputType | true
+    _min?: RoleMinAggregateInputType
+    _max?: RoleMaxAggregateInputType
   }
 
-  export type MeetingGroupByOutputType = {
+  export type RoleGroupByOutputType = {
     id: string
-    title: string
-    fileUrl: string
-    processStatus: $Enums.ProcessStatus
-    uploaderId: string
-    teamId: string | null
+    userId: string
+    type: $Enums.RoleType
+    teamId: string
     createdAt: Date
     updatedAt: Date
-    _count: MeetingCountAggregateOutputType | null
-    _min: MeetingMinAggregateOutputType | null
-    _max: MeetingMaxAggregateOutputType | null
+    _count: RoleCountAggregateOutputType | null
+    _min: RoleMinAggregateOutputType | null
+    _max: RoleMaxAggregateOutputType | null
   }
 
-  type GetMeetingGroupByPayload<T extends MeetingGroupByArgs> = Prisma.PrismaPromise<
+  type GetRoleGroupByPayload<T extends RoleGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<MeetingGroupByOutputType, T['by']> &
+      PickEnumerable<RoleGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof MeetingGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof RoleGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], MeetingGroupByOutputType[P]>
-            : GetScalarType<T[P], MeetingGroupByOutputType[P]>
+              : GetScalarType<T[P], RoleGroupByOutputType[P]>
+            : GetScalarType<T[P], RoleGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type MeetingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type RoleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    title?: boolean
-    fileUrl?: boolean
-    processStatus?: boolean
-    uploaderId?: boolean
+    userId?: boolean
+    type?: boolean
     teamId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    result?: boolean | Meeting$resultArgs<ExtArgs>
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | Meeting$teamArgs<ExtArgs>
-  }, ExtArgs["result"]["meeting"]>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["role"]>
 
-  export type MeetingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type RoleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    title?: boolean
-    fileUrl?: boolean
-    processStatus?: boolean
-    uploaderId?: boolean
+    userId?: boolean
+    type?: boolean
     teamId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | Meeting$teamArgs<ExtArgs>
-  }, ExtArgs["result"]["meeting"]>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["role"]>
 
-  export type MeetingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type RoleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    title?: boolean
-    fileUrl?: boolean
-    processStatus?: boolean
-    uploaderId?: boolean
+    userId?: boolean
+    type?: boolean
     teamId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | Meeting$teamArgs<ExtArgs>
-  }, ExtArgs["result"]["meeting"]>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["role"]>
 
-  export type MeetingSelectScalar = {
+  export type RoleSelectScalar = {
     id?: boolean
-    title?: boolean
-    fileUrl?: boolean
-    processStatus?: boolean
-    uploaderId?: boolean
+    userId?: boolean
+    type?: boolean
     teamId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type MeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "fileUrl" | "processStatus" | "uploaderId" | "teamId" | "createdAt" | "updatedAt", ExtArgs["result"]["meeting"]>
-  export type MeetingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    result?: boolean | Meeting$resultArgs<ExtArgs>
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | Meeting$teamArgs<ExtArgs>
+  export type RoleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "teamId" | "createdAt" | "updatedAt", ExtArgs["result"]["role"]>
+  export type RoleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    team?: boolean | TeamDefaultArgs<ExtArgs>
   }
-  export type MeetingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | Meeting$teamArgs<ExtArgs>
+  export type RoleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    team?: boolean | TeamDefaultArgs<ExtArgs>
   }
-  export type MeetingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    uploader?: boolean | UserDefaultArgs<ExtArgs>
-    team?: boolean | Meeting$teamArgs<ExtArgs>
+  export type RoleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    team?: boolean | TeamDefaultArgs<ExtArgs>
   }
 
-  export type $MeetingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Meeting"
+  export type $RolePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Role"
     objects: {
-      result: Prisma.$ResultPayload<ExtArgs> | null
-      uploader: Prisma.$UserPayload<ExtArgs>
-      team: Prisma.$TeamPayload<ExtArgs> | null
+      user: Prisma.$UserPayload<ExtArgs>
+      team: Prisma.$TeamPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      title: string
-      fileUrl: string
-      processStatus: $Enums.ProcessStatus
-      uploaderId: string
-      teamId: string | null
+      userId: string
+      type: $Enums.RoleType
+      teamId: string
       createdAt: Date
       updatedAt: Date
-    }, ExtArgs["result"]["meeting"]>
+    }, ExtArgs["result"]["role"]>
     composites: {}
   }
 
-  type MeetingGetPayload<S extends boolean | null | undefined | MeetingDefaultArgs> = $Result.GetResult<Prisma.$MeetingPayload, S>
+  type RoleGetPayload<S extends boolean | null | undefined | RoleDefaultArgs> = $Result.GetResult<Prisma.$RolePayload, S>
 
-  type MeetingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<MeetingFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: MeetingCountAggregateInputType | true
+  type RoleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RoleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RoleCountAggregateInputType | true
     }
 
-  export interface MeetingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Meeting'], meta: { name: 'Meeting' } }
+  export interface RoleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Role'], meta: { name: 'Role' } }
     /**
-     * Find zero or one Meeting that matches the filter.
-     * @param {MeetingFindUniqueArgs} args - Arguments to find a Meeting
+     * Find zero or one Role that matches the filter.
+     * @param {RoleFindUniqueArgs} args - Arguments to find a Role
      * @example
-     * // Get one Meeting
-     * const meeting = await prisma.meeting.findUnique({
+     * // Get one Role
+     * const role = await prisma.role.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends MeetingFindUniqueArgs>(args: SelectSubset<T, MeetingFindUniqueArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends RoleFindUniqueArgs>(args: SelectSubset<T, RoleFindUniqueArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Meeting that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Role that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {MeetingFindUniqueOrThrowArgs} args - Arguments to find a Meeting
+     * @param {RoleFindUniqueOrThrowArgs} args - Arguments to find a Role
      * @example
-     * // Get one Meeting
-     * const meeting = await prisma.meeting.findUniqueOrThrow({
+     * // Get one Role
+     * const role = await prisma.role.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends MeetingFindUniqueOrThrowArgs>(args: SelectSubset<T, MeetingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends RoleFindUniqueOrThrowArgs>(args: SelectSubset<T, RoleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Meeting that matches the filter.
+     * Find the first Role that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MeetingFindFirstArgs} args - Arguments to find a Meeting
+     * @param {RoleFindFirstArgs} args - Arguments to find a Role
      * @example
-     * // Get one Meeting
-     * const meeting = await prisma.meeting.findFirst({
+     * // Get one Role
+     * const role = await prisma.role.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends MeetingFindFirstArgs>(args?: SelectSubset<T, MeetingFindFirstArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends RoleFindFirstArgs>(args?: SelectSubset<T, RoleFindFirstArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Meeting that matches the filter or
+     * Find the first Role that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MeetingFindFirstOrThrowArgs} args - Arguments to find a Meeting
+     * @param {RoleFindFirstOrThrowArgs} args - Arguments to find a Role
      * @example
-     * // Get one Meeting
-     * const meeting = await prisma.meeting.findFirstOrThrow({
+     * // Get one Role
+     * const role = await prisma.role.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends MeetingFindFirstOrThrowArgs>(args?: SelectSubset<T, MeetingFindFirstOrThrowArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends RoleFindFirstOrThrowArgs>(args?: SelectSubset<T, RoleFindFirstOrThrowArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Meetings that matches the filter.
+     * Find zero or more Roles that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MeetingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {RoleFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Meetings
-     * const meetings = await prisma.meeting.findMany()
+     * // Get all Roles
+     * const roles = await prisma.role.findMany()
      * 
-     * // Get first 10 Meetings
-     * const meetings = await prisma.meeting.findMany({ take: 10 })
+     * // Get first 10 Roles
+     * const roles = await prisma.role.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const meetingWithIdOnly = await prisma.meeting.findMany({ select: { id: true } })
+     * const roleWithIdOnly = await prisma.role.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends MeetingFindManyArgs>(args?: SelectSubset<T, MeetingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends RoleFindManyArgs>(args?: SelectSubset<T, RoleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Meeting.
-     * @param {MeetingCreateArgs} args - Arguments to create a Meeting.
+     * Create a Role.
+     * @param {RoleCreateArgs} args - Arguments to create a Role.
      * @example
-     * // Create one Meeting
-     * const Meeting = await prisma.meeting.create({
+     * // Create one Role
+     * const Role = await prisma.role.create({
      *   data: {
-     *     // ... data to create a Meeting
+     *     // ... data to create a Role
      *   }
      * })
      * 
      */
-    create<T extends MeetingCreateArgs>(args: SelectSubset<T, MeetingCreateArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends RoleCreateArgs>(args: SelectSubset<T, RoleCreateArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Meetings.
-     * @param {MeetingCreateManyArgs} args - Arguments to create many Meetings.
+     * Create many Roles.
+     * @param {RoleCreateManyArgs} args - Arguments to create many Roles.
      * @example
-     * // Create many Meetings
-     * const meeting = await prisma.meeting.createMany({
+     * // Create many Roles
+     * const role = await prisma.role.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends MeetingCreateManyArgs>(args?: SelectSubset<T, MeetingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends RoleCreateManyArgs>(args?: SelectSubset<T, RoleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Meetings and returns the data saved in the database.
-     * @param {MeetingCreateManyAndReturnArgs} args - Arguments to create many Meetings.
+     * Create many Roles and returns the data saved in the database.
+     * @param {RoleCreateManyAndReturnArgs} args - Arguments to create many Roles.
      * @example
-     * // Create many Meetings
-     * const meeting = await prisma.meeting.createManyAndReturn({
+     * // Create many Roles
+     * const role = await prisma.role.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Meetings and only return the `id`
-     * const meetingWithIdOnly = await prisma.meeting.createManyAndReturn({
+     * // Create many Roles and only return the `id`
+     * const roleWithIdOnly = await prisma.role.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -4017,28 +4260,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends MeetingCreateManyAndReturnArgs>(args?: SelectSubset<T, MeetingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends RoleCreateManyAndReturnArgs>(args?: SelectSubset<T, RoleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Meeting.
-     * @param {MeetingDeleteArgs} args - Arguments to delete one Meeting.
+     * Delete a Role.
+     * @param {RoleDeleteArgs} args - Arguments to delete one Role.
      * @example
-     * // Delete one Meeting
-     * const Meeting = await prisma.meeting.delete({
+     * // Delete one Role
+     * const Role = await prisma.role.delete({
      *   where: {
-     *     // ... filter to delete one Meeting
+     *     // ... filter to delete one Role
      *   }
      * })
      * 
      */
-    delete<T extends MeetingDeleteArgs>(args: SelectSubset<T, MeetingDeleteArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends RoleDeleteArgs>(args: SelectSubset<T, RoleDeleteArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Meeting.
-     * @param {MeetingUpdateArgs} args - Arguments to update one Meeting.
+     * Update one Role.
+     * @param {RoleUpdateArgs} args - Arguments to update one Role.
      * @example
-     * // Update one Meeting
-     * const meeting = await prisma.meeting.update({
+     * // Update one Role
+     * const role = await prisma.role.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -4048,30 +4291,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends MeetingUpdateArgs>(args: SelectSubset<T, MeetingUpdateArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends RoleUpdateArgs>(args: SelectSubset<T, RoleUpdateArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Meetings.
-     * @param {MeetingDeleteManyArgs} args - Arguments to filter Meetings to delete.
+     * Delete zero or more Roles.
+     * @param {RoleDeleteManyArgs} args - Arguments to filter Roles to delete.
      * @example
-     * // Delete a few Meetings
-     * const { count } = await prisma.meeting.deleteMany({
+     * // Delete a few Roles
+     * const { count } = await prisma.role.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends MeetingDeleteManyArgs>(args?: SelectSubset<T, MeetingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends RoleDeleteManyArgs>(args?: SelectSubset<T, RoleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Meetings.
+     * Update zero or more Roles.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MeetingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {RoleUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Meetings
-     * const meeting = await prisma.meeting.updateMany({
+     * // Update many Roles
+     * const role = await prisma.role.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -4081,14 +4324,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends MeetingUpdateManyArgs>(args: SelectSubset<T, MeetingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends RoleUpdateManyArgs>(args: SelectSubset<T, RoleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Meetings and returns the data updated in the database.
-     * @param {MeetingUpdateManyAndReturnArgs} args - Arguments to update many Meetings.
+     * Update zero or more Roles and returns the data updated in the database.
+     * @param {RoleUpdateManyAndReturnArgs} args - Arguments to update many Roles.
      * @example
-     * // Update many Meetings
-     * const meeting = await prisma.meeting.updateManyAndReturn({
+     * // Update many Roles
+     * const role = await prisma.role.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -4097,8 +4340,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Meetings and only return the `id`
-     * const meetingWithIdOnly = await prisma.meeting.updateManyAndReturn({
+     * // Update zero or more Roles and only return the `id`
+     * const roleWithIdOnly = await prisma.role.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -4111,56 +4354,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends MeetingUpdateManyAndReturnArgs>(args: SelectSubset<T, MeetingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends RoleUpdateManyAndReturnArgs>(args: SelectSubset<T, RoleUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Meeting.
-     * @param {MeetingUpsertArgs} args - Arguments to update or create a Meeting.
+     * Create or update one Role.
+     * @param {RoleUpsertArgs} args - Arguments to update or create a Role.
      * @example
-     * // Update or create a Meeting
-     * const meeting = await prisma.meeting.upsert({
+     * // Update or create a Role
+     * const role = await prisma.role.upsert({
      *   create: {
-     *     // ... data to create a Meeting
+     *     // ... data to create a Role
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Meeting we want to update
+     *     // ... the filter for the Role we want to update
      *   }
      * })
      */
-    upsert<T extends MeetingUpsertArgs>(args: SelectSubset<T, MeetingUpsertArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends RoleUpsertArgs>(args: SelectSubset<T, RoleUpsertArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Meetings.
+     * Count the number of Roles.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MeetingCountArgs} args - Arguments to filter Meetings to count.
+     * @param {RoleCountArgs} args - Arguments to filter Roles to count.
      * @example
-     * // Count the number of Meetings
-     * const count = await prisma.meeting.count({
+     * // Count the number of Roles
+     * const count = await prisma.role.count({
      *   where: {
-     *     // ... the filter for the Meetings we want to count
+     *     // ... the filter for the Roles we want to count
      *   }
      * })
     **/
-    count<T extends MeetingCountArgs>(
-      args?: Subset<T, MeetingCountArgs>,
+    count<T extends RoleCountArgs>(
+      args?: Subset<T, RoleCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], MeetingCountAggregateOutputType>
+          : GetScalarType<T['select'], RoleCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Meeting.
+     * Allows you to perform aggregations operations on a Role.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MeetingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {RoleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -4180,13 +4423,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends MeetingAggregateArgs>(args: Subset<T, MeetingAggregateArgs>): Prisma.PrismaPromise<GetMeetingAggregateType<T>>
+    aggregate<T extends RoleAggregateArgs>(args: Subset<T, RoleAggregateArgs>): Prisma.PrismaPromise<GetRoleAggregateType<T>>
 
     /**
-     * Group by Meeting.
+     * Group by Role.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MeetingGroupByArgs} args - Group by arguments.
+     * @param {RoleGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -4201,14 +4444,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends MeetingGroupByArgs,
+      T extends RoleGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: MeetingGroupByArgs['orderBy'] }
-        : { orderBy?: MeetingGroupByArgs['orderBy'] },
+        ? { orderBy: RoleGroupByArgs['orderBy'] }
+        : { orderBy?: RoleGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -4257,24 +4500,23 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, MeetingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMeetingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, RoleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRoleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Meeting model
+   * Fields of the Role model
    */
-  readonly fields: MeetingFieldRefs;
+  readonly fields: RoleFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Meeting.
+   * The delegate class that acts as a "Promise-like" for Role.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__MeetingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__RoleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    result<T extends Meeting$resultArgs<ExtArgs> = {}>(args?: Subset<T, Meeting$resultArgs<ExtArgs>>): Prisma__ResultClient<$Result.GetResult<Prisma.$ResultPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    uploader<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    team<T extends Meeting$teamArgs<ExtArgs> = {}>(args?: Subset<T, Meeting$teamArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    team<T extends TeamDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TeamDefaultArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4301,416 +4543,1523 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Meeting model
+   * Fields of the Role model
    */
-  interface MeetingFieldRefs {
-    readonly id: FieldRef<"Meeting", 'String'>
-    readonly title: FieldRef<"Meeting", 'String'>
-    readonly fileUrl: FieldRef<"Meeting", 'String'>
-    readonly processStatus: FieldRef<"Meeting", 'ProcessStatus'>
-    readonly uploaderId: FieldRef<"Meeting", 'String'>
-    readonly teamId: FieldRef<"Meeting", 'String'>
-    readonly createdAt: FieldRef<"Meeting", 'DateTime'>
-    readonly updatedAt: FieldRef<"Meeting", 'DateTime'>
+  interface RoleFieldRefs {
+    readonly id: FieldRef<"Role", 'String'>
+    readonly userId: FieldRef<"Role", 'String'>
+    readonly type: FieldRef<"Role", 'RoleType'>
+    readonly teamId: FieldRef<"Role", 'String'>
+    readonly createdAt: FieldRef<"Role", 'DateTime'>
+    readonly updatedAt: FieldRef<"Role", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Meeting findUnique
+   * Role findUnique
    */
-  export type MeetingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Meeting
+     * Select specific fields to fetch from the Role
      */
-    select?: MeetingSelect<ExtArgs> | null
+    select?: RoleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Meeting
+     * Omit specific fields from the Role
      */
-    omit?: MeetingOmit<ExtArgs> | null
+    omit?: RoleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MeetingInclude<ExtArgs> | null
+    include?: RoleInclude<ExtArgs> | null
     /**
-     * Filter, which Meeting to fetch.
+     * Filter, which Role to fetch.
      */
-    where: MeetingWhereUniqueInput
+    where: RoleWhereUniqueInput
   }
 
   /**
-   * Meeting findUniqueOrThrow
+   * Role findUniqueOrThrow
    */
-  export type MeetingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Meeting
+     * Select specific fields to fetch from the Role
      */
-    select?: MeetingSelect<ExtArgs> | null
+    select?: RoleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Meeting
+     * Omit specific fields from the Role
      */
-    omit?: MeetingOmit<ExtArgs> | null
+    omit?: RoleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MeetingInclude<ExtArgs> | null
+    include?: RoleInclude<ExtArgs> | null
     /**
-     * Filter, which Meeting to fetch.
+     * Filter, which Role to fetch.
      */
-    where: MeetingWhereUniqueInput
+    where: RoleWhereUniqueInput
   }
 
   /**
-   * Meeting findFirst
+   * Role findFirst
    */
-  export type MeetingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Meeting
+     * Select specific fields to fetch from the Role
      */
-    select?: MeetingSelect<ExtArgs> | null
+    select?: RoleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Meeting
+     * Omit specific fields from the Role
      */
-    omit?: MeetingOmit<ExtArgs> | null
+    omit?: RoleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MeetingInclude<ExtArgs> | null
+    include?: RoleInclude<ExtArgs> | null
     /**
-     * Filter, which Meeting to fetch.
+     * Filter, which Role to fetch.
      */
-    where?: MeetingWhereInput
+    where?: RoleWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Meetings to fetch.
+     * Determine the order of Roles to fetch.
      */
-    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    orderBy?: RoleOrderByWithRelationInput | RoleOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Meetings.
+     * Sets the position for searching for Roles.
      */
-    cursor?: MeetingWhereUniqueInput
+    cursor?: RoleWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Meetings from the position of the cursor.
+     * Take `±n` Roles from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Meetings.
+     * Skip the first `n` Roles.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Meetings.
+     * Filter by unique combinations of Roles.
      */
-    distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
+    distinct?: RoleScalarFieldEnum | RoleScalarFieldEnum[]
   }
 
   /**
-   * Meeting findFirstOrThrow
+   * Role findFirstOrThrow
    */
-  export type MeetingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Meeting
+     * Select specific fields to fetch from the Role
      */
-    select?: MeetingSelect<ExtArgs> | null
+    select?: RoleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Meeting
+     * Omit specific fields from the Role
      */
-    omit?: MeetingOmit<ExtArgs> | null
+    omit?: RoleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MeetingInclude<ExtArgs> | null
+    include?: RoleInclude<ExtArgs> | null
     /**
-     * Filter, which Meeting to fetch.
+     * Filter, which Role to fetch.
      */
-    where?: MeetingWhereInput
+    where?: RoleWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Meetings to fetch.
+     * Determine the order of Roles to fetch.
      */
-    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    orderBy?: RoleOrderByWithRelationInput | RoleOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Meetings.
+     * Sets the position for searching for Roles.
      */
-    cursor?: MeetingWhereUniqueInput
+    cursor?: RoleWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Meetings from the position of the cursor.
+     * Take `±n` Roles from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Meetings.
+     * Skip the first `n` Roles.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Meetings.
+     * Filter by unique combinations of Roles.
      */
-    distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
+    distinct?: RoleScalarFieldEnum | RoleScalarFieldEnum[]
   }
 
   /**
-   * Meeting findMany
+   * Role findMany
    */
-  export type MeetingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Meeting
+     * Select specific fields to fetch from the Role
      */
-    select?: MeetingSelect<ExtArgs> | null
+    select?: RoleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Meeting
+     * Omit specific fields from the Role
      */
-    omit?: MeetingOmit<ExtArgs> | null
+    omit?: RoleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MeetingInclude<ExtArgs> | null
+    include?: RoleInclude<ExtArgs> | null
     /**
-     * Filter, which Meetings to fetch.
+     * Filter, which Roles to fetch.
      */
-    where?: MeetingWhereInput
+    where?: RoleWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Meetings to fetch.
+     * Determine the order of Roles to fetch.
      */
-    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    orderBy?: RoleOrderByWithRelationInput | RoleOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Meetings.
+     * Sets the position for listing Roles.
      */
-    cursor?: MeetingWhereUniqueInput
+    cursor?: RoleWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Meetings from the position of the cursor.
+     * Take `±n` Roles from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Meetings.
+     * Skip the first `n` Roles.
      */
     skip?: number
-    distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
+    distinct?: RoleScalarFieldEnum | RoleScalarFieldEnum[]
   }
 
   /**
-   * Meeting create
+   * Role create
    */
-  export type MeetingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Meeting
+     * Select specific fields to fetch from the Role
      */
-    select?: MeetingSelect<ExtArgs> | null
+    select?: RoleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Meeting
+     * Omit specific fields from the Role
      */
-    omit?: MeetingOmit<ExtArgs> | null
+    omit?: RoleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MeetingInclude<ExtArgs> | null
+    include?: RoleInclude<ExtArgs> | null
     /**
-     * The data needed to create a Meeting.
+     * The data needed to create a Role.
      */
-    data: XOR<MeetingCreateInput, MeetingUncheckedCreateInput>
+    data: XOR<RoleCreateInput, RoleUncheckedCreateInput>
   }
 
   /**
-   * Meeting createMany
+   * Role createMany
    */
-  export type MeetingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Meetings.
+     * The data used to create many Roles.
      */
-    data: MeetingCreateManyInput | MeetingCreateManyInput[]
+    data: RoleCreateManyInput | RoleCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Meeting createManyAndReturn
+   * Role createManyAndReturn
    */
-  export type MeetingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Meeting
+     * Select specific fields to fetch from the Role
      */
-    select?: MeetingSelectCreateManyAndReturn<ExtArgs> | null
+    select?: RoleSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Meeting
+     * Omit specific fields from the Role
      */
-    omit?: MeetingOmit<ExtArgs> | null
+    omit?: RoleOmit<ExtArgs> | null
     /**
-     * The data used to create many Meetings.
+     * The data used to create many Roles.
      */
-    data: MeetingCreateManyInput | MeetingCreateManyInput[]
+    data: RoleCreateManyInput | RoleCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MeetingIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: RoleIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Meeting update
+   * Role update
    */
-  export type MeetingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Meeting
+     * Select specific fields to fetch from the Role
      */
-    select?: MeetingSelect<ExtArgs> | null
+    select?: RoleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Meeting
+     * Omit specific fields from the Role
      */
-    omit?: MeetingOmit<ExtArgs> | null
+    omit?: RoleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MeetingInclude<ExtArgs> | null
+    include?: RoleInclude<ExtArgs> | null
     /**
-     * The data needed to update a Meeting.
+     * The data needed to update a Role.
      */
-    data: XOR<MeetingUpdateInput, MeetingUncheckedUpdateInput>
+    data: XOR<RoleUpdateInput, RoleUncheckedUpdateInput>
     /**
-     * Choose, which Meeting to update.
+     * Choose, which Role to update.
      */
-    where: MeetingWhereUniqueInput
+    where: RoleWhereUniqueInput
   }
 
   /**
-   * Meeting updateMany
+   * Role updateMany
    */
-  export type MeetingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Meetings.
+     * The data used to update Roles.
      */
-    data: XOR<MeetingUpdateManyMutationInput, MeetingUncheckedUpdateManyInput>
+    data: XOR<RoleUpdateManyMutationInput, RoleUncheckedUpdateManyInput>
     /**
-     * Filter which Meetings to update
+     * Filter which Roles to update
      */
-    where?: MeetingWhereInput
+    where?: RoleWhereInput
     /**
-     * Limit how many Meetings to update.
+     * Limit how many Roles to update.
      */
     limit?: number
   }
 
   /**
-   * Meeting updateManyAndReturn
+   * Role updateManyAndReturn
    */
-  export type MeetingUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Meeting
+     * Select specific fields to fetch from the Role
      */
-    select?: MeetingSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: RoleSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Meeting
+     * Omit specific fields from the Role
      */
-    omit?: MeetingOmit<ExtArgs> | null
+    omit?: RoleOmit<ExtArgs> | null
     /**
-     * The data used to update Meetings.
+     * The data used to update Roles.
      */
-    data: XOR<MeetingUpdateManyMutationInput, MeetingUncheckedUpdateManyInput>
+    data: XOR<RoleUpdateManyMutationInput, RoleUncheckedUpdateManyInput>
     /**
-     * Filter which Meetings to update
+     * Filter which Roles to update
      */
-    where?: MeetingWhereInput
+    where?: RoleWhereInput
     /**
-     * Limit how many Meetings to update.
+     * Limit how many Roles to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MeetingIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: RoleIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Meeting upsert
+   * Role upsert
    */
-  export type MeetingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Meeting
+     * Select specific fields to fetch from the Role
      */
-    select?: MeetingSelect<ExtArgs> | null
+    select?: RoleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Meeting
+     * Omit specific fields from the Role
      */
-    omit?: MeetingOmit<ExtArgs> | null
+    omit?: RoleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MeetingInclude<ExtArgs> | null
+    include?: RoleInclude<ExtArgs> | null
     /**
-     * The filter to search for the Meeting to update in case it exists.
+     * The filter to search for the Role to update in case it exists.
      */
-    where: MeetingWhereUniqueInput
+    where: RoleWhereUniqueInput
     /**
-     * In case the Meeting found by the `where` argument doesn't exist, create a new Meeting with this data.
+     * In case the Role found by the `where` argument doesn't exist, create a new Role with this data.
      */
-    create: XOR<MeetingCreateInput, MeetingUncheckedCreateInput>
+    create: XOR<RoleCreateInput, RoleUncheckedCreateInput>
     /**
-     * In case the Meeting was found with the provided `where` argument, update it with this data.
+     * In case the Role was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<MeetingUpdateInput, MeetingUncheckedUpdateInput>
+    update: XOR<RoleUpdateInput, RoleUncheckedUpdateInput>
   }
 
   /**
-   * Meeting delete
+   * Role delete
    */
-  export type MeetingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Meeting
+     * Select specific fields to fetch from the Role
      */
-    select?: MeetingSelect<ExtArgs> | null
+    select?: RoleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Meeting
+     * Omit specific fields from the Role
      */
-    omit?: MeetingOmit<ExtArgs> | null
+    omit?: RoleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MeetingInclude<ExtArgs> | null
+    include?: RoleInclude<ExtArgs> | null
     /**
-     * Filter which Meeting to delete.
+     * Filter which Role to delete.
      */
-    where: MeetingWhereUniqueInput
+    where: RoleWhereUniqueInput
   }
 
   /**
-   * Meeting deleteMany
+   * Role deleteMany
    */
-  export type MeetingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Meetings to delete
+     * Filter which Roles to delete
      */
-    where?: MeetingWhereInput
+    where?: RoleWhereInput
     /**
-     * Limit how many Meetings to delete.
+     * Limit how many Roles to delete.
      */
     limit?: number
   }
 
   /**
-   * Meeting.result
+   * Role without action
    */
-  export type Meeting$resultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type RoleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: RoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: RoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoleInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Upload
+   */
+
+  export type AggregateUpload = {
+    _count: UploadCountAggregateOutputType | null
+    _min: UploadMinAggregateOutputType | null
+    _max: UploadMaxAggregateOutputType | null
+  }
+
+  export type UploadMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    fileUrl: string | null
+    processStatus: $Enums.ProcessStatus | null
+    uploaderId: string | null
+    teamId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UploadMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    fileUrl: string | null
+    processStatus: $Enums.ProcessStatus | null
+    uploaderId: string | null
+    teamId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UploadCountAggregateOutputType = {
+    id: number
+    title: number
+    fileUrl: number
+    processStatus: number
+    uploaderId: number
+    teamId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UploadMinAggregateInputType = {
+    id?: true
+    title?: true
+    fileUrl?: true
+    processStatus?: true
+    uploaderId?: true
+    teamId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UploadMaxAggregateInputType = {
+    id?: true
+    title?: true
+    fileUrl?: true
+    processStatus?: true
+    uploaderId?: true
+    teamId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UploadCountAggregateInputType = {
+    id?: true
+    title?: true
+    fileUrl?: true
+    processStatus?: true
+    uploaderId?: true
+    teamId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UploadAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Upload to aggregate.
+     */
+    where?: UploadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Uploads to fetch.
+     */
+    orderBy?: UploadOrderByWithRelationInput | UploadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UploadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Uploads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Uploads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Uploads
+    **/
+    _count?: true | UploadCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UploadMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UploadMaxAggregateInputType
+  }
+
+  export type GetUploadAggregateType<T extends UploadAggregateArgs> = {
+        [P in keyof T & keyof AggregateUpload]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUpload[P]>
+      : GetScalarType<T[P], AggregateUpload[P]>
+  }
+
+
+
+
+  export type UploadGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UploadWhereInput
+    orderBy?: UploadOrderByWithAggregationInput | UploadOrderByWithAggregationInput[]
+    by: UploadScalarFieldEnum[] | UploadScalarFieldEnum
+    having?: UploadScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UploadCountAggregateInputType | true
+    _min?: UploadMinAggregateInputType
+    _max?: UploadMaxAggregateInputType
+  }
+
+  export type UploadGroupByOutputType = {
+    id: string
+    title: string
+    fileUrl: string
+    processStatus: $Enums.ProcessStatus
+    uploaderId: string
+    teamId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: UploadCountAggregateOutputType | null
+    _min: UploadMinAggregateOutputType | null
+    _max: UploadMaxAggregateOutputType | null
+  }
+
+  type GetUploadGroupByPayload<T extends UploadGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UploadGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UploadGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UploadGroupByOutputType[P]>
+            : GetScalarType<T[P], UploadGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UploadSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    fileUrl?: boolean
+    processStatus?: boolean
+    uploaderId?: boolean
+    teamId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    result?: boolean | Upload$resultArgs<ExtArgs>
+    uploader?: boolean | UserDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
+  }, ExtArgs["result"]["upload"]>
+
+  export type UploadSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    fileUrl?: boolean
+    processStatus?: boolean
+    uploaderId?: boolean
+    teamId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    uploader?: boolean | UserDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
+  }, ExtArgs["result"]["upload"]>
+
+  export type UploadSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    fileUrl?: boolean
+    processStatus?: boolean
+    uploaderId?: boolean
+    teamId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    uploader?: boolean | UserDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
+  }, ExtArgs["result"]["upload"]>
+
+  export type UploadSelectScalar = {
+    id?: boolean
+    title?: boolean
+    fileUrl?: boolean
+    processStatus?: boolean
+    uploaderId?: boolean
+    teamId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type UploadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "fileUrl" | "processStatus" | "uploaderId" | "teamId" | "createdAt" | "updatedAt", ExtArgs["result"]["upload"]>
+  export type UploadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    result?: boolean | Upload$resultArgs<ExtArgs>
+    uploader?: boolean | UserDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
+  }
+  export type UploadIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    uploader?: boolean | UserDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
+  }
+  export type UploadIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    uploader?: boolean | UserDefaultArgs<ExtArgs>
+    team?: boolean | Upload$teamArgs<ExtArgs>
+  }
+
+  export type $UploadPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Upload"
+    objects: {
+      result: Prisma.$ResultPayload<ExtArgs> | null
+      uploader: Prisma.$UserPayload<ExtArgs>
+      team: Prisma.$TeamPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      fileUrl: string
+      processStatus: $Enums.ProcessStatus
+      uploaderId: string
+      teamId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["upload"]>
+    composites: {}
+  }
+
+  type UploadGetPayload<S extends boolean | null | undefined | UploadDefaultArgs> = $Result.GetResult<Prisma.$UploadPayload, S>
+
+  type UploadCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UploadFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UploadCountAggregateInputType | true
+    }
+
+  export interface UploadDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Upload'], meta: { name: 'Upload' } }
+    /**
+     * Find zero or one Upload that matches the filter.
+     * @param {UploadFindUniqueArgs} args - Arguments to find a Upload
+     * @example
+     * // Get one Upload
+     * const upload = await prisma.upload.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UploadFindUniqueArgs>(args: SelectSubset<T, UploadFindUniqueArgs<ExtArgs>>): Prisma__UploadClient<$Result.GetResult<Prisma.$UploadPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Upload that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UploadFindUniqueOrThrowArgs} args - Arguments to find a Upload
+     * @example
+     * // Get one Upload
+     * const upload = await prisma.upload.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UploadFindUniqueOrThrowArgs>(args: SelectSubset<T, UploadFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UploadClient<$Result.GetResult<Prisma.$UploadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Upload that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UploadFindFirstArgs} args - Arguments to find a Upload
+     * @example
+     * // Get one Upload
+     * const upload = await prisma.upload.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UploadFindFirstArgs>(args?: SelectSubset<T, UploadFindFirstArgs<ExtArgs>>): Prisma__UploadClient<$Result.GetResult<Prisma.$UploadPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Upload that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UploadFindFirstOrThrowArgs} args - Arguments to find a Upload
+     * @example
+     * // Get one Upload
+     * const upload = await prisma.upload.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UploadFindFirstOrThrowArgs>(args?: SelectSubset<T, UploadFindFirstOrThrowArgs<ExtArgs>>): Prisma__UploadClient<$Result.GetResult<Prisma.$UploadPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Uploads that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UploadFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Uploads
+     * const uploads = await prisma.upload.findMany()
+     * 
+     * // Get first 10 Uploads
+     * const uploads = await prisma.upload.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const uploadWithIdOnly = await prisma.upload.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UploadFindManyArgs>(args?: SelectSubset<T, UploadFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UploadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Upload.
+     * @param {UploadCreateArgs} args - Arguments to create a Upload.
+     * @example
+     * // Create one Upload
+     * const Upload = await prisma.upload.create({
+     *   data: {
+     *     // ... data to create a Upload
+     *   }
+     * })
+     * 
+     */
+    create<T extends UploadCreateArgs>(args: SelectSubset<T, UploadCreateArgs<ExtArgs>>): Prisma__UploadClient<$Result.GetResult<Prisma.$UploadPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Uploads.
+     * @param {UploadCreateManyArgs} args - Arguments to create many Uploads.
+     * @example
+     * // Create many Uploads
+     * const upload = await prisma.upload.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UploadCreateManyArgs>(args?: SelectSubset<T, UploadCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Uploads and returns the data saved in the database.
+     * @param {UploadCreateManyAndReturnArgs} args - Arguments to create many Uploads.
+     * @example
+     * // Create many Uploads
+     * const upload = await prisma.upload.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Uploads and only return the `id`
+     * const uploadWithIdOnly = await prisma.upload.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UploadCreateManyAndReturnArgs>(args?: SelectSubset<T, UploadCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UploadPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Upload.
+     * @param {UploadDeleteArgs} args - Arguments to delete one Upload.
+     * @example
+     * // Delete one Upload
+     * const Upload = await prisma.upload.delete({
+     *   where: {
+     *     // ... filter to delete one Upload
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UploadDeleteArgs>(args: SelectSubset<T, UploadDeleteArgs<ExtArgs>>): Prisma__UploadClient<$Result.GetResult<Prisma.$UploadPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Upload.
+     * @param {UploadUpdateArgs} args - Arguments to update one Upload.
+     * @example
+     * // Update one Upload
+     * const upload = await prisma.upload.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UploadUpdateArgs>(args: SelectSubset<T, UploadUpdateArgs<ExtArgs>>): Prisma__UploadClient<$Result.GetResult<Prisma.$UploadPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Uploads.
+     * @param {UploadDeleteManyArgs} args - Arguments to filter Uploads to delete.
+     * @example
+     * // Delete a few Uploads
+     * const { count } = await prisma.upload.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UploadDeleteManyArgs>(args?: SelectSubset<T, UploadDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Uploads.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UploadUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Uploads
+     * const upload = await prisma.upload.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UploadUpdateManyArgs>(args: SelectSubset<T, UploadUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Uploads and returns the data updated in the database.
+     * @param {UploadUpdateManyAndReturnArgs} args - Arguments to update many Uploads.
+     * @example
+     * // Update many Uploads
+     * const upload = await prisma.upload.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Uploads and only return the `id`
+     * const uploadWithIdOnly = await prisma.upload.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UploadUpdateManyAndReturnArgs>(args: SelectSubset<T, UploadUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UploadPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Upload.
+     * @param {UploadUpsertArgs} args - Arguments to update or create a Upload.
+     * @example
+     * // Update or create a Upload
+     * const upload = await prisma.upload.upsert({
+     *   create: {
+     *     // ... data to create a Upload
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Upload we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UploadUpsertArgs>(args: SelectSubset<T, UploadUpsertArgs<ExtArgs>>): Prisma__UploadClient<$Result.GetResult<Prisma.$UploadPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Uploads.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UploadCountArgs} args - Arguments to filter Uploads to count.
+     * @example
+     * // Count the number of Uploads
+     * const count = await prisma.upload.count({
+     *   where: {
+     *     // ... the filter for the Uploads we want to count
+     *   }
+     * })
+    **/
+    count<T extends UploadCountArgs>(
+      args?: Subset<T, UploadCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UploadCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Upload.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UploadAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UploadAggregateArgs>(args: Subset<T, UploadAggregateArgs>): Prisma.PrismaPromise<GetUploadAggregateType<T>>
+
+    /**
+     * Group by Upload.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UploadGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UploadGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UploadGroupByArgs['orderBy'] }
+        : { orderBy?: UploadGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UploadGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUploadGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Upload model
+   */
+  readonly fields: UploadFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Upload.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UploadClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    result<T extends Upload$resultArgs<ExtArgs> = {}>(args?: Subset<T, Upload$resultArgs<ExtArgs>>): Prisma__ResultClient<$Result.GetResult<Prisma.$ResultPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    uploader<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    team<T extends Upload$teamArgs<ExtArgs> = {}>(args?: Subset<T, Upload$teamArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Upload model
+   */
+  interface UploadFieldRefs {
+    readonly id: FieldRef<"Upload", 'String'>
+    readonly title: FieldRef<"Upload", 'String'>
+    readonly fileUrl: FieldRef<"Upload", 'String'>
+    readonly processStatus: FieldRef<"Upload", 'ProcessStatus'>
+    readonly uploaderId: FieldRef<"Upload", 'String'>
+    readonly teamId: FieldRef<"Upload", 'String'>
+    readonly createdAt: FieldRef<"Upload", 'DateTime'>
+    readonly updatedAt: FieldRef<"Upload", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Upload findUnique
+   */
+  export type UploadFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Upload
+     */
+    select?: UploadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Upload
+     */
+    omit?: UploadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UploadInclude<ExtArgs> | null
+    /**
+     * Filter, which Upload to fetch.
+     */
+    where: UploadWhereUniqueInput
+  }
+
+  /**
+   * Upload findUniqueOrThrow
+   */
+  export type UploadFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Upload
+     */
+    select?: UploadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Upload
+     */
+    omit?: UploadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UploadInclude<ExtArgs> | null
+    /**
+     * Filter, which Upload to fetch.
+     */
+    where: UploadWhereUniqueInput
+  }
+
+  /**
+   * Upload findFirst
+   */
+  export type UploadFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Upload
+     */
+    select?: UploadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Upload
+     */
+    omit?: UploadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UploadInclude<ExtArgs> | null
+    /**
+     * Filter, which Upload to fetch.
+     */
+    where?: UploadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Uploads to fetch.
+     */
+    orderBy?: UploadOrderByWithRelationInput | UploadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Uploads.
+     */
+    cursor?: UploadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Uploads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Uploads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Uploads.
+     */
+    distinct?: UploadScalarFieldEnum | UploadScalarFieldEnum[]
+  }
+
+  /**
+   * Upload findFirstOrThrow
+   */
+  export type UploadFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Upload
+     */
+    select?: UploadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Upload
+     */
+    omit?: UploadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UploadInclude<ExtArgs> | null
+    /**
+     * Filter, which Upload to fetch.
+     */
+    where?: UploadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Uploads to fetch.
+     */
+    orderBy?: UploadOrderByWithRelationInput | UploadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Uploads.
+     */
+    cursor?: UploadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Uploads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Uploads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Uploads.
+     */
+    distinct?: UploadScalarFieldEnum | UploadScalarFieldEnum[]
+  }
+
+  /**
+   * Upload findMany
+   */
+  export type UploadFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Upload
+     */
+    select?: UploadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Upload
+     */
+    omit?: UploadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UploadInclude<ExtArgs> | null
+    /**
+     * Filter, which Uploads to fetch.
+     */
+    where?: UploadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Uploads to fetch.
+     */
+    orderBy?: UploadOrderByWithRelationInput | UploadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Uploads.
+     */
+    cursor?: UploadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Uploads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Uploads.
+     */
+    skip?: number
+    distinct?: UploadScalarFieldEnum | UploadScalarFieldEnum[]
+  }
+
+  /**
+   * Upload create
+   */
+  export type UploadCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Upload
+     */
+    select?: UploadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Upload
+     */
+    omit?: UploadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UploadInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Upload.
+     */
+    data: XOR<UploadCreateInput, UploadUncheckedCreateInput>
+  }
+
+  /**
+   * Upload createMany
+   */
+  export type UploadCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Uploads.
+     */
+    data: UploadCreateManyInput | UploadCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Upload createManyAndReturn
+   */
+  export type UploadCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Upload
+     */
+    select?: UploadSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Upload
+     */
+    omit?: UploadOmit<ExtArgs> | null
+    /**
+     * The data used to create many Uploads.
+     */
+    data: UploadCreateManyInput | UploadCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UploadIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Upload update
+   */
+  export type UploadUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Upload
+     */
+    select?: UploadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Upload
+     */
+    omit?: UploadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UploadInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Upload.
+     */
+    data: XOR<UploadUpdateInput, UploadUncheckedUpdateInput>
+    /**
+     * Choose, which Upload to update.
+     */
+    where: UploadWhereUniqueInput
+  }
+
+  /**
+   * Upload updateMany
+   */
+  export type UploadUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Uploads.
+     */
+    data: XOR<UploadUpdateManyMutationInput, UploadUncheckedUpdateManyInput>
+    /**
+     * Filter which Uploads to update
+     */
+    where?: UploadWhereInput
+    /**
+     * Limit how many Uploads to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Upload updateManyAndReturn
+   */
+  export type UploadUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Upload
+     */
+    select?: UploadSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Upload
+     */
+    omit?: UploadOmit<ExtArgs> | null
+    /**
+     * The data used to update Uploads.
+     */
+    data: XOR<UploadUpdateManyMutationInput, UploadUncheckedUpdateManyInput>
+    /**
+     * Filter which Uploads to update
+     */
+    where?: UploadWhereInput
+    /**
+     * Limit how many Uploads to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UploadIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Upload upsert
+   */
+  export type UploadUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Upload
+     */
+    select?: UploadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Upload
+     */
+    omit?: UploadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UploadInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Upload to update in case it exists.
+     */
+    where: UploadWhereUniqueInput
+    /**
+     * In case the Upload found by the `where` argument doesn't exist, create a new Upload with this data.
+     */
+    create: XOR<UploadCreateInput, UploadUncheckedCreateInput>
+    /**
+     * In case the Upload was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UploadUpdateInput, UploadUncheckedUpdateInput>
+  }
+
+  /**
+   * Upload delete
+   */
+  export type UploadDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Upload
+     */
+    select?: UploadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Upload
+     */
+    omit?: UploadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UploadInclude<ExtArgs> | null
+    /**
+     * Filter which Upload to delete.
+     */
+    where: UploadWhereUniqueInput
+  }
+
+  /**
+   * Upload deleteMany
+   */
+  export type UploadDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Uploads to delete
+     */
+    where?: UploadWhereInput
+    /**
+     * Limit how many Uploads to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Upload.result
+   */
+  export type Upload$resultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Result
      */
@@ -4727,9 +6076,9 @@ export namespace Prisma {
   }
 
   /**
-   * Meeting.team
+   * Upload.team
    */
-  export type Meeting$teamArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Upload$teamArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Team
      */
@@ -4746,21 +6095,21 @@ export namespace Prisma {
   }
 
   /**
-   * Meeting without action
+   * Upload without action
    */
-  export type MeetingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UploadDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Meeting
+     * Select specific fields to fetch from the Upload
      */
-    select?: MeetingSelect<ExtArgs> | null
+    select?: UploadSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Meeting
+     * Omit specific fields from the Upload
      */
-    omit?: MeetingOmit<ExtArgs> | null
+    omit?: UploadOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MeetingInclude<ExtArgs> | null
+    include?: UploadInclude<ExtArgs> | null
   }
 
 
@@ -4777,7 +6126,8 @@ export namespace Prisma {
   export type ResultMinAggregateOutputType = {
     id: string | null
     summary: string | null
-    meetingId: string | null
+    transcript: string | null
+    uploadId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4785,7 +6135,8 @@ export namespace Prisma {
   export type ResultMaxAggregateOutputType = {
     id: string | null
     summary: string | null
-    meetingId: string | null
+    transcript: string | null
+    uploadId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4793,7 +6144,9 @@ export namespace Prisma {
   export type ResultCountAggregateOutputType = {
     id: number
     summary: number
-    meetingId: number
+    transcript: number
+    insights: number
+    uploadId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4803,7 +6156,8 @@ export namespace Prisma {
   export type ResultMinAggregateInputType = {
     id?: true
     summary?: true
-    meetingId?: true
+    transcript?: true
+    uploadId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4811,7 +6165,8 @@ export namespace Prisma {
   export type ResultMaxAggregateInputType = {
     id?: true
     summary?: true
-    meetingId?: true
+    transcript?: true
+    uploadId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4819,7 +6174,9 @@ export namespace Prisma {
   export type ResultCountAggregateInputType = {
     id?: true
     summary?: true
-    meetingId?: true
+    transcript?: true
+    insights?: true
+    uploadId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4900,7 +6257,9 @@ export namespace Prisma {
   export type ResultGroupByOutputType = {
     id: string
     summary: string
-    meetingId: string
+    transcript: string
+    insights: string[]
+    uploadId: string
     createdAt: Date
     updatedAt: Date
     _count: ResultCountAggregateOutputType | null
@@ -4925,63 +6284,73 @@ export namespace Prisma {
   export type ResultSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     summary?: boolean
-    meetingId?: boolean
+    transcript?: boolean
+    insights?: boolean
+    uploadId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     actionItems?: boolean | Result$actionItemsArgs<ExtArgs>
-    meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+    upload?: boolean | UploadDefaultArgs<ExtArgs>
     _count?: boolean | ResultCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["result"]>
 
   export type ResultSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     summary?: boolean
-    meetingId?: boolean
+    transcript?: boolean
+    insights?: boolean
+    uploadId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+    upload?: boolean | UploadDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["result"]>
 
   export type ResultSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     summary?: boolean
-    meetingId?: boolean
+    transcript?: boolean
+    insights?: boolean
+    uploadId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+    upload?: boolean | UploadDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["result"]>
 
   export type ResultSelectScalar = {
     id?: boolean
     summary?: boolean
-    meetingId?: boolean
+    transcript?: boolean
+    insights?: boolean
+    uploadId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "summary" | "meetingId" | "createdAt" | "updatedAt", ExtArgs["result"]["result"]>
+  export type ResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "summary" | "transcript" | "insights" | "uploadId" | "createdAt" | "updatedAt", ExtArgs["result"]["result"]>
   export type ResultInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     actionItems?: boolean | Result$actionItemsArgs<ExtArgs>
-    meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+    upload?: boolean | UploadDefaultArgs<ExtArgs>
     _count?: boolean | ResultCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ResultIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+    upload?: boolean | UploadDefaultArgs<ExtArgs>
   }
   export type ResultIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+    upload?: boolean | UploadDefaultArgs<ExtArgs>
   }
 
   export type $ResultPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Result"
     objects: {
       actionItems: Prisma.$ActionItemPayload<ExtArgs>[]
-      meeting: Prisma.$MeetingPayload<ExtArgs>
+      upload: Prisma.$UploadPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       summary: string
-      meetingId: string
+      transcript: string
+      insights: string[]
+      uploadId: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["result"]>
@@ -5379,7 +6748,7 @@ export namespace Prisma {
   export interface Prisma__ResultClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     actionItems<T extends Result$actionItemsArgs<ExtArgs> = {}>(args?: Subset<T, Result$actionItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActionItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    meeting<T extends MeetingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MeetingDefaultArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    upload<T extends UploadDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UploadDefaultArgs<ExtArgs>>): Prisma__UploadClient<$Result.GetResult<Prisma.$UploadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5411,7 +6780,9 @@ export namespace Prisma {
   interface ResultFieldRefs {
     readonly id: FieldRef<"Result", 'String'>
     readonly summary: FieldRef<"Result", 'String'>
-    readonly meetingId: FieldRef<"Result", 'String'>
+    readonly transcript: FieldRef<"Result", 'String'>
+    readonly insights: FieldRef<"Result", 'String[]'>
+    readonly uploadId: FieldRef<"Result", 'String'>
     readonly createdAt: FieldRef<"Result", 'DateTime'>
     readonly updatedAt: FieldRef<"Result", 'DateTime'>
   }
@@ -5865,9 +7236,9 @@ export namespace Prisma {
   export type ActionItemMinAggregateOutputType = {
     id: string | null
     action: string | null
+    assigneeId: string | null
     dueDate: Date | null
     dueStatus: $Enums.DueStatus | null
-    assigneeId: string | null
     resultId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -5876,9 +7247,9 @@ export namespace Prisma {
   export type ActionItemMaxAggregateOutputType = {
     id: string | null
     action: string | null
+    assigneeId: string | null
     dueDate: Date | null
     dueStatus: $Enums.DueStatus | null
-    assigneeId: string | null
     resultId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -5887,9 +7258,9 @@ export namespace Prisma {
   export type ActionItemCountAggregateOutputType = {
     id: number
     action: number
+    assigneeId: number
     dueDate: number
     dueStatus: number
-    assigneeId: number
     resultId: number
     createdAt: number
     updatedAt: number
@@ -5900,9 +7271,9 @@ export namespace Prisma {
   export type ActionItemMinAggregateInputType = {
     id?: true
     action?: true
+    assigneeId?: true
     dueDate?: true
     dueStatus?: true
-    assigneeId?: true
     resultId?: true
     createdAt?: true
     updatedAt?: true
@@ -5911,9 +7282,9 @@ export namespace Prisma {
   export type ActionItemMaxAggregateInputType = {
     id?: true
     action?: true
+    assigneeId?: true
     dueDate?: true
     dueStatus?: true
-    assigneeId?: true
     resultId?: true
     createdAt?: true
     updatedAt?: true
@@ -5922,9 +7293,9 @@ export namespace Prisma {
   export type ActionItemCountAggregateInputType = {
     id?: true
     action?: true
+    assigneeId?: true
     dueDate?: true
     dueStatus?: true
-    assigneeId?: true
     resultId?: true
     createdAt?: true
     updatedAt?: true
@@ -6006,9 +7377,9 @@ export namespace Prisma {
   export type ActionItemGroupByOutputType = {
     id: string
     action: string
+    assigneeId: string | null
     dueDate: Date | null
     dueStatus: $Enums.DueStatus
-    assigneeId: string | null
     resultId: string
     createdAt: Date
     updatedAt: Date
@@ -6034,9 +7405,9 @@ export namespace Prisma {
   export type ActionItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     action?: boolean
+    assigneeId?: boolean
     dueDate?: boolean
     dueStatus?: boolean
-    assigneeId?: boolean
     resultId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6047,9 +7418,9 @@ export namespace Prisma {
   export type ActionItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     action?: boolean
+    assigneeId?: boolean
     dueDate?: boolean
     dueStatus?: boolean
-    assigneeId?: boolean
     resultId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6060,9 +7431,9 @@ export namespace Prisma {
   export type ActionItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     action?: boolean
+    assigneeId?: boolean
     dueDate?: boolean
     dueStatus?: boolean
-    assigneeId?: boolean
     resultId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6073,15 +7444,15 @@ export namespace Prisma {
   export type ActionItemSelectScalar = {
     id?: boolean
     action?: boolean
+    assigneeId?: boolean
     dueDate?: boolean
     dueStatus?: boolean
-    assigneeId?: boolean
     resultId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ActionItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "action" | "dueDate" | "dueStatus" | "assigneeId" | "resultId" | "createdAt" | "updatedAt", ExtArgs["result"]["actionItem"]>
+  export type ActionItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "action" | "assigneeId" | "dueDate" | "dueStatus" | "resultId" | "createdAt" | "updatedAt", ExtArgs["result"]["actionItem"]>
   export type ActionItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assignee?: boolean | ActionItem$assigneeArgs<ExtArgs>
     result?: boolean | ResultDefaultArgs<ExtArgs>
@@ -6104,9 +7475,9 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       action: string
+      assigneeId: string | null
       dueDate: Date | null
       dueStatus: $Enums.DueStatus
-      assigneeId: string | null
       resultId: string
       createdAt: Date
       updatedAt: Date
@@ -6537,9 +7908,9 @@ export namespace Prisma {
   interface ActionItemFieldRefs {
     readonly id: FieldRef<"ActionItem", 'String'>
     readonly action: FieldRef<"ActionItem", 'String'>
+    readonly assigneeId: FieldRef<"ActionItem", 'String'>
     readonly dueDate: FieldRef<"ActionItem", 'DateTime'>
     readonly dueStatus: FieldRef<"ActionItem", 'DueStatus'>
-    readonly assigneeId: FieldRef<"ActionItem", 'String'>
     readonly resultId: FieldRef<"ActionItem", 'String'>
     readonly createdAt: FieldRef<"ActionItem", 'DateTime'>
     readonly updatedAt: FieldRef<"ActionItem", 'DateTime'>
@@ -6992,9 +8363,12 @@ export namespace Prisma {
 
   export const UserScalarFieldEnum: {
     id: 'id',
-    supabaseId: 'supabaseId',
+    sbId: 'sbId',
+    username: 'username',
     firstName: 'firstName',
     lastName: 'lastName',
+    totalMonthlyUploads: 'totalMonthlyUploads',
+    subscription: 'subscription',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -7005,6 +8379,7 @@ export namespace Prisma {
   export const TeamScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    organization: 'organization',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -7012,7 +8387,19 @@ export namespace Prisma {
   export type TeamScalarFieldEnum = (typeof TeamScalarFieldEnum)[keyof typeof TeamScalarFieldEnum]
 
 
-  export const MeetingScalarFieldEnum: {
+  export const RoleScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    type: 'type',
+    teamId: 'teamId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
+
+
+  export const UploadScalarFieldEnum: {
     id: 'id',
     title: 'title',
     fileUrl: 'fileUrl',
@@ -7023,13 +8410,15 @@ export namespace Prisma {
     updatedAt: 'updatedAt'
   };
 
-  export type MeetingScalarFieldEnum = (typeof MeetingScalarFieldEnum)[keyof typeof MeetingScalarFieldEnum]
+  export type UploadScalarFieldEnum = (typeof UploadScalarFieldEnum)[keyof typeof UploadScalarFieldEnum]
 
 
   export const ResultScalarFieldEnum: {
     id: 'id',
     summary: 'summary',
-    meetingId: 'meetingId',
+    transcript: 'transcript',
+    insights: 'insights',
+    uploadId: 'uploadId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -7040,9 +8429,9 @@ export namespace Prisma {
   export const ActionItemScalarFieldEnum: {
     id: 'id',
     action: 'action',
+    assigneeId: 'assigneeId',
     dueDate: 'dueDate',
     dueStatus: 'dueStatus',
-    assigneeId: 'assigneeId',
     resultId: 'resultId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -7095,6 +8484,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Subscription'
+   */
+  export type EnumSubscriptionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Subscription'>
+    
+
+
+  /**
+   * Reference to a field of type 'Subscription[]'
+   */
+  export type ListEnumSubscriptionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Subscription[]'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -7105,6 +8522,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'RoleType'
+   */
+  export type EnumRoleTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoleType'>
+    
+
+
+  /**
+   * Reference to a field of type 'RoleType[]'
+   */
+  export type ListEnumRoleTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoleType[]'>
     
 
 
@@ -7137,16 +8568,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
+   * Reference to a field of type 'Float'
    */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
 
 
   /**
-   * Reference to a field of type 'Int[]'
+   * Reference to a field of type 'Float[]'
    */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -7158,53 +8589,70 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     id?: StringFilter<"User"> | string
-    supabaseId?: StringFilter<"User"> | string
+    sbId?: StringFilter<"User"> | string
+    username?: StringFilter<"User"> | string
     firstName?: StringFilter<"User"> | string
     lastName?: StringFilter<"User"> | string
+    totalMonthlyUploads?: IntFilter<"User"> | number
+    subscription?: EnumSubscriptionFilter<"User"> | $Enums.Subscription
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     teams?: TeamListRelationFilter
-    meetings?: MeetingListRelationFilter
+    roles?: RoleListRelationFilter
+    uploads?: UploadListRelationFilter
     actionItems?: ActionItemListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
-    supabaseId?: SortOrder
+    sbId?: SortOrder
+    username?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    totalMonthlyUploads?: SortOrder
+    subscription?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     teams?: TeamOrderByRelationAggregateInput
-    meetings?: MeetingOrderByRelationAggregateInput
+    roles?: RoleOrderByRelationAggregateInput
+    uploads?: UploadOrderByRelationAggregateInput
     actionItems?: ActionItemOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    supabaseId?: string
+    sbId?: string
+    username?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     firstName?: StringFilter<"User"> | string
     lastName?: StringFilter<"User"> | string
+    totalMonthlyUploads?: IntFilter<"User"> | number
+    subscription?: EnumSubscriptionFilter<"User"> | $Enums.Subscription
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     teams?: TeamListRelationFilter
-    meetings?: MeetingListRelationFilter
+    roles?: RoleListRelationFilter
+    uploads?: UploadListRelationFilter
     actionItems?: ActionItemListRelationFilter
-  }, "id" | "supabaseId">
+  }, "id" | "sbId" | "username">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
-    supabaseId?: SortOrder
+    sbId?: SortOrder
+    username?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    totalMonthlyUploads?: SortOrder
+    subscription?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
+    _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
+    _sum?: UserSumOrderByAggregateInput
   }
 
   export type UserScalarWhereWithAggregatesInput = {
@@ -7212,9 +8660,12 @@ export namespace Prisma {
     OR?: UserScalarWhereWithAggregatesInput[]
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"User"> | string
-    supabaseId?: StringWithAggregatesFilter<"User"> | string
+    sbId?: StringWithAggregatesFilter<"User"> | string
+    username?: StringWithAggregatesFilter<"User"> | string
     firstName?: StringWithAggregatesFilter<"User"> | string
     lastName?: StringWithAggregatesFilter<"User"> | string
+    totalMonthlyUploads?: IntWithAggregatesFilter<"User"> | number
+    subscription?: EnumSubscriptionWithAggregatesFilter<"User"> | $Enums.Subscription
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -7225,19 +8676,23 @@ export namespace Prisma {
     NOT?: TeamWhereInput | TeamWhereInput[]
     id?: StringFilter<"Team"> | string
     name?: StringFilter<"Team"> | string
+    organization?: StringNullableFilter<"Team"> | string | null
     createdAt?: DateTimeFilter<"Team"> | Date | string
     updatedAt?: DateTimeFilter<"Team"> | Date | string
     members?: UserListRelationFilter
-    meetings?: MeetingListRelationFilter
+    roles?: RoleListRelationFilter
+    uploads?: UploadListRelationFilter
   }
 
   export type TeamOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    organization?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     members?: UserOrderByRelationAggregateInput
-    meetings?: MeetingOrderByRelationAggregateInput
+    roles?: RoleOrderByRelationAggregateInput
+    uploads?: UploadOrderByRelationAggregateInput
   }
 
   export type TeamWhereUniqueInput = Prisma.AtLeast<{
@@ -7246,15 +8701,18 @@ export namespace Prisma {
     OR?: TeamWhereInput[]
     NOT?: TeamWhereInput | TeamWhereInput[]
     name?: StringFilter<"Team"> | string
+    organization?: StringNullableFilter<"Team"> | string | null
     createdAt?: DateTimeFilter<"Team"> | Date | string
     updatedAt?: DateTimeFilter<"Team"> | Date | string
     members?: UserListRelationFilter
-    meetings?: MeetingListRelationFilter
+    roles?: RoleListRelationFilter
+    uploads?: UploadListRelationFilter
   }, "id">
 
   export type TeamOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    organization?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: TeamCountOrderByAggregateInput
@@ -7268,28 +8726,92 @@ export namespace Prisma {
     NOT?: TeamScalarWhereWithAggregatesInput | TeamScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Team"> | string
     name?: StringWithAggregatesFilter<"Team"> | string
+    organization?: StringNullableWithAggregatesFilter<"Team"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Team"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Team"> | Date | string
   }
 
-  export type MeetingWhereInput = {
-    AND?: MeetingWhereInput | MeetingWhereInput[]
-    OR?: MeetingWhereInput[]
-    NOT?: MeetingWhereInput | MeetingWhereInput[]
-    id?: StringFilter<"Meeting"> | string
-    title?: StringFilter<"Meeting"> | string
-    fileUrl?: StringFilter<"Meeting"> | string
-    processStatus?: EnumProcessStatusFilter<"Meeting"> | $Enums.ProcessStatus
-    uploaderId?: StringFilter<"Meeting"> | string
-    teamId?: StringNullableFilter<"Meeting"> | string | null
-    createdAt?: DateTimeFilter<"Meeting"> | Date | string
-    updatedAt?: DateTimeFilter<"Meeting"> | Date | string
+  export type RoleWhereInput = {
+    AND?: RoleWhereInput | RoleWhereInput[]
+    OR?: RoleWhereInput[]
+    NOT?: RoleWhereInput | RoleWhereInput[]
+    id?: StringFilter<"Role"> | string
+    userId?: StringFilter<"Role"> | string
+    type?: EnumRoleTypeFilter<"Role"> | $Enums.RoleType
+    teamId?: StringFilter<"Role"> | string
+    createdAt?: DateTimeFilter<"Role"> | Date | string
+    updatedAt?: DateTimeFilter<"Role"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    team?: XOR<TeamScalarRelationFilter, TeamWhereInput>
+  }
+
+  export type RoleOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    teamId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    team?: TeamOrderByWithRelationInput
+  }
+
+  export type RoleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RoleWhereInput | RoleWhereInput[]
+    OR?: RoleWhereInput[]
+    NOT?: RoleWhereInput | RoleWhereInput[]
+    userId?: StringFilter<"Role"> | string
+    type?: EnumRoleTypeFilter<"Role"> | $Enums.RoleType
+    teamId?: StringFilter<"Role"> | string
+    createdAt?: DateTimeFilter<"Role"> | Date | string
+    updatedAt?: DateTimeFilter<"Role"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    team?: XOR<TeamScalarRelationFilter, TeamWhereInput>
+  }, "id">
+
+  export type RoleOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    teamId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RoleCountOrderByAggregateInput
+    _max?: RoleMaxOrderByAggregateInput
+    _min?: RoleMinOrderByAggregateInput
+  }
+
+  export type RoleScalarWhereWithAggregatesInput = {
+    AND?: RoleScalarWhereWithAggregatesInput | RoleScalarWhereWithAggregatesInput[]
+    OR?: RoleScalarWhereWithAggregatesInput[]
+    NOT?: RoleScalarWhereWithAggregatesInput | RoleScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Role"> | string
+    userId?: StringWithAggregatesFilter<"Role"> | string
+    type?: EnumRoleTypeWithAggregatesFilter<"Role"> | $Enums.RoleType
+    teamId?: StringWithAggregatesFilter<"Role"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Role"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Role"> | Date | string
+  }
+
+  export type UploadWhereInput = {
+    AND?: UploadWhereInput | UploadWhereInput[]
+    OR?: UploadWhereInput[]
+    NOT?: UploadWhereInput | UploadWhereInput[]
+    id?: StringFilter<"Upload"> | string
+    title?: StringFilter<"Upload"> | string
+    fileUrl?: StringFilter<"Upload"> | string
+    processStatus?: EnumProcessStatusFilter<"Upload"> | $Enums.ProcessStatus
+    uploaderId?: StringFilter<"Upload"> | string
+    teamId?: StringNullableFilter<"Upload"> | string | null
+    createdAt?: DateTimeFilter<"Upload"> | Date | string
+    updatedAt?: DateTimeFilter<"Upload"> | Date | string
     result?: XOR<ResultNullableScalarRelationFilter, ResultWhereInput> | null
     uploader?: XOR<UserScalarRelationFilter, UserWhereInput>
     team?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
   }
 
-  export type MeetingOrderByWithRelationInput = {
+  export type UploadOrderByWithRelationInput = {
     id?: SortOrder
     title?: SortOrder
     fileUrl?: SortOrder
@@ -7303,24 +8825,24 @@ export namespace Prisma {
     team?: TeamOrderByWithRelationInput
   }
 
-  export type MeetingWhereUniqueInput = Prisma.AtLeast<{
+  export type UploadWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: MeetingWhereInput | MeetingWhereInput[]
-    OR?: MeetingWhereInput[]
-    NOT?: MeetingWhereInput | MeetingWhereInput[]
-    title?: StringFilter<"Meeting"> | string
-    fileUrl?: StringFilter<"Meeting"> | string
-    processStatus?: EnumProcessStatusFilter<"Meeting"> | $Enums.ProcessStatus
-    uploaderId?: StringFilter<"Meeting"> | string
-    teamId?: StringNullableFilter<"Meeting"> | string | null
-    createdAt?: DateTimeFilter<"Meeting"> | Date | string
-    updatedAt?: DateTimeFilter<"Meeting"> | Date | string
+    AND?: UploadWhereInput | UploadWhereInput[]
+    OR?: UploadWhereInput[]
+    NOT?: UploadWhereInput | UploadWhereInput[]
+    title?: StringFilter<"Upload"> | string
+    fileUrl?: StringFilter<"Upload"> | string
+    processStatus?: EnumProcessStatusFilter<"Upload"> | $Enums.ProcessStatus
+    uploaderId?: StringFilter<"Upload"> | string
+    teamId?: StringNullableFilter<"Upload"> | string | null
+    createdAt?: DateTimeFilter<"Upload"> | Date | string
+    updatedAt?: DateTimeFilter<"Upload"> | Date | string
     result?: XOR<ResultNullableScalarRelationFilter, ResultWhereInput> | null
     uploader?: XOR<UserScalarRelationFilter, UserWhereInput>
     team?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
   }, "id">
 
-  export type MeetingOrderByWithAggregationInput = {
+  export type UploadOrderByWithAggregationInput = {
     id?: SortOrder
     title?: SortOrder
     fileUrl?: SortOrder
@@ -7329,23 +8851,23 @@ export namespace Prisma {
     teamId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    _count?: MeetingCountOrderByAggregateInput
-    _max?: MeetingMaxOrderByAggregateInput
-    _min?: MeetingMinOrderByAggregateInput
+    _count?: UploadCountOrderByAggregateInput
+    _max?: UploadMaxOrderByAggregateInput
+    _min?: UploadMinOrderByAggregateInput
   }
 
-  export type MeetingScalarWhereWithAggregatesInput = {
-    AND?: MeetingScalarWhereWithAggregatesInput | MeetingScalarWhereWithAggregatesInput[]
-    OR?: MeetingScalarWhereWithAggregatesInput[]
-    NOT?: MeetingScalarWhereWithAggregatesInput | MeetingScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Meeting"> | string
-    title?: StringWithAggregatesFilter<"Meeting"> | string
-    fileUrl?: StringWithAggregatesFilter<"Meeting"> | string
-    processStatus?: EnumProcessStatusWithAggregatesFilter<"Meeting"> | $Enums.ProcessStatus
-    uploaderId?: StringWithAggregatesFilter<"Meeting"> | string
-    teamId?: StringNullableWithAggregatesFilter<"Meeting"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"Meeting"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Meeting"> | Date | string
+  export type UploadScalarWhereWithAggregatesInput = {
+    AND?: UploadScalarWhereWithAggregatesInput | UploadScalarWhereWithAggregatesInput[]
+    OR?: UploadScalarWhereWithAggregatesInput[]
+    NOT?: UploadScalarWhereWithAggregatesInput | UploadScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Upload"> | string
+    title?: StringWithAggregatesFilter<"Upload"> | string
+    fileUrl?: StringWithAggregatesFilter<"Upload"> | string
+    processStatus?: EnumProcessStatusWithAggregatesFilter<"Upload"> | $Enums.ProcessStatus
+    uploaderId?: StringWithAggregatesFilter<"Upload"> | string
+    teamId?: StringNullableWithAggregatesFilter<"Upload"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Upload"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Upload"> | Date | string
   }
 
   export type ResultWhereInput = {
@@ -7354,40 +8876,48 @@ export namespace Prisma {
     NOT?: ResultWhereInput | ResultWhereInput[]
     id?: StringFilter<"Result"> | string
     summary?: StringFilter<"Result"> | string
-    meetingId?: StringFilter<"Result"> | string
+    transcript?: StringFilter<"Result"> | string
+    insights?: StringNullableListFilter<"Result">
+    uploadId?: StringFilter<"Result"> | string
     createdAt?: DateTimeFilter<"Result"> | Date | string
     updatedAt?: DateTimeFilter<"Result"> | Date | string
     actionItems?: ActionItemListRelationFilter
-    meeting?: XOR<MeetingScalarRelationFilter, MeetingWhereInput>
+    upload?: XOR<UploadScalarRelationFilter, UploadWhereInput>
   }
 
   export type ResultOrderByWithRelationInput = {
     id?: SortOrder
     summary?: SortOrder
-    meetingId?: SortOrder
+    transcript?: SortOrder
+    insights?: SortOrder
+    uploadId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     actionItems?: ActionItemOrderByRelationAggregateInput
-    meeting?: MeetingOrderByWithRelationInput
+    upload?: UploadOrderByWithRelationInput
   }
 
   export type ResultWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    meetingId?: string
+    uploadId?: string
     AND?: ResultWhereInput | ResultWhereInput[]
     OR?: ResultWhereInput[]
     NOT?: ResultWhereInput | ResultWhereInput[]
     summary?: StringFilter<"Result"> | string
+    transcript?: StringFilter<"Result"> | string
+    insights?: StringNullableListFilter<"Result">
     createdAt?: DateTimeFilter<"Result"> | Date | string
     updatedAt?: DateTimeFilter<"Result"> | Date | string
     actionItems?: ActionItemListRelationFilter
-    meeting?: XOR<MeetingScalarRelationFilter, MeetingWhereInput>
-  }, "id" | "meetingId">
+    upload?: XOR<UploadScalarRelationFilter, UploadWhereInput>
+  }, "id" | "uploadId">
 
   export type ResultOrderByWithAggregationInput = {
     id?: SortOrder
     summary?: SortOrder
-    meetingId?: SortOrder
+    transcript?: SortOrder
+    insights?: SortOrder
+    uploadId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ResultCountOrderByAggregateInput
@@ -7401,7 +8931,9 @@ export namespace Prisma {
     NOT?: ResultScalarWhereWithAggregatesInput | ResultScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Result"> | string
     summary?: StringWithAggregatesFilter<"Result"> | string
-    meetingId?: StringWithAggregatesFilter<"Result"> | string
+    transcript?: StringWithAggregatesFilter<"Result"> | string
+    insights?: StringNullableListFilter<"Result">
+    uploadId?: StringWithAggregatesFilter<"Result"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Result"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Result"> | Date | string
   }
@@ -7412,9 +8944,9 @@ export namespace Prisma {
     NOT?: ActionItemWhereInput | ActionItemWhereInput[]
     id?: StringFilter<"ActionItem"> | string
     action?: StringFilter<"ActionItem"> | string
+    assigneeId?: StringNullableFilter<"ActionItem"> | string | null
     dueDate?: DateTimeNullableFilter<"ActionItem"> | Date | string | null
     dueStatus?: EnumDueStatusFilter<"ActionItem"> | $Enums.DueStatus
-    assigneeId?: StringNullableFilter<"ActionItem"> | string | null
     resultId?: StringFilter<"ActionItem"> | string
     createdAt?: DateTimeFilter<"ActionItem"> | Date | string
     updatedAt?: DateTimeFilter<"ActionItem"> | Date | string
@@ -7425,9 +8957,9 @@ export namespace Prisma {
   export type ActionItemOrderByWithRelationInput = {
     id?: SortOrder
     action?: SortOrder
+    assigneeId?: SortOrderInput | SortOrder
     dueDate?: SortOrderInput | SortOrder
     dueStatus?: SortOrder
-    assigneeId?: SortOrderInput | SortOrder
     resultId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7441,9 +8973,9 @@ export namespace Prisma {
     OR?: ActionItemWhereInput[]
     NOT?: ActionItemWhereInput | ActionItemWhereInput[]
     action?: StringFilter<"ActionItem"> | string
+    assigneeId?: StringNullableFilter<"ActionItem"> | string | null
     dueDate?: DateTimeNullableFilter<"ActionItem"> | Date | string | null
     dueStatus?: EnumDueStatusFilter<"ActionItem"> | $Enums.DueStatus
-    assigneeId?: StringNullableFilter<"ActionItem"> | string | null
     resultId?: StringFilter<"ActionItem"> | string
     createdAt?: DateTimeFilter<"ActionItem"> | Date | string
     updatedAt?: DateTimeFilter<"ActionItem"> | Date | string
@@ -7454,9 +8986,9 @@ export namespace Prisma {
   export type ActionItemOrderByWithAggregationInput = {
     id?: SortOrder
     action?: SortOrder
+    assigneeId?: SortOrderInput | SortOrder
     dueDate?: SortOrderInput | SortOrder
     dueStatus?: SortOrder
-    assigneeId?: SortOrderInput | SortOrder
     resultId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7471,9 +9003,9 @@ export namespace Prisma {
     NOT?: ActionItemScalarWhereWithAggregatesInput | ActionItemScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"ActionItem"> | string
     action?: StringWithAggregatesFilter<"ActionItem"> | string
+    assigneeId?: StringNullableWithAggregatesFilter<"ActionItem"> | string | null
     dueDate?: DateTimeNullableWithAggregatesFilter<"ActionItem"> | Date | string | null
     dueStatus?: EnumDueStatusWithAggregatesFilter<"ActionItem"> | $Enums.DueStatus
-    assigneeId?: StringNullableWithAggregatesFilter<"ActionItem"> | string | null
     resultId?: StringWithAggregatesFilter<"ActionItem"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ActionItem"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ActionItem"> | Date | string
@@ -7481,75 +9013,100 @@ export namespace Prisma {
 
   export type UserCreateInput = {
     id?: string
-    supabaseId: string
+    sbId: string
+    username: string
     firstName: string
     lastName: string
+    totalMonthlyUploads?: number
+    subscription?: $Enums.Subscription
     createdAt?: Date | string
     updatedAt?: Date | string
     teams?: TeamCreateNestedManyWithoutMembersInput
-    meetings?: MeetingCreateNestedManyWithoutUploaderInput
+    roles?: RoleCreateNestedManyWithoutUserInput
+    uploads?: UploadCreateNestedManyWithoutUploaderInput
     actionItems?: ActionItemCreateNestedManyWithoutAssigneeInput
   }
 
   export type UserUncheckedCreateInput = {
     id?: string
-    supabaseId: string
+    sbId: string
+    username: string
     firstName: string
     lastName: string
+    totalMonthlyUploads?: number
+    subscription?: $Enums.Subscription
     createdAt?: Date | string
     updatedAt?: Date | string
     teams?: TeamUncheckedCreateNestedManyWithoutMembersInput
-    meetings?: MeetingUncheckedCreateNestedManyWithoutUploaderInput
+    roles?: RoleUncheckedCreateNestedManyWithoutUserInput
+    uploads?: UploadUncheckedCreateNestedManyWithoutUploaderInput
     actionItems?: ActionItemUncheckedCreateNestedManyWithoutAssigneeInput
   }
 
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    supabaseId?: StringFieldUpdateOperationsInput | string
+    sbId?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    totalMonthlyUploads?: IntFieldUpdateOperationsInput | number
+    subscription?: EnumSubscriptionFieldUpdateOperationsInput | $Enums.Subscription
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teams?: TeamUpdateManyWithoutMembersNestedInput
-    meetings?: MeetingUpdateManyWithoutUploaderNestedInput
+    roles?: RoleUpdateManyWithoutUserNestedInput
+    uploads?: UploadUpdateManyWithoutUploaderNestedInput
     actionItems?: ActionItemUpdateManyWithoutAssigneeNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    supabaseId?: StringFieldUpdateOperationsInput | string
+    sbId?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    totalMonthlyUploads?: IntFieldUpdateOperationsInput | number
+    subscription?: EnumSubscriptionFieldUpdateOperationsInput | $Enums.Subscription
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teams?: TeamUncheckedUpdateManyWithoutMembersNestedInput
-    meetings?: MeetingUncheckedUpdateManyWithoutUploaderNestedInput
+    roles?: RoleUncheckedUpdateManyWithoutUserNestedInput
+    uploads?: UploadUncheckedUpdateManyWithoutUploaderNestedInput
     actionItems?: ActionItemUncheckedUpdateManyWithoutAssigneeNestedInput
   }
 
   export type UserCreateManyInput = {
     id?: string
-    supabaseId: string
+    sbId: string
+    username: string
     firstName: string
     lastName: string
+    totalMonthlyUploads?: number
+    subscription?: $Enums.Subscription
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    supabaseId?: StringFieldUpdateOperationsInput | string
+    sbId?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    totalMonthlyUploads?: IntFieldUpdateOperationsInput | number
+    subscription?: EnumSubscriptionFieldUpdateOperationsInput | $Enums.Subscription
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    supabaseId?: StringFieldUpdateOperationsInput | string
+    sbId?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    totalMonthlyUploads?: IntFieldUpdateOperationsInput | number
+    subscription?: EnumSubscriptionFieldUpdateOperationsInput | $Enums.Subscription
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7557,42 +9114,51 @@ export namespace Prisma {
   export type TeamCreateInput = {
     id?: string
     name: string
+    organization?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: UserCreateNestedManyWithoutTeamsInput
-    meetings?: MeetingCreateNestedManyWithoutTeamInput
+    roles?: RoleCreateNestedManyWithoutTeamInput
+    uploads?: UploadCreateNestedManyWithoutTeamInput
   }
 
   export type TeamUncheckedCreateInput = {
     id?: string
     name: string
+    organization?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: UserUncheckedCreateNestedManyWithoutTeamsInput
-    meetings?: MeetingUncheckedCreateNestedManyWithoutTeamInput
+    roles?: RoleUncheckedCreateNestedManyWithoutTeamInput
+    uploads?: UploadUncheckedCreateNestedManyWithoutTeamInput
   }
 
   export type TeamUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: UserUpdateManyWithoutTeamsNestedInput
-    meetings?: MeetingUpdateManyWithoutTeamNestedInput
+    roles?: RoleUpdateManyWithoutTeamNestedInput
+    uploads?: UploadUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: UserUncheckedUpdateManyWithoutTeamsNestedInput
-    meetings?: MeetingUncheckedUpdateManyWithoutTeamNestedInput
+    roles?: RoleUncheckedUpdateManyWithoutTeamNestedInput
+    uploads?: UploadUncheckedUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamCreateManyInput = {
     id?: string
     name: string
+    organization?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7600,6 +9166,7 @@ export namespace Prisma {
   export type TeamUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7607,23 +9174,85 @@ export namespace Prisma {
   export type TeamUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MeetingCreateInput = {
+  export type RoleCreateInput = {
+    id?: string
+    type?: $Enums.RoleType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutRolesInput
+    team: TeamCreateNestedOneWithoutRolesInput
+  }
+
+  export type RoleUncheckedCreateInput = {
+    id?: string
+    userId: string
+    type?: $Enums.RoleType
+    teamId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutRolesNestedInput
+    team?: TeamUpdateOneRequiredWithoutRolesNestedInput
+  }
+
+  export type RoleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    type?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType
+    teamId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoleCreateManyInput = {
+    id?: string
+    userId: string
+    type?: $Enums.RoleType
+    teamId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    type?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType
+    teamId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UploadCreateInput = {
     id?: string
     title: string
     fileUrl: string
     processStatus?: $Enums.ProcessStatus
     createdAt?: Date | string
     updatedAt?: Date | string
-    result?: ResultCreateNestedOneWithoutMeetingInput
-    uploader: UserCreateNestedOneWithoutMeetingsInput
-    team?: TeamCreateNestedOneWithoutMeetingsInput
+    result?: ResultCreateNestedOneWithoutUploadInput
+    uploader: UserCreateNestedOneWithoutUploadsInput
+    team?: TeamCreateNestedOneWithoutUploadsInput
   }
 
-  export type MeetingUncheckedCreateInput = {
+  export type UploadUncheckedCreateInput = {
     id?: string
     title: string
     fileUrl: string
@@ -7632,22 +9261,22 @@ export namespace Prisma {
     teamId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    result?: ResultUncheckedCreateNestedOneWithoutMeetingInput
+    result?: ResultUncheckedCreateNestedOneWithoutUploadInput
   }
 
-  export type MeetingUpdateInput = {
+  export type UploadUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
     processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    result?: ResultUpdateOneWithoutMeetingNestedInput
-    uploader?: UserUpdateOneRequiredWithoutMeetingsNestedInput
-    team?: TeamUpdateOneWithoutMeetingsNestedInput
+    result?: ResultUpdateOneWithoutUploadNestedInput
+    uploader?: UserUpdateOneRequiredWithoutUploadsNestedInput
+    team?: TeamUpdateOneWithoutUploadsNestedInput
   }
 
-  export type MeetingUncheckedUpdateInput = {
+  export type UploadUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
@@ -7656,10 +9285,10 @@ export namespace Prisma {
     teamId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    result?: ResultUncheckedUpdateOneWithoutMeetingNestedInput
+    result?: ResultUncheckedUpdateOneWithoutUploadNestedInput
   }
 
-  export type MeetingCreateManyInput = {
+  export type UploadCreateManyInput = {
     id?: string
     title: string
     fileUrl: string
@@ -7670,7 +9299,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type MeetingUpdateManyMutationInput = {
+  export type UploadUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
@@ -7679,7 +9308,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MeetingUncheckedUpdateManyInput = {
+  export type UploadUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
@@ -7693,16 +9322,20 @@ export namespace Prisma {
   export type ResultCreateInput = {
     id?: string
     summary: string
+    transcript: string
+    insights?: ResultCreateinsightsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     actionItems?: ActionItemCreateNestedManyWithoutResultInput
-    meeting: MeetingCreateNestedOneWithoutResultInput
+    upload: UploadCreateNestedOneWithoutResultInput
   }
 
   export type ResultUncheckedCreateInput = {
     id?: string
     summary: string
-    meetingId: string
+    transcript: string
+    insights?: ResultCreateinsightsInput | string[]
+    uploadId: string
     createdAt?: Date | string
     updatedAt?: Date | string
     actionItems?: ActionItemUncheckedCreateNestedManyWithoutResultInput
@@ -7711,16 +9344,20 @@ export namespace Prisma {
   export type ResultUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     summary?: StringFieldUpdateOperationsInput | string
+    transcript?: StringFieldUpdateOperationsInput | string
+    insights?: ResultUpdateinsightsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     actionItems?: ActionItemUpdateManyWithoutResultNestedInput
-    meeting?: MeetingUpdateOneRequiredWithoutResultNestedInput
+    upload?: UploadUpdateOneRequiredWithoutResultNestedInput
   }
 
   export type ResultUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     summary?: StringFieldUpdateOperationsInput | string
-    meetingId?: StringFieldUpdateOperationsInput | string
+    transcript?: StringFieldUpdateOperationsInput | string
+    insights?: ResultUpdateinsightsInput | string[]
+    uploadId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     actionItems?: ActionItemUncheckedUpdateManyWithoutResultNestedInput
@@ -7729,7 +9366,9 @@ export namespace Prisma {
   export type ResultCreateManyInput = {
     id?: string
     summary: string
-    meetingId: string
+    transcript: string
+    insights?: ResultCreateinsightsInput | string[]
+    uploadId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7737,6 +9376,8 @@ export namespace Prisma {
   export type ResultUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     summary?: StringFieldUpdateOperationsInput | string
+    transcript?: StringFieldUpdateOperationsInput | string
+    insights?: ResultUpdateinsightsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7744,7 +9385,9 @@ export namespace Prisma {
   export type ResultUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     summary?: StringFieldUpdateOperationsInput | string
-    meetingId?: StringFieldUpdateOperationsInput | string
+    transcript?: StringFieldUpdateOperationsInput | string
+    insights?: ResultUpdateinsightsInput | string[]
+    uploadId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7763,9 +9406,9 @@ export namespace Prisma {
   export type ActionItemUncheckedCreateInput = {
     id?: string
     action: string
+    assigneeId?: string | null
     dueDate?: Date | string | null
     dueStatus?: $Enums.DueStatus
-    assigneeId?: string | null
     resultId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7785,9 +9428,9 @@ export namespace Prisma {
   export type ActionItemUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     action?: StringFieldUpdateOperationsInput | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
-    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     resultId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7796,9 +9439,9 @@ export namespace Prisma {
   export type ActionItemCreateManyInput = {
     id?: string
     action: string
+    assigneeId?: string | null
     dueDate?: Date | string | null
     dueStatus?: $Enums.DueStatus
-    assigneeId?: string | null
     resultId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7816,9 +9459,9 @@ export namespace Prisma {
   export type ActionItemUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     action?: StringFieldUpdateOperationsInput | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
-    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     resultId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7839,6 +9482,24 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type EnumSubscriptionFilter<$PrismaModel = never> = {
+    equals?: $Enums.Subscription | EnumSubscriptionFieldRefInput<$PrismaModel>
+    in?: $Enums.Subscription[] | ListEnumSubscriptionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Subscription[] | ListEnumSubscriptionFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubscriptionFilter<$PrismaModel> | $Enums.Subscription
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -7856,10 +9517,16 @@ export namespace Prisma {
     none?: TeamWhereInput
   }
 
-  export type MeetingListRelationFilter = {
-    every?: MeetingWhereInput
-    some?: MeetingWhereInput
-    none?: MeetingWhereInput
+  export type RoleListRelationFilter = {
+    every?: RoleWhereInput
+    some?: RoleWhereInput
+    none?: RoleWhereInput
+  }
+
+  export type UploadListRelationFilter = {
+    every?: UploadWhereInput
+    some?: UploadWhereInput
+    none?: UploadWhereInput
   }
 
   export type ActionItemListRelationFilter = {
@@ -7872,7 +9539,11 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type MeetingOrderByRelationAggregateInput = {
+  export type RoleOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UploadOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -7882,29 +9553,46 @@ export namespace Prisma {
 
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
-    supabaseId?: SortOrder
+    sbId?: SortOrder
+    username?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    totalMonthlyUploads?: SortOrder
+    subscription?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
+  export type UserAvgOrderByAggregateInput = {
+    totalMonthlyUploads?: SortOrder
+  }
+
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
-    supabaseId?: SortOrder
+    sbId?: SortOrder
+    username?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    totalMonthlyUploads?: SortOrder
+    subscription?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
-    supabaseId?: SortOrder
+    sbId?: SortOrder
+    username?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    totalMonthlyUploads?: SortOrder
+    subscription?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type UserSumOrderByAggregateInput = {
+    totalMonthlyUploads?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -7925,6 +9613,32 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type EnumSubscriptionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Subscription | EnumSubscriptionFieldRefInput<$PrismaModel>
+    in?: $Enums.Subscription[] | ListEnumSubscriptionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Subscription[] | ListEnumSubscriptionFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubscriptionWithAggregatesFilter<$PrismaModel> | $Enums.Subscription
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSubscriptionFilter<$PrismaModel>
+    _max?: NestedEnumSubscriptionFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -7937,44 +9651,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type UserListRelationFilter = {
-    every?: UserWhereInput
-    some?: UserWhereInput
-    none?: UserWhereInput
-  }
-
-  export type UserOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type TeamCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type TeamMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type TeamMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type EnumProcessStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProcessStatus | EnumProcessStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumProcessStatusFilter<$PrismaModel> | $Enums.ProcessStatus
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
@@ -7992,19 +9668,10 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type ResultNullableScalarRelationFilter = {
-    is?: ResultWhereInput | null
-    isNot?: ResultWhereInput | null
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
-  }
-
-  export type TeamNullableScalarRelationFilter = {
-    is?: TeamWhereInput | null
-    isNot?: TeamWhereInput | null
+  export type UserListRelationFilter = {
+    every?: UserWhereInput
+    some?: UserWhereInput
+    none?: UserWhereInput
   }
 
   export type SortOrderInput = {
@@ -8012,47 +9679,32 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type MeetingCountOrderByAggregateInput = {
+  export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TeamCountOrderByAggregateInput = {
     id?: SortOrder
-    title?: SortOrder
-    fileUrl?: SortOrder
-    processStatus?: SortOrder
-    uploaderId?: SortOrder
-    teamId?: SortOrder
+    name?: SortOrder
+    organization?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type MeetingMaxOrderByAggregateInput = {
+  export type TeamMaxOrderByAggregateInput = {
     id?: SortOrder
-    title?: SortOrder
-    fileUrl?: SortOrder
-    processStatus?: SortOrder
-    uploaderId?: SortOrder
-    teamId?: SortOrder
+    name?: SortOrder
+    organization?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type MeetingMinOrderByAggregateInput = {
+  export type TeamMinOrderByAggregateInput = {
     id?: SortOrder
-    title?: SortOrder
-    fileUrl?: SortOrder
-    processStatus?: SortOrder
-    uploaderId?: SortOrder
-    teamId?: SortOrder
+    name?: SortOrder
+    organization?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type EnumProcessStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProcessStatus | EnumProcessStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumProcessStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProcessStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumProcessStatusFilter<$PrismaModel>
-    _max?: NestedEnumProcessStatusFilter<$PrismaModel>
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -8073,15 +9725,139 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type MeetingScalarRelationFilter = {
-    is?: MeetingWhereInput
-    isNot?: MeetingWhereInput
+  export type EnumRoleTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.RoleType | EnumRoleTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RoleType[] | ListEnumRoleTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RoleType[] | ListEnumRoleTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleTypeFilter<$PrismaModel> | $Enums.RoleType
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type TeamScalarRelationFilter = {
+    is?: TeamWhereInput
+    isNot?: TeamWhereInput
+  }
+
+  export type RoleCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    teamId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    teamId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoleMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    teamId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumRoleTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RoleType | EnumRoleTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RoleType[] | ListEnumRoleTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RoleType[] | ListEnumRoleTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleTypeWithAggregatesFilter<$PrismaModel> | $Enums.RoleType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoleTypeFilter<$PrismaModel>
+    _max?: NestedEnumRoleTypeFilter<$PrismaModel>
+  }
+
+  export type EnumProcessStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProcessStatus | EnumProcessStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProcessStatusFilter<$PrismaModel> | $Enums.ProcessStatus
+  }
+
+  export type ResultNullableScalarRelationFilter = {
+    is?: ResultWhereInput | null
+    isNot?: ResultWhereInput | null
+  }
+
+  export type TeamNullableScalarRelationFilter = {
+    is?: TeamWhereInput | null
+    isNot?: TeamWhereInput | null
+  }
+
+  export type UploadCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    fileUrl?: SortOrder
+    processStatus?: SortOrder
+    uploaderId?: SortOrder
+    teamId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UploadMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    fileUrl?: SortOrder
+    processStatus?: SortOrder
+    uploaderId?: SortOrder
+    teamId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UploadMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    fileUrl?: SortOrder
+    processStatus?: SortOrder
+    uploaderId?: SortOrder
+    teamId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumProcessStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProcessStatus | EnumProcessStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProcessStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProcessStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProcessStatusFilter<$PrismaModel>
+    _max?: NestedEnumProcessStatusFilter<$PrismaModel>
+  }
+
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type UploadScalarRelationFilter = {
+    is?: UploadWhereInput
+    isNot?: UploadWhereInput
   }
 
   export type ResultCountOrderByAggregateInput = {
     id?: SortOrder
     summary?: SortOrder
-    meetingId?: SortOrder
+    transcript?: SortOrder
+    insights?: SortOrder
+    uploadId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8089,7 +9865,8 @@ export namespace Prisma {
   export type ResultMaxOrderByAggregateInput = {
     id?: SortOrder
     summary?: SortOrder
-    meetingId?: SortOrder
+    transcript?: SortOrder
+    uploadId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8097,7 +9874,8 @@ export namespace Prisma {
   export type ResultMinOrderByAggregateInput = {
     id?: SortOrder
     summary?: SortOrder
-    meetingId?: SortOrder
+    transcript?: SortOrder
+    uploadId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8133,9 +9911,9 @@ export namespace Prisma {
   export type ActionItemCountOrderByAggregateInput = {
     id?: SortOrder
     action?: SortOrder
+    assigneeId?: SortOrder
     dueDate?: SortOrder
     dueStatus?: SortOrder
-    assigneeId?: SortOrder
     resultId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -8144,9 +9922,9 @@ export namespace Prisma {
   export type ActionItemMaxOrderByAggregateInput = {
     id?: SortOrder
     action?: SortOrder
+    assigneeId?: SortOrder
     dueDate?: SortOrder
     dueStatus?: SortOrder
-    assigneeId?: SortOrder
     resultId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -8155,9 +9933,9 @@ export namespace Prisma {
   export type ActionItemMinOrderByAggregateInput = {
     id?: SortOrder
     action?: SortOrder
+    assigneeId?: SortOrder
     dueDate?: SortOrder
     dueStatus?: SortOrder
-    assigneeId?: SortOrder
     resultId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -8193,11 +9971,18 @@ export namespace Prisma {
     connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
   }
 
-  export type MeetingCreateNestedManyWithoutUploaderInput = {
-    create?: XOR<MeetingCreateWithoutUploaderInput, MeetingUncheckedCreateWithoutUploaderInput> | MeetingCreateWithoutUploaderInput[] | MeetingUncheckedCreateWithoutUploaderInput[]
-    connectOrCreate?: MeetingCreateOrConnectWithoutUploaderInput | MeetingCreateOrConnectWithoutUploaderInput[]
-    createMany?: MeetingCreateManyUploaderInputEnvelope
-    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+  export type RoleCreateNestedManyWithoutUserInput = {
+    create?: XOR<RoleCreateWithoutUserInput, RoleUncheckedCreateWithoutUserInput> | RoleCreateWithoutUserInput[] | RoleUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RoleCreateOrConnectWithoutUserInput | RoleCreateOrConnectWithoutUserInput[]
+    createMany?: RoleCreateManyUserInputEnvelope
+    connect?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+  }
+
+  export type UploadCreateNestedManyWithoutUploaderInput = {
+    create?: XOR<UploadCreateWithoutUploaderInput, UploadUncheckedCreateWithoutUploaderInput> | UploadCreateWithoutUploaderInput[] | UploadUncheckedCreateWithoutUploaderInput[]
+    connectOrCreate?: UploadCreateOrConnectWithoutUploaderInput | UploadCreateOrConnectWithoutUploaderInput[]
+    createMany?: UploadCreateManyUploaderInputEnvelope
+    connect?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
   }
 
   export type ActionItemCreateNestedManyWithoutAssigneeInput = {
@@ -8213,11 +9998,18 @@ export namespace Prisma {
     connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
   }
 
-  export type MeetingUncheckedCreateNestedManyWithoutUploaderInput = {
-    create?: XOR<MeetingCreateWithoutUploaderInput, MeetingUncheckedCreateWithoutUploaderInput> | MeetingCreateWithoutUploaderInput[] | MeetingUncheckedCreateWithoutUploaderInput[]
-    connectOrCreate?: MeetingCreateOrConnectWithoutUploaderInput | MeetingCreateOrConnectWithoutUploaderInput[]
-    createMany?: MeetingCreateManyUploaderInputEnvelope
-    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+  export type RoleUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<RoleCreateWithoutUserInput, RoleUncheckedCreateWithoutUserInput> | RoleCreateWithoutUserInput[] | RoleUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RoleCreateOrConnectWithoutUserInput | RoleCreateOrConnectWithoutUserInput[]
+    createMany?: RoleCreateManyUserInputEnvelope
+    connect?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+  }
+
+  export type UploadUncheckedCreateNestedManyWithoutUploaderInput = {
+    create?: XOR<UploadCreateWithoutUploaderInput, UploadUncheckedCreateWithoutUploaderInput> | UploadCreateWithoutUploaderInput[] | UploadUncheckedCreateWithoutUploaderInput[]
+    connectOrCreate?: UploadCreateOrConnectWithoutUploaderInput | UploadCreateOrConnectWithoutUploaderInput[]
+    createMany?: UploadCreateManyUploaderInputEnvelope
+    connect?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
   }
 
   export type ActionItemUncheckedCreateNestedManyWithoutAssigneeInput = {
@@ -8229,6 +10021,18 @@ export namespace Prisma {
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type EnumSubscriptionFieldUpdateOperationsInput = {
+    set?: $Enums.Subscription
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -8248,18 +10052,32 @@ export namespace Prisma {
     deleteMany?: TeamScalarWhereInput | TeamScalarWhereInput[]
   }
 
-  export type MeetingUpdateManyWithoutUploaderNestedInput = {
-    create?: XOR<MeetingCreateWithoutUploaderInput, MeetingUncheckedCreateWithoutUploaderInput> | MeetingCreateWithoutUploaderInput[] | MeetingUncheckedCreateWithoutUploaderInput[]
-    connectOrCreate?: MeetingCreateOrConnectWithoutUploaderInput | MeetingCreateOrConnectWithoutUploaderInput[]
-    upsert?: MeetingUpsertWithWhereUniqueWithoutUploaderInput | MeetingUpsertWithWhereUniqueWithoutUploaderInput[]
-    createMany?: MeetingCreateManyUploaderInputEnvelope
-    set?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    disconnect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    delete?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    update?: MeetingUpdateWithWhereUniqueWithoutUploaderInput | MeetingUpdateWithWhereUniqueWithoutUploaderInput[]
-    updateMany?: MeetingUpdateManyWithWhereWithoutUploaderInput | MeetingUpdateManyWithWhereWithoutUploaderInput[]
-    deleteMany?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
+  export type RoleUpdateManyWithoutUserNestedInput = {
+    create?: XOR<RoleCreateWithoutUserInput, RoleUncheckedCreateWithoutUserInput> | RoleCreateWithoutUserInput[] | RoleUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RoleCreateOrConnectWithoutUserInput | RoleCreateOrConnectWithoutUserInput[]
+    upsert?: RoleUpsertWithWhereUniqueWithoutUserInput | RoleUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: RoleCreateManyUserInputEnvelope
+    set?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    disconnect?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    delete?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    connect?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    update?: RoleUpdateWithWhereUniqueWithoutUserInput | RoleUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: RoleUpdateManyWithWhereWithoutUserInput | RoleUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: RoleScalarWhereInput | RoleScalarWhereInput[]
+  }
+
+  export type UploadUpdateManyWithoutUploaderNestedInput = {
+    create?: XOR<UploadCreateWithoutUploaderInput, UploadUncheckedCreateWithoutUploaderInput> | UploadCreateWithoutUploaderInput[] | UploadUncheckedCreateWithoutUploaderInput[]
+    connectOrCreate?: UploadCreateOrConnectWithoutUploaderInput | UploadCreateOrConnectWithoutUploaderInput[]
+    upsert?: UploadUpsertWithWhereUniqueWithoutUploaderInput | UploadUpsertWithWhereUniqueWithoutUploaderInput[]
+    createMany?: UploadCreateManyUploaderInputEnvelope
+    set?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    disconnect?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    delete?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    connect?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    update?: UploadUpdateWithWhereUniqueWithoutUploaderInput | UploadUpdateWithWhereUniqueWithoutUploaderInput[]
+    updateMany?: UploadUpdateManyWithWhereWithoutUploaderInput | UploadUpdateManyWithWhereWithoutUploaderInput[]
+    deleteMany?: UploadScalarWhereInput | UploadScalarWhereInput[]
   }
 
   export type ActionItemUpdateManyWithoutAssigneeNestedInput = {
@@ -8289,18 +10107,32 @@ export namespace Prisma {
     deleteMany?: TeamScalarWhereInput | TeamScalarWhereInput[]
   }
 
-  export type MeetingUncheckedUpdateManyWithoutUploaderNestedInput = {
-    create?: XOR<MeetingCreateWithoutUploaderInput, MeetingUncheckedCreateWithoutUploaderInput> | MeetingCreateWithoutUploaderInput[] | MeetingUncheckedCreateWithoutUploaderInput[]
-    connectOrCreate?: MeetingCreateOrConnectWithoutUploaderInput | MeetingCreateOrConnectWithoutUploaderInput[]
-    upsert?: MeetingUpsertWithWhereUniqueWithoutUploaderInput | MeetingUpsertWithWhereUniqueWithoutUploaderInput[]
-    createMany?: MeetingCreateManyUploaderInputEnvelope
-    set?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    disconnect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    delete?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    update?: MeetingUpdateWithWhereUniqueWithoutUploaderInput | MeetingUpdateWithWhereUniqueWithoutUploaderInput[]
-    updateMany?: MeetingUpdateManyWithWhereWithoutUploaderInput | MeetingUpdateManyWithWhereWithoutUploaderInput[]
-    deleteMany?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
+  export type RoleUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<RoleCreateWithoutUserInput, RoleUncheckedCreateWithoutUserInput> | RoleCreateWithoutUserInput[] | RoleUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RoleCreateOrConnectWithoutUserInput | RoleCreateOrConnectWithoutUserInput[]
+    upsert?: RoleUpsertWithWhereUniqueWithoutUserInput | RoleUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: RoleCreateManyUserInputEnvelope
+    set?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    disconnect?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    delete?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    connect?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    update?: RoleUpdateWithWhereUniqueWithoutUserInput | RoleUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: RoleUpdateManyWithWhereWithoutUserInput | RoleUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: RoleScalarWhereInput | RoleScalarWhereInput[]
+  }
+
+  export type UploadUncheckedUpdateManyWithoutUploaderNestedInput = {
+    create?: XOR<UploadCreateWithoutUploaderInput, UploadUncheckedCreateWithoutUploaderInput> | UploadCreateWithoutUploaderInput[] | UploadUncheckedCreateWithoutUploaderInput[]
+    connectOrCreate?: UploadCreateOrConnectWithoutUploaderInput | UploadCreateOrConnectWithoutUploaderInput[]
+    upsert?: UploadUpsertWithWhereUniqueWithoutUploaderInput | UploadUpsertWithWhereUniqueWithoutUploaderInput[]
+    createMany?: UploadCreateManyUploaderInputEnvelope
+    set?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    disconnect?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    delete?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    connect?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    update?: UploadUpdateWithWhereUniqueWithoutUploaderInput | UploadUpdateWithWhereUniqueWithoutUploaderInput[]
+    updateMany?: UploadUpdateManyWithWhereWithoutUploaderInput | UploadUpdateManyWithWhereWithoutUploaderInput[]
+    deleteMany?: UploadScalarWhereInput | UploadScalarWhereInput[]
   }
 
   export type ActionItemUncheckedUpdateManyWithoutAssigneeNestedInput = {
@@ -8323,11 +10155,18 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
-  export type MeetingCreateNestedManyWithoutTeamInput = {
-    create?: XOR<MeetingCreateWithoutTeamInput, MeetingUncheckedCreateWithoutTeamInput> | MeetingCreateWithoutTeamInput[] | MeetingUncheckedCreateWithoutTeamInput[]
-    connectOrCreate?: MeetingCreateOrConnectWithoutTeamInput | MeetingCreateOrConnectWithoutTeamInput[]
-    createMany?: MeetingCreateManyTeamInputEnvelope
-    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+  export type RoleCreateNestedManyWithoutTeamInput = {
+    create?: XOR<RoleCreateWithoutTeamInput, RoleUncheckedCreateWithoutTeamInput> | RoleCreateWithoutTeamInput[] | RoleUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: RoleCreateOrConnectWithoutTeamInput | RoleCreateOrConnectWithoutTeamInput[]
+    createMany?: RoleCreateManyTeamInputEnvelope
+    connect?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+  }
+
+  export type UploadCreateNestedManyWithoutTeamInput = {
+    create?: XOR<UploadCreateWithoutTeamInput, UploadUncheckedCreateWithoutTeamInput> | UploadCreateWithoutTeamInput[] | UploadUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: UploadCreateOrConnectWithoutTeamInput | UploadCreateOrConnectWithoutTeamInput[]
+    createMany?: UploadCreateManyTeamInputEnvelope
+    connect?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
   }
 
   export type UserUncheckedCreateNestedManyWithoutTeamsInput = {
@@ -8336,11 +10175,22 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
-  export type MeetingUncheckedCreateNestedManyWithoutTeamInput = {
-    create?: XOR<MeetingCreateWithoutTeamInput, MeetingUncheckedCreateWithoutTeamInput> | MeetingCreateWithoutTeamInput[] | MeetingUncheckedCreateWithoutTeamInput[]
-    connectOrCreate?: MeetingCreateOrConnectWithoutTeamInput | MeetingCreateOrConnectWithoutTeamInput[]
-    createMany?: MeetingCreateManyTeamInputEnvelope
-    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+  export type RoleUncheckedCreateNestedManyWithoutTeamInput = {
+    create?: XOR<RoleCreateWithoutTeamInput, RoleUncheckedCreateWithoutTeamInput> | RoleCreateWithoutTeamInput[] | RoleUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: RoleCreateOrConnectWithoutTeamInput | RoleCreateOrConnectWithoutTeamInput[]
+    createMany?: RoleCreateManyTeamInputEnvelope
+    connect?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+  }
+
+  export type UploadUncheckedCreateNestedManyWithoutTeamInput = {
+    create?: XOR<UploadCreateWithoutTeamInput, UploadUncheckedCreateWithoutTeamInput> | UploadCreateWithoutTeamInput[] | UploadUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: UploadCreateOrConnectWithoutTeamInput | UploadCreateOrConnectWithoutTeamInput[]
+    createMany?: UploadCreateManyTeamInputEnvelope
+    connect?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type UserUpdateManyWithoutTeamsNestedInput = {
@@ -8356,18 +10206,32 @@ export namespace Prisma {
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
-  export type MeetingUpdateManyWithoutTeamNestedInput = {
-    create?: XOR<MeetingCreateWithoutTeamInput, MeetingUncheckedCreateWithoutTeamInput> | MeetingCreateWithoutTeamInput[] | MeetingUncheckedCreateWithoutTeamInput[]
-    connectOrCreate?: MeetingCreateOrConnectWithoutTeamInput | MeetingCreateOrConnectWithoutTeamInput[]
-    upsert?: MeetingUpsertWithWhereUniqueWithoutTeamInput | MeetingUpsertWithWhereUniqueWithoutTeamInput[]
-    createMany?: MeetingCreateManyTeamInputEnvelope
-    set?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    disconnect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    delete?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    update?: MeetingUpdateWithWhereUniqueWithoutTeamInput | MeetingUpdateWithWhereUniqueWithoutTeamInput[]
-    updateMany?: MeetingUpdateManyWithWhereWithoutTeamInput | MeetingUpdateManyWithWhereWithoutTeamInput[]
-    deleteMany?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
+  export type RoleUpdateManyWithoutTeamNestedInput = {
+    create?: XOR<RoleCreateWithoutTeamInput, RoleUncheckedCreateWithoutTeamInput> | RoleCreateWithoutTeamInput[] | RoleUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: RoleCreateOrConnectWithoutTeamInput | RoleCreateOrConnectWithoutTeamInput[]
+    upsert?: RoleUpsertWithWhereUniqueWithoutTeamInput | RoleUpsertWithWhereUniqueWithoutTeamInput[]
+    createMany?: RoleCreateManyTeamInputEnvelope
+    set?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    disconnect?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    delete?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    connect?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    update?: RoleUpdateWithWhereUniqueWithoutTeamInput | RoleUpdateWithWhereUniqueWithoutTeamInput[]
+    updateMany?: RoleUpdateManyWithWhereWithoutTeamInput | RoleUpdateManyWithWhereWithoutTeamInput[]
+    deleteMany?: RoleScalarWhereInput | RoleScalarWhereInput[]
+  }
+
+  export type UploadUpdateManyWithoutTeamNestedInput = {
+    create?: XOR<UploadCreateWithoutTeamInput, UploadUncheckedCreateWithoutTeamInput> | UploadCreateWithoutTeamInput[] | UploadUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: UploadCreateOrConnectWithoutTeamInput | UploadCreateOrConnectWithoutTeamInput[]
+    upsert?: UploadUpsertWithWhereUniqueWithoutTeamInput | UploadUpsertWithWhereUniqueWithoutTeamInput[]
+    createMany?: UploadCreateManyTeamInputEnvelope
+    set?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    disconnect?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    delete?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    connect?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    update?: UploadUpdateWithWhereUniqueWithoutTeamInput | UploadUpdateWithWhereUniqueWithoutTeamInput[]
+    updateMany?: UploadUpdateManyWithWhereWithoutTeamInput | UploadUpdateManyWithWhereWithoutTeamInput[]
+    deleteMany?: UploadScalarWhereInput | UploadScalarWhereInput[]
   }
 
   export type UserUncheckedUpdateManyWithoutTeamsNestedInput = {
@@ -8383,41 +10247,87 @@ export namespace Prisma {
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
-  export type MeetingUncheckedUpdateManyWithoutTeamNestedInput = {
-    create?: XOR<MeetingCreateWithoutTeamInput, MeetingUncheckedCreateWithoutTeamInput> | MeetingCreateWithoutTeamInput[] | MeetingUncheckedCreateWithoutTeamInput[]
-    connectOrCreate?: MeetingCreateOrConnectWithoutTeamInput | MeetingCreateOrConnectWithoutTeamInput[]
-    upsert?: MeetingUpsertWithWhereUniqueWithoutTeamInput | MeetingUpsertWithWhereUniqueWithoutTeamInput[]
-    createMany?: MeetingCreateManyTeamInputEnvelope
-    set?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    disconnect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    delete?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-    update?: MeetingUpdateWithWhereUniqueWithoutTeamInput | MeetingUpdateWithWhereUniqueWithoutTeamInput[]
-    updateMany?: MeetingUpdateManyWithWhereWithoutTeamInput | MeetingUpdateManyWithWhereWithoutTeamInput[]
-    deleteMany?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
+  export type RoleUncheckedUpdateManyWithoutTeamNestedInput = {
+    create?: XOR<RoleCreateWithoutTeamInput, RoleUncheckedCreateWithoutTeamInput> | RoleCreateWithoutTeamInput[] | RoleUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: RoleCreateOrConnectWithoutTeamInput | RoleCreateOrConnectWithoutTeamInput[]
+    upsert?: RoleUpsertWithWhereUniqueWithoutTeamInput | RoleUpsertWithWhereUniqueWithoutTeamInput[]
+    createMany?: RoleCreateManyTeamInputEnvelope
+    set?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    disconnect?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    delete?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    connect?: RoleWhereUniqueInput | RoleWhereUniqueInput[]
+    update?: RoleUpdateWithWhereUniqueWithoutTeamInput | RoleUpdateWithWhereUniqueWithoutTeamInput[]
+    updateMany?: RoleUpdateManyWithWhereWithoutTeamInput | RoleUpdateManyWithWhereWithoutTeamInput[]
+    deleteMany?: RoleScalarWhereInput | RoleScalarWhereInput[]
   }
 
-  export type ResultCreateNestedOneWithoutMeetingInput = {
-    create?: XOR<ResultCreateWithoutMeetingInput, ResultUncheckedCreateWithoutMeetingInput>
-    connectOrCreate?: ResultCreateOrConnectWithoutMeetingInput
-    connect?: ResultWhereUniqueInput
+  export type UploadUncheckedUpdateManyWithoutTeamNestedInput = {
+    create?: XOR<UploadCreateWithoutTeamInput, UploadUncheckedCreateWithoutTeamInput> | UploadCreateWithoutTeamInput[] | UploadUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: UploadCreateOrConnectWithoutTeamInput | UploadCreateOrConnectWithoutTeamInput[]
+    upsert?: UploadUpsertWithWhereUniqueWithoutTeamInput | UploadUpsertWithWhereUniqueWithoutTeamInput[]
+    createMany?: UploadCreateManyTeamInputEnvelope
+    set?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    disconnect?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    delete?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    connect?: UploadWhereUniqueInput | UploadWhereUniqueInput[]
+    update?: UploadUpdateWithWhereUniqueWithoutTeamInput | UploadUpdateWithWhereUniqueWithoutTeamInput[]
+    updateMany?: UploadUpdateManyWithWhereWithoutTeamInput | UploadUpdateManyWithWhereWithoutTeamInput[]
+    deleteMany?: UploadScalarWhereInput | UploadScalarWhereInput[]
   }
 
-  export type UserCreateNestedOneWithoutMeetingsInput = {
-    create?: XOR<UserCreateWithoutMeetingsInput, UserUncheckedCreateWithoutMeetingsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutMeetingsInput
+  export type UserCreateNestedOneWithoutRolesInput = {
+    create?: XOR<UserCreateWithoutRolesInput, UserUncheckedCreateWithoutRolesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRolesInput
     connect?: UserWhereUniqueInput
   }
 
-  export type TeamCreateNestedOneWithoutMeetingsInput = {
-    create?: XOR<TeamCreateWithoutMeetingsInput, TeamUncheckedCreateWithoutMeetingsInput>
-    connectOrCreate?: TeamCreateOrConnectWithoutMeetingsInput
+  export type TeamCreateNestedOneWithoutRolesInput = {
+    create?: XOR<TeamCreateWithoutRolesInput, TeamUncheckedCreateWithoutRolesInput>
+    connectOrCreate?: TeamCreateOrConnectWithoutRolesInput
     connect?: TeamWhereUniqueInput
   }
 
-  export type ResultUncheckedCreateNestedOneWithoutMeetingInput = {
-    create?: XOR<ResultCreateWithoutMeetingInput, ResultUncheckedCreateWithoutMeetingInput>
-    connectOrCreate?: ResultCreateOrConnectWithoutMeetingInput
+  export type EnumRoleTypeFieldUpdateOperationsInput = {
+    set?: $Enums.RoleType
+  }
+
+  export type UserUpdateOneRequiredWithoutRolesNestedInput = {
+    create?: XOR<UserCreateWithoutRolesInput, UserUncheckedCreateWithoutRolesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRolesInput
+    upsert?: UserUpsertWithoutRolesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRolesInput, UserUpdateWithoutRolesInput>, UserUncheckedUpdateWithoutRolesInput>
+  }
+
+  export type TeamUpdateOneRequiredWithoutRolesNestedInput = {
+    create?: XOR<TeamCreateWithoutRolesInput, TeamUncheckedCreateWithoutRolesInput>
+    connectOrCreate?: TeamCreateOrConnectWithoutRolesInput
+    upsert?: TeamUpsertWithoutRolesInput
+    connect?: TeamWhereUniqueInput
+    update?: XOR<XOR<TeamUpdateToOneWithWhereWithoutRolesInput, TeamUpdateWithoutRolesInput>, TeamUncheckedUpdateWithoutRolesInput>
+  }
+
+  export type ResultCreateNestedOneWithoutUploadInput = {
+    create?: XOR<ResultCreateWithoutUploadInput, ResultUncheckedCreateWithoutUploadInput>
+    connectOrCreate?: ResultCreateOrConnectWithoutUploadInput
+    connect?: ResultWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutUploadsInput = {
+    create?: XOR<UserCreateWithoutUploadsInput, UserUncheckedCreateWithoutUploadsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUploadsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type TeamCreateNestedOneWithoutUploadsInput = {
+    create?: XOR<TeamCreateWithoutUploadsInput, TeamUncheckedCreateWithoutUploadsInput>
+    connectOrCreate?: TeamCreateOrConnectWithoutUploadsInput
+    connect?: TeamWhereUniqueInput
+  }
+
+  export type ResultUncheckedCreateNestedOneWithoutUploadInput = {
+    create?: XOR<ResultCreateWithoutUploadInput, ResultUncheckedCreateWithoutUploadInput>
+    connectOrCreate?: ResultCreateOrConnectWithoutUploadInput
     connect?: ResultWhereUniqueInput
   }
 
@@ -8425,46 +10335,46 @@ export namespace Prisma {
     set?: $Enums.ProcessStatus
   }
 
-  export type ResultUpdateOneWithoutMeetingNestedInput = {
-    create?: XOR<ResultCreateWithoutMeetingInput, ResultUncheckedCreateWithoutMeetingInput>
-    connectOrCreate?: ResultCreateOrConnectWithoutMeetingInput
-    upsert?: ResultUpsertWithoutMeetingInput
+  export type ResultUpdateOneWithoutUploadNestedInput = {
+    create?: XOR<ResultCreateWithoutUploadInput, ResultUncheckedCreateWithoutUploadInput>
+    connectOrCreate?: ResultCreateOrConnectWithoutUploadInput
+    upsert?: ResultUpsertWithoutUploadInput
     disconnect?: ResultWhereInput | boolean
     delete?: ResultWhereInput | boolean
     connect?: ResultWhereUniqueInput
-    update?: XOR<XOR<ResultUpdateToOneWithWhereWithoutMeetingInput, ResultUpdateWithoutMeetingInput>, ResultUncheckedUpdateWithoutMeetingInput>
+    update?: XOR<XOR<ResultUpdateToOneWithWhereWithoutUploadInput, ResultUpdateWithoutUploadInput>, ResultUncheckedUpdateWithoutUploadInput>
   }
 
-  export type UserUpdateOneRequiredWithoutMeetingsNestedInput = {
-    create?: XOR<UserCreateWithoutMeetingsInput, UserUncheckedCreateWithoutMeetingsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutMeetingsInput
-    upsert?: UserUpsertWithoutMeetingsInput
+  export type UserUpdateOneRequiredWithoutUploadsNestedInput = {
+    create?: XOR<UserCreateWithoutUploadsInput, UserUncheckedCreateWithoutUploadsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUploadsInput
+    upsert?: UserUpsertWithoutUploadsInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMeetingsInput, UserUpdateWithoutMeetingsInput>, UserUncheckedUpdateWithoutMeetingsInput>
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUploadsInput, UserUpdateWithoutUploadsInput>, UserUncheckedUpdateWithoutUploadsInput>
   }
 
-  export type TeamUpdateOneWithoutMeetingsNestedInput = {
-    create?: XOR<TeamCreateWithoutMeetingsInput, TeamUncheckedCreateWithoutMeetingsInput>
-    connectOrCreate?: TeamCreateOrConnectWithoutMeetingsInput
-    upsert?: TeamUpsertWithoutMeetingsInput
+  export type TeamUpdateOneWithoutUploadsNestedInput = {
+    create?: XOR<TeamCreateWithoutUploadsInput, TeamUncheckedCreateWithoutUploadsInput>
+    connectOrCreate?: TeamCreateOrConnectWithoutUploadsInput
+    upsert?: TeamUpsertWithoutUploadsInput
     disconnect?: TeamWhereInput | boolean
     delete?: TeamWhereInput | boolean
     connect?: TeamWhereUniqueInput
-    update?: XOR<XOR<TeamUpdateToOneWithWhereWithoutMeetingsInput, TeamUpdateWithoutMeetingsInput>, TeamUncheckedUpdateWithoutMeetingsInput>
+    update?: XOR<XOR<TeamUpdateToOneWithWhereWithoutUploadsInput, TeamUpdateWithoutUploadsInput>, TeamUncheckedUpdateWithoutUploadsInput>
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-  }
-
-  export type ResultUncheckedUpdateOneWithoutMeetingNestedInput = {
-    create?: XOR<ResultCreateWithoutMeetingInput, ResultUncheckedCreateWithoutMeetingInput>
-    connectOrCreate?: ResultCreateOrConnectWithoutMeetingInput
-    upsert?: ResultUpsertWithoutMeetingInput
+  export type ResultUncheckedUpdateOneWithoutUploadNestedInput = {
+    create?: XOR<ResultCreateWithoutUploadInput, ResultUncheckedCreateWithoutUploadInput>
+    connectOrCreate?: ResultCreateOrConnectWithoutUploadInput
+    upsert?: ResultUpsertWithoutUploadInput
     disconnect?: ResultWhereInput | boolean
     delete?: ResultWhereInput | boolean
     connect?: ResultWhereUniqueInput
-    update?: XOR<XOR<ResultUpdateToOneWithWhereWithoutMeetingInput, ResultUpdateWithoutMeetingInput>, ResultUncheckedUpdateWithoutMeetingInput>
+    update?: XOR<XOR<ResultUpdateToOneWithWhereWithoutUploadInput, ResultUpdateWithoutUploadInput>, ResultUncheckedUpdateWithoutUploadInput>
+  }
+
+  export type ResultCreateinsightsInput = {
+    set: string[]
   }
 
   export type ActionItemCreateNestedManyWithoutResultInput = {
@@ -8474,10 +10384,10 @@ export namespace Prisma {
     connect?: ActionItemWhereUniqueInput | ActionItemWhereUniqueInput[]
   }
 
-  export type MeetingCreateNestedOneWithoutResultInput = {
-    create?: XOR<MeetingCreateWithoutResultInput, MeetingUncheckedCreateWithoutResultInput>
-    connectOrCreate?: MeetingCreateOrConnectWithoutResultInput
-    connect?: MeetingWhereUniqueInput
+  export type UploadCreateNestedOneWithoutResultInput = {
+    create?: XOR<UploadCreateWithoutResultInput, UploadUncheckedCreateWithoutResultInput>
+    connectOrCreate?: UploadCreateOrConnectWithoutResultInput
+    connect?: UploadWhereUniqueInput
   }
 
   export type ActionItemUncheckedCreateNestedManyWithoutResultInput = {
@@ -8485,6 +10395,11 @@ export namespace Prisma {
     connectOrCreate?: ActionItemCreateOrConnectWithoutResultInput | ActionItemCreateOrConnectWithoutResultInput[]
     createMany?: ActionItemCreateManyResultInputEnvelope
     connect?: ActionItemWhereUniqueInput | ActionItemWhereUniqueInput[]
+  }
+
+  export type ResultUpdateinsightsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type ActionItemUpdateManyWithoutResultNestedInput = {
@@ -8501,12 +10416,12 @@ export namespace Prisma {
     deleteMany?: ActionItemScalarWhereInput | ActionItemScalarWhereInput[]
   }
 
-  export type MeetingUpdateOneRequiredWithoutResultNestedInput = {
-    create?: XOR<MeetingCreateWithoutResultInput, MeetingUncheckedCreateWithoutResultInput>
-    connectOrCreate?: MeetingCreateOrConnectWithoutResultInput
-    upsert?: MeetingUpsertWithoutResultInput
-    connect?: MeetingWhereUniqueInput
-    update?: XOR<XOR<MeetingUpdateToOneWithWhereWithoutResultInput, MeetingUpdateWithoutResultInput>, MeetingUncheckedUpdateWithoutResultInput>
+  export type UploadUpdateOneRequiredWithoutResultNestedInput = {
+    create?: XOR<UploadCreateWithoutResultInput, UploadUncheckedCreateWithoutResultInput>
+    connectOrCreate?: UploadCreateOrConnectWithoutResultInput
+    upsert?: UploadUpsertWithoutResultInput
+    connect?: UploadWhereUniqueInput
+    update?: XOR<XOR<UploadUpdateToOneWithWhereWithoutResultInput, UploadUpdateWithoutResultInput>, UploadUncheckedUpdateWithoutResultInput>
   }
 
   export type ActionItemUncheckedUpdateManyWithoutResultNestedInput = {
@@ -8575,6 +10490,24 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type NestedEnumSubscriptionFilter<$PrismaModel = never> = {
+    equals?: $Enums.Subscription | EnumSubscriptionFieldRefInput<$PrismaModel>
+    in?: $Enums.Subscription[] | ListEnumSubscriptionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Subscription[] | ListEnumSubscriptionFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubscriptionFilter<$PrismaModel> | $Enums.Subscription
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -8603,7 +10536,7 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type NestedIntFilter<$PrismaModel = never> = {
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
     notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -8611,7 +10544,33 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedEnumSubscriptionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Subscription | EnumSubscriptionFieldRefInput<$PrismaModel>
+    in?: $Enums.Subscription[] | ListEnumSubscriptionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Subscription[] | ListEnumSubscriptionFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubscriptionWithAggregatesFilter<$PrismaModel> | $Enums.Subscription
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSubscriptionFilter<$PrismaModel>
+    _max?: NestedEnumSubscriptionFilter<$PrismaModel>
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -8628,13 +10587,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedEnumProcessStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProcessStatus | EnumProcessStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumProcessStatusFilter<$PrismaModel> | $Enums.ProcessStatus
-  }
-
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -8647,16 +10599,6 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedEnumProcessStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProcessStatus | EnumProcessStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumProcessStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProcessStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumProcessStatusFilter<$PrismaModel>
-    _max?: NestedEnumProcessStatusFilter<$PrismaModel>
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -8685,6 +10627,40 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumRoleTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.RoleType | EnumRoleTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RoleType[] | ListEnumRoleTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RoleType[] | ListEnumRoleTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleTypeFilter<$PrismaModel> | $Enums.RoleType
+  }
+
+  export type NestedEnumRoleTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RoleType | EnumRoleTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RoleType[] | ListEnumRoleTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RoleType[] | ListEnumRoleTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleTypeWithAggregatesFilter<$PrismaModel> | $Enums.RoleType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoleTypeFilter<$PrismaModel>
+    _max?: NestedEnumRoleTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumProcessStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProcessStatus | EnumProcessStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProcessStatusFilter<$PrismaModel> | $Enums.ProcessStatus
+  }
+
+  export type NestedEnumProcessStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProcessStatus | EnumProcessStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProcessStatus[] | ListEnumProcessStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProcessStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProcessStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProcessStatusFilter<$PrismaModel>
+    _max?: NestedEnumProcessStatusFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -8732,17 +10708,21 @@ export namespace Prisma {
   export type TeamCreateWithoutMembersInput = {
     id?: string
     name: string
+    organization?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    meetings?: MeetingCreateNestedManyWithoutTeamInput
+    roles?: RoleCreateNestedManyWithoutTeamInput
+    uploads?: UploadCreateNestedManyWithoutTeamInput
   }
 
   export type TeamUncheckedCreateWithoutMembersInput = {
     id?: string
     name: string
+    organization?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    meetings?: MeetingUncheckedCreateNestedManyWithoutTeamInput
+    roles?: RoleUncheckedCreateNestedManyWithoutTeamInput
+    uploads?: UploadUncheckedCreateNestedManyWithoutTeamInput
   }
 
   export type TeamCreateOrConnectWithoutMembersInput = {
@@ -8750,18 +10730,44 @@ export namespace Prisma {
     create: XOR<TeamCreateWithoutMembersInput, TeamUncheckedCreateWithoutMembersInput>
   }
 
-  export type MeetingCreateWithoutUploaderInput = {
+  export type RoleCreateWithoutUserInput = {
+    id?: string
+    type?: $Enums.RoleType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    team: TeamCreateNestedOneWithoutRolesInput
+  }
+
+  export type RoleUncheckedCreateWithoutUserInput = {
+    id?: string
+    type?: $Enums.RoleType
+    teamId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoleCreateOrConnectWithoutUserInput = {
+    where: RoleWhereUniqueInput
+    create: XOR<RoleCreateWithoutUserInput, RoleUncheckedCreateWithoutUserInput>
+  }
+
+  export type RoleCreateManyUserInputEnvelope = {
+    data: RoleCreateManyUserInput | RoleCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UploadCreateWithoutUploaderInput = {
     id?: string
     title: string
     fileUrl: string
     processStatus?: $Enums.ProcessStatus
     createdAt?: Date | string
     updatedAt?: Date | string
-    result?: ResultCreateNestedOneWithoutMeetingInput
-    team?: TeamCreateNestedOneWithoutMeetingsInput
+    result?: ResultCreateNestedOneWithoutUploadInput
+    team?: TeamCreateNestedOneWithoutUploadsInput
   }
 
-  export type MeetingUncheckedCreateWithoutUploaderInput = {
+  export type UploadUncheckedCreateWithoutUploaderInput = {
     id?: string
     title: string
     fileUrl: string
@@ -8769,16 +10775,16 @@ export namespace Prisma {
     teamId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    result?: ResultUncheckedCreateNestedOneWithoutMeetingInput
+    result?: ResultUncheckedCreateNestedOneWithoutUploadInput
   }
 
-  export type MeetingCreateOrConnectWithoutUploaderInput = {
-    where: MeetingWhereUniqueInput
-    create: XOR<MeetingCreateWithoutUploaderInput, MeetingUncheckedCreateWithoutUploaderInput>
+  export type UploadCreateOrConnectWithoutUploaderInput = {
+    where: UploadWhereUniqueInput
+    create: XOR<UploadCreateWithoutUploaderInput, UploadUncheckedCreateWithoutUploaderInput>
   }
 
-  export type MeetingCreateManyUploaderInputEnvelope = {
-    data: MeetingCreateManyUploaderInput | MeetingCreateManyUploaderInput[]
+  export type UploadCreateManyUploaderInputEnvelope = {
+    data: UploadCreateManyUploaderInput | UploadCreateManyUploaderInput[]
     skipDuplicates?: boolean
   }
 
@@ -8834,38 +10840,67 @@ export namespace Prisma {
     NOT?: TeamScalarWhereInput | TeamScalarWhereInput[]
     id?: StringFilter<"Team"> | string
     name?: StringFilter<"Team"> | string
+    organization?: StringNullableFilter<"Team"> | string | null
     createdAt?: DateTimeFilter<"Team"> | Date | string
     updatedAt?: DateTimeFilter<"Team"> | Date | string
   }
 
-  export type MeetingUpsertWithWhereUniqueWithoutUploaderInput = {
-    where: MeetingWhereUniqueInput
-    update: XOR<MeetingUpdateWithoutUploaderInput, MeetingUncheckedUpdateWithoutUploaderInput>
-    create: XOR<MeetingCreateWithoutUploaderInput, MeetingUncheckedCreateWithoutUploaderInput>
+  export type RoleUpsertWithWhereUniqueWithoutUserInput = {
+    where: RoleWhereUniqueInput
+    update: XOR<RoleUpdateWithoutUserInput, RoleUncheckedUpdateWithoutUserInput>
+    create: XOR<RoleCreateWithoutUserInput, RoleUncheckedCreateWithoutUserInput>
   }
 
-  export type MeetingUpdateWithWhereUniqueWithoutUploaderInput = {
-    where: MeetingWhereUniqueInput
-    data: XOR<MeetingUpdateWithoutUploaderInput, MeetingUncheckedUpdateWithoutUploaderInput>
+  export type RoleUpdateWithWhereUniqueWithoutUserInput = {
+    where: RoleWhereUniqueInput
+    data: XOR<RoleUpdateWithoutUserInput, RoleUncheckedUpdateWithoutUserInput>
   }
 
-  export type MeetingUpdateManyWithWhereWithoutUploaderInput = {
-    where: MeetingScalarWhereInput
-    data: XOR<MeetingUpdateManyMutationInput, MeetingUncheckedUpdateManyWithoutUploaderInput>
+  export type RoleUpdateManyWithWhereWithoutUserInput = {
+    where: RoleScalarWhereInput
+    data: XOR<RoleUpdateManyMutationInput, RoleUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type MeetingScalarWhereInput = {
-    AND?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
-    OR?: MeetingScalarWhereInput[]
-    NOT?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
-    id?: StringFilter<"Meeting"> | string
-    title?: StringFilter<"Meeting"> | string
-    fileUrl?: StringFilter<"Meeting"> | string
-    processStatus?: EnumProcessStatusFilter<"Meeting"> | $Enums.ProcessStatus
-    uploaderId?: StringFilter<"Meeting"> | string
-    teamId?: StringNullableFilter<"Meeting"> | string | null
-    createdAt?: DateTimeFilter<"Meeting"> | Date | string
-    updatedAt?: DateTimeFilter<"Meeting"> | Date | string
+  export type RoleScalarWhereInput = {
+    AND?: RoleScalarWhereInput | RoleScalarWhereInput[]
+    OR?: RoleScalarWhereInput[]
+    NOT?: RoleScalarWhereInput | RoleScalarWhereInput[]
+    id?: StringFilter<"Role"> | string
+    userId?: StringFilter<"Role"> | string
+    type?: EnumRoleTypeFilter<"Role"> | $Enums.RoleType
+    teamId?: StringFilter<"Role"> | string
+    createdAt?: DateTimeFilter<"Role"> | Date | string
+    updatedAt?: DateTimeFilter<"Role"> | Date | string
+  }
+
+  export type UploadUpsertWithWhereUniqueWithoutUploaderInput = {
+    where: UploadWhereUniqueInput
+    update: XOR<UploadUpdateWithoutUploaderInput, UploadUncheckedUpdateWithoutUploaderInput>
+    create: XOR<UploadCreateWithoutUploaderInput, UploadUncheckedCreateWithoutUploaderInput>
+  }
+
+  export type UploadUpdateWithWhereUniqueWithoutUploaderInput = {
+    where: UploadWhereUniqueInput
+    data: XOR<UploadUpdateWithoutUploaderInput, UploadUncheckedUpdateWithoutUploaderInput>
+  }
+
+  export type UploadUpdateManyWithWhereWithoutUploaderInput = {
+    where: UploadScalarWhereInput
+    data: XOR<UploadUpdateManyMutationInput, UploadUncheckedUpdateManyWithoutUploaderInput>
+  }
+
+  export type UploadScalarWhereInput = {
+    AND?: UploadScalarWhereInput | UploadScalarWhereInput[]
+    OR?: UploadScalarWhereInput[]
+    NOT?: UploadScalarWhereInput | UploadScalarWhereInput[]
+    id?: StringFilter<"Upload"> | string
+    title?: StringFilter<"Upload"> | string
+    fileUrl?: StringFilter<"Upload"> | string
+    processStatus?: EnumProcessStatusFilter<"Upload"> | $Enums.ProcessStatus
+    uploaderId?: StringFilter<"Upload"> | string
+    teamId?: StringNullableFilter<"Upload"> | string | null
+    createdAt?: DateTimeFilter<"Upload"> | Date | string
+    updatedAt?: DateTimeFilter<"Upload"> | Date | string
   }
 
   export type ActionItemUpsertWithWhereUniqueWithoutAssigneeInput = {
@@ -8890,9 +10925,9 @@ export namespace Prisma {
     NOT?: ActionItemScalarWhereInput | ActionItemScalarWhereInput[]
     id?: StringFilter<"ActionItem"> | string
     action?: StringFilter<"ActionItem"> | string
+    assigneeId?: StringNullableFilter<"ActionItem"> | string | null
     dueDate?: DateTimeNullableFilter<"ActionItem"> | Date | string | null
     dueStatus?: EnumDueStatusFilter<"ActionItem"> | $Enums.DueStatus
-    assigneeId?: StringNullableFilter<"ActionItem"> | string | null
     resultId?: StringFilter<"ActionItem"> | string
     createdAt?: DateTimeFilter<"ActionItem"> | Date | string
     updatedAt?: DateTimeFilter<"ActionItem"> | Date | string
@@ -8900,23 +10935,31 @@ export namespace Prisma {
 
   export type UserCreateWithoutTeamsInput = {
     id?: string
-    supabaseId: string
+    sbId: string
+    username: string
     firstName: string
     lastName: string
+    totalMonthlyUploads?: number
+    subscription?: $Enums.Subscription
     createdAt?: Date | string
     updatedAt?: Date | string
-    meetings?: MeetingCreateNestedManyWithoutUploaderInput
+    roles?: RoleCreateNestedManyWithoutUserInput
+    uploads?: UploadCreateNestedManyWithoutUploaderInput
     actionItems?: ActionItemCreateNestedManyWithoutAssigneeInput
   }
 
   export type UserUncheckedCreateWithoutTeamsInput = {
     id?: string
-    supabaseId: string
+    sbId: string
+    username: string
     firstName: string
     lastName: string
+    totalMonthlyUploads?: number
+    subscription?: $Enums.Subscription
     createdAt?: Date | string
     updatedAt?: Date | string
-    meetings?: MeetingUncheckedCreateNestedManyWithoutUploaderInput
+    roles?: RoleUncheckedCreateNestedManyWithoutUserInput
+    uploads?: UploadUncheckedCreateNestedManyWithoutUploaderInput
     actionItems?: ActionItemUncheckedCreateNestedManyWithoutAssigneeInput
   }
 
@@ -8925,18 +10968,44 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutTeamsInput, UserUncheckedCreateWithoutTeamsInput>
   }
 
-  export type MeetingCreateWithoutTeamInput = {
+  export type RoleCreateWithoutTeamInput = {
+    id?: string
+    type?: $Enums.RoleType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutRolesInput
+  }
+
+  export type RoleUncheckedCreateWithoutTeamInput = {
+    id?: string
+    userId: string
+    type?: $Enums.RoleType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoleCreateOrConnectWithoutTeamInput = {
+    where: RoleWhereUniqueInput
+    create: XOR<RoleCreateWithoutTeamInput, RoleUncheckedCreateWithoutTeamInput>
+  }
+
+  export type RoleCreateManyTeamInputEnvelope = {
+    data: RoleCreateManyTeamInput | RoleCreateManyTeamInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UploadCreateWithoutTeamInput = {
     id?: string
     title: string
     fileUrl: string
     processStatus?: $Enums.ProcessStatus
     createdAt?: Date | string
     updatedAt?: Date | string
-    result?: ResultCreateNestedOneWithoutMeetingInput
-    uploader: UserCreateNestedOneWithoutMeetingsInput
+    result?: ResultCreateNestedOneWithoutUploadInput
+    uploader: UserCreateNestedOneWithoutUploadsInput
   }
 
-  export type MeetingUncheckedCreateWithoutTeamInput = {
+  export type UploadUncheckedCreateWithoutTeamInput = {
     id?: string
     title: string
     fileUrl: string
@@ -8944,16 +11013,16 @@ export namespace Prisma {
     uploaderId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    result?: ResultUncheckedCreateNestedOneWithoutMeetingInput
+    result?: ResultUncheckedCreateNestedOneWithoutUploadInput
   }
 
-  export type MeetingCreateOrConnectWithoutTeamInput = {
-    where: MeetingWhereUniqueInput
-    create: XOR<MeetingCreateWithoutTeamInput, MeetingUncheckedCreateWithoutTeamInput>
+  export type UploadCreateOrConnectWithoutTeamInput = {
+    where: UploadWhereUniqueInput
+    create: XOR<UploadCreateWithoutTeamInput, UploadUncheckedCreateWithoutTeamInput>
   }
 
-  export type MeetingCreateManyTeamInputEnvelope = {
-    data: MeetingCreateManyTeamInput | MeetingCreateManyTeamInput[]
+  export type UploadCreateManyTeamInputEnvelope = {
+    data: UploadCreateManyTeamInput | UploadCreateManyTeamInput[]
     skipDuplicates?: boolean
   }
 
@@ -8978,183 +11047,366 @@ export namespace Prisma {
     OR?: UserScalarWhereInput[]
     NOT?: UserScalarWhereInput | UserScalarWhereInput[]
     id?: StringFilter<"User"> | string
-    supabaseId?: StringFilter<"User"> | string
+    sbId?: StringFilter<"User"> | string
+    username?: StringFilter<"User"> | string
     firstName?: StringFilter<"User"> | string
     lastName?: StringFilter<"User"> | string
+    totalMonthlyUploads?: IntFilter<"User"> | number
+    subscription?: EnumSubscriptionFilter<"User"> | $Enums.Subscription
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
   }
 
-  export type MeetingUpsertWithWhereUniqueWithoutTeamInput = {
-    where: MeetingWhereUniqueInput
-    update: XOR<MeetingUpdateWithoutTeamInput, MeetingUncheckedUpdateWithoutTeamInput>
-    create: XOR<MeetingCreateWithoutTeamInput, MeetingUncheckedCreateWithoutTeamInput>
+  export type RoleUpsertWithWhereUniqueWithoutTeamInput = {
+    where: RoleWhereUniqueInput
+    update: XOR<RoleUpdateWithoutTeamInput, RoleUncheckedUpdateWithoutTeamInput>
+    create: XOR<RoleCreateWithoutTeamInput, RoleUncheckedCreateWithoutTeamInput>
   }
 
-  export type MeetingUpdateWithWhereUniqueWithoutTeamInput = {
-    where: MeetingWhereUniqueInput
-    data: XOR<MeetingUpdateWithoutTeamInput, MeetingUncheckedUpdateWithoutTeamInput>
+  export type RoleUpdateWithWhereUniqueWithoutTeamInput = {
+    where: RoleWhereUniqueInput
+    data: XOR<RoleUpdateWithoutTeamInput, RoleUncheckedUpdateWithoutTeamInput>
   }
 
-  export type MeetingUpdateManyWithWhereWithoutTeamInput = {
-    where: MeetingScalarWhereInput
-    data: XOR<MeetingUpdateManyMutationInput, MeetingUncheckedUpdateManyWithoutTeamInput>
+  export type RoleUpdateManyWithWhereWithoutTeamInput = {
+    where: RoleScalarWhereInput
+    data: XOR<RoleUpdateManyMutationInput, RoleUncheckedUpdateManyWithoutTeamInput>
   }
 
-  export type ResultCreateWithoutMeetingInput = {
+  export type UploadUpsertWithWhereUniqueWithoutTeamInput = {
+    where: UploadWhereUniqueInput
+    update: XOR<UploadUpdateWithoutTeamInput, UploadUncheckedUpdateWithoutTeamInput>
+    create: XOR<UploadCreateWithoutTeamInput, UploadUncheckedCreateWithoutTeamInput>
+  }
+
+  export type UploadUpdateWithWhereUniqueWithoutTeamInput = {
+    where: UploadWhereUniqueInput
+    data: XOR<UploadUpdateWithoutTeamInput, UploadUncheckedUpdateWithoutTeamInput>
+  }
+
+  export type UploadUpdateManyWithWhereWithoutTeamInput = {
+    where: UploadScalarWhereInput
+    data: XOR<UploadUpdateManyMutationInput, UploadUncheckedUpdateManyWithoutTeamInput>
+  }
+
+  export type UserCreateWithoutRolesInput = {
+    id?: string
+    sbId: string
+    username: string
+    firstName: string
+    lastName: string
+    totalMonthlyUploads?: number
+    subscription?: $Enums.Subscription
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    teams?: TeamCreateNestedManyWithoutMembersInput
+    uploads?: UploadCreateNestedManyWithoutUploaderInput
+    actionItems?: ActionItemCreateNestedManyWithoutAssigneeInput
+  }
+
+  export type UserUncheckedCreateWithoutRolesInput = {
+    id?: string
+    sbId: string
+    username: string
+    firstName: string
+    lastName: string
+    totalMonthlyUploads?: number
+    subscription?: $Enums.Subscription
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    teams?: TeamUncheckedCreateNestedManyWithoutMembersInput
+    uploads?: UploadUncheckedCreateNestedManyWithoutUploaderInput
+    actionItems?: ActionItemUncheckedCreateNestedManyWithoutAssigneeInput
+  }
+
+  export type UserCreateOrConnectWithoutRolesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutRolesInput, UserUncheckedCreateWithoutRolesInput>
+  }
+
+  export type TeamCreateWithoutRolesInput = {
+    id?: string
+    name: string
+    organization?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: UserCreateNestedManyWithoutTeamsInput
+    uploads?: UploadCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamUncheckedCreateWithoutRolesInput = {
+    id?: string
+    name: string
+    organization?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: UserUncheckedCreateNestedManyWithoutTeamsInput
+    uploads?: UploadUncheckedCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamCreateOrConnectWithoutRolesInput = {
+    where: TeamWhereUniqueInput
+    create: XOR<TeamCreateWithoutRolesInput, TeamUncheckedCreateWithoutRolesInput>
+  }
+
+  export type UserUpsertWithoutRolesInput = {
+    update: XOR<UserUpdateWithoutRolesInput, UserUncheckedUpdateWithoutRolesInput>
+    create: XOR<UserCreateWithoutRolesInput, UserUncheckedCreateWithoutRolesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutRolesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutRolesInput, UserUncheckedUpdateWithoutRolesInput>
+  }
+
+  export type UserUpdateWithoutRolesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sbId?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    totalMonthlyUploads?: IntFieldUpdateOperationsInput | number
+    subscription?: EnumSubscriptionFieldUpdateOperationsInput | $Enums.Subscription
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    teams?: TeamUpdateManyWithoutMembersNestedInput
+    uploads?: UploadUpdateManyWithoutUploaderNestedInput
+    actionItems?: ActionItemUpdateManyWithoutAssigneeNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutRolesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sbId?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    totalMonthlyUploads?: IntFieldUpdateOperationsInput | number
+    subscription?: EnumSubscriptionFieldUpdateOperationsInput | $Enums.Subscription
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    teams?: TeamUncheckedUpdateManyWithoutMembersNestedInput
+    uploads?: UploadUncheckedUpdateManyWithoutUploaderNestedInput
+    actionItems?: ActionItemUncheckedUpdateManyWithoutAssigneeNestedInput
+  }
+
+  export type TeamUpsertWithoutRolesInput = {
+    update: XOR<TeamUpdateWithoutRolesInput, TeamUncheckedUpdateWithoutRolesInput>
+    create: XOR<TeamCreateWithoutRolesInput, TeamUncheckedCreateWithoutRolesInput>
+    where?: TeamWhereInput
+  }
+
+  export type TeamUpdateToOneWithWhereWithoutRolesInput = {
+    where?: TeamWhereInput
+    data: XOR<TeamUpdateWithoutRolesInput, TeamUncheckedUpdateWithoutRolesInput>
+  }
+
+  export type TeamUpdateWithoutRolesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: UserUpdateManyWithoutTeamsNestedInput
+    uploads?: UploadUpdateManyWithoutTeamNestedInput
+  }
+
+  export type TeamUncheckedUpdateWithoutRolesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: UserUncheckedUpdateManyWithoutTeamsNestedInput
+    uploads?: UploadUncheckedUpdateManyWithoutTeamNestedInput
+  }
+
+  export type ResultCreateWithoutUploadInput = {
     id?: string
     summary: string
+    transcript: string
+    insights?: ResultCreateinsightsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     actionItems?: ActionItemCreateNestedManyWithoutResultInput
   }
 
-  export type ResultUncheckedCreateWithoutMeetingInput = {
+  export type ResultUncheckedCreateWithoutUploadInput = {
     id?: string
     summary: string
+    transcript: string
+    insights?: ResultCreateinsightsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     actionItems?: ActionItemUncheckedCreateNestedManyWithoutResultInput
   }
 
-  export type ResultCreateOrConnectWithoutMeetingInput = {
+  export type ResultCreateOrConnectWithoutUploadInput = {
     where: ResultWhereUniqueInput
-    create: XOR<ResultCreateWithoutMeetingInput, ResultUncheckedCreateWithoutMeetingInput>
+    create: XOR<ResultCreateWithoutUploadInput, ResultUncheckedCreateWithoutUploadInput>
   }
 
-  export type UserCreateWithoutMeetingsInput = {
+  export type UserCreateWithoutUploadsInput = {
     id?: string
-    supabaseId: string
+    sbId: string
+    username: string
     firstName: string
     lastName: string
+    totalMonthlyUploads?: number
+    subscription?: $Enums.Subscription
     createdAt?: Date | string
     updatedAt?: Date | string
     teams?: TeamCreateNestedManyWithoutMembersInput
+    roles?: RoleCreateNestedManyWithoutUserInput
     actionItems?: ActionItemCreateNestedManyWithoutAssigneeInput
   }
 
-  export type UserUncheckedCreateWithoutMeetingsInput = {
+  export type UserUncheckedCreateWithoutUploadsInput = {
     id?: string
-    supabaseId: string
+    sbId: string
+    username: string
     firstName: string
     lastName: string
+    totalMonthlyUploads?: number
+    subscription?: $Enums.Subscription
     createdAt?: Date | string
     updatedAt?: Date | string
     teams?: TeamUncheckedCreateNestedManyWithoutMembersInput
+    roles?: RoleUncheckedCreateNestedManyWithoutUserInput
     actionItems?: ActionItemUncheckedCreateNestedManyWithoutAssigneeInput
   }
 
-  export type UserCreateOrConnectWithoutMeetingsInput = {
+  export type UserCreateOrConnectWithoutUploadsInput = {
     where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutMeetingsInput, UserUncheckedCreateWithoutMeetingsInput>
+    create: XOR<UserCreateWithoutUploadsInput, UserUncheckedCreateWithoutUploadsInput>
   }
 
-  export type TeamCreateWithoutMeetingsInput = {
+  export type TeamCreateWithoutUploadsInput = {
     id?: string
     name: string
+    organization?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: UserCreateNestedManyWithoutTeamsInput
+    roles?: RoleCreateNestedManyWithoutTeamInput
   }
 
-  export type TeamUncheckedCreateWithoutMeetingsInput = {
+  export type TeamUncheckedCreateWithoutUploadsInput = {
     id?: string
     name: string
+    organization?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: UserUncheckedCreateNestedManyWithoutTeamsInput
+    roles?: RoleUncheckedCreateNestedManyWithoutTeamInput
   }
 
-  export type TeamCreateOrConnectWithoutMeetingsInput = {
+  export type TeamCreateOrConnectWithoutUploadsInput = {
     where: TeamWhereUniqueInput
-    create: XOR<TeamCreateWithoutMeetingsInput, TeamUncheckedCreateWithoutMeetingsInput>
+    create: XOR<TeamCreateWithoutUploadsInput, TeamUncheckedCreateWithoutUploadsInput>
   }
 
-  export type ResultUpsertWithoutMeetingInput = {
-    update: XOR<ResultUpdateWithoutMeetingInput, ResultUncheckedUpdateWithoutMeetingInput>
-    create: XOR<ResultCreateWithoutMeetingInput, ResultUncheckedCreateWithoutMeetingInput>
+  export type ResultUpsertWithoutUploadInput = {
+    update: XOR<ResultUpdateWithoutUploadInput, ResultUncheckedUpdateWithoutUploadInput>
+    create: XOR<ResultCreateWithoutUploadInput, ResultUncheckedCreateWithoutUploadInput>
     where?: ResultWhereInput
   }
 
-  export type ResultUpdateToOneWithWhereWithoutMeetingInput = {
+  export type ResultUpdateToOneWithWhereWithoutUploadInput = {
     where?: ResultWhereInput
-    data: XOR<ResultUpdateWithoutMeetingInput, ResultUncheckedUpdateWithoutMeetingInput>
+    data: XOR<ResultUpdateWithoutUploadInput, ResultUncheckedUpdateWithoutUploadInput>
   }
 
-  export type ResultUpdateWithoutMeetingInput = {
+  export type ResultUpdateWithoutUploadInput = {
     id?: StringFieldUpdateOperationsInput | string
     summary?: StringFieldUpdateOperationsInput | string
+    transcript?: StringFieldUpdateOperationsInput | string
+    insights?: ResultUpdateinsightsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     actionItems?: ActionItemUpdateManyWithoutResultNestedInput
   }
 
-  export type ResultUncheckedUpdateWithoutMeetingInput = {
+  export type ResultUncheckedUpdateWithoutUploadInput = {
     id?: StringFieldUpdateOperationsInput | string
     summary?: StringFieldUpdateOperationsInput | string
+    transcript?: StringFieldUpdateOperationsInput | string
+    insights?: ResultUpdateinsightsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     actionItems?: ActionItemUncheckedUpdateManyWithoutResultNestedInput
   }
 
-  export type UserUpsertWithoutMeetingsInput = {
-    update: XOR<UserUpdateWithoutMeetingsInput, UserUncheckedUpdateWithoutMeetingsInput>
-    create: XOR<UserCreateWithoutMeetingsInput, UserUncheckedCreateWithoutMeetingsInput>
+  export type UserUpsertWithoutUploadsInput = {
+    update: XOR<UserUpdateWithoutUploadsInput, UserUncheckedUpdateWithoutUploadsInput>
+    create: XOR<UserCreateWithoutUploadsInput, UserUncheckedCreateWithoutUploadsInput>
     where?: UserWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutMeetingsInput = {
+  export type UserUpdateToOneWithWhereWithoutUploadsInput = {
     where?: UserWhereInput
-    data: XOR<UserUpdateWithoutMeetingsInput, UserUncheckedUpdateWithoutMeetingsInput>
+    data: XOR<UserUpdateWithoutUploadsInput, UserUncheckedUpdateWithoutUploadsInput>
   }
 
-  export type UserUpdateWithoutMeetingsInput = {
+  export type UserUpdateWithoutUploadsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    supabaseId?: StringFieldUpdateOperationsInput | string
+    sbId?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    totalMonthlyUploads?: IntFieldUpdateOperationsInput | number
+    subscription?: EnumSubscriptionFieldUpdateOperationsInput | $Enums.Subscription
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teams?: TeamUpdateManyWithoutMembersNestedInput
+    roles?: RoleUpdateManyWithoutUserNestedInput
     actionItems?: ActionItemUpdateManyWithoutAssigneeNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutMeetingsInput = {
+  export type UserUncheckedUpdateWithoutUploadsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    supabaseId?: StringFieldUpdateOperationsInput | string
+    sbId?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    totalMonthlyUploads?: IntFieldUpdateOperationsInput | number
+    subscription?: EnumSubscriptionFieldUpdateOperationsInput | $Enums.Subscription
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teams?: TeamUncheckedUpdateManyWithoutMembersNestedInput
+    roles?: RoleUncheckedUpdateManyWithoutUserNestedInput
     actionItems?: ActionItemUncheckedUpdateManyWithoutAssigneeNestedInput
   }
 
-  export type TeamUpsertWithoutMeetingsInput = {
-    update: XOR<TeamUpdateWithoutMeetingsInput, TeamUncheckedUpdateWithoutMeetingsInput>
-    create: XOR<TeamCreateWithoutMeetingsInput, TeamUncheckedCreateWithoutMeetingsInput>
+  export type TeamUpsertWithoutUploadsInput = {
+    update: XOR<TeamUpdateWithoutUploadsInput, TeamUncheckedUpdateWithoutUploadsInput>
+    create: XOR<TeamCreateWithoutUploadsInput, TeamUncheckedCreateWithoutUploadsInput>
     where?: TeamWhereInput
   }
 
-  export type TeamUpdateToOneWithWhereWithoutMeetingsInput = {
+  export type TeamUpdateToOneWithWhereWithoutUploadsInput = {
     where?: TeamWhereInput
-    data: XOR<TeamUpdateWithoutMeetingsInput, TeamUncheckedUpdateWithoutMeetingsInput>
+    data: XOR<TeamUpdateWithoutUploadsInput, TeamUncheckedUpdateWithoutUploadsInput>
   }
 
-  export type TeamUpdateWithoutMeetingsInput = {
+  export type TeamUpdateWithoutUploadsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: UserUpdateManyWithoutTeamsNestedInput
+    roles?: RoleUpdateManyWithoutTeamNestedInput
   }
 
-  export type TeamUncheckedUpdateWithoutMeetingsInput = {
+  export type TeamUncheckedUpdateWithoutUploadsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: UserUncheckedUpdateManyWithoutTeamsNestedInput
+    roles?: RoleUncheckedUpdateManyWithoutTeamNestedInput
   }
 
   export type ActionItemCreateWithoutResultInput = {
@@ -9170,9 +11422,9 @@ export namespace Prisma {
   export type ActionItemUncheckedCreateWithoutResultInput = {
     id?: string
     action: string
+    assigneeId?: string | null
     dueDate?: Date | string | null
     dueStatus?: $Enums.DueStatus
-    assigneeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9187,18 +11439,18 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type MeetingCreateWithoutResultInput = {
+  export type UploadCreateWithoutResultInput = {
     id?: string
     title: string
     fileUrl: string
     processStatus?: $Enums.ProcessStatus
     createdAt?: Date | string
     updatedAt?: Date | string
-    uploader: UserCreateNestedOneWithoutMeetingsInput
-    team?: TeamCreateNestedOneWithoutMeetingsInput
+    uploader: UserCreateNestedOneWithoutUploadsInput
+    team?: TeamCreateNestedOneWithoutUploadsInput
   }
 
-  export type MeetingUncheckedCreateWithoutResultInput = {
+  export type UploadUncheckedCreateWithoutResultInput = {
     id?: string
     title: string
     fileUrl: string
@@ -9209,9 +11461,9 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type MeetingCreateOrConnectWithoutResultInput = {
-    where: MeetingWhereUniqueInput
-    create: XOR<MeetingCreateWithoutResultInput, MeetingUncheckedCreateWithoutResultInput>
+  export type UploadCreateOrConnectWithoutResultInput = {
+    where: UploadWhereUniqueInput
+    create: XOR<UploadCreateWithoutResultInput, UploadUncheckedCreateWithoutResultInput>
   }
 
   export type ActionItemUpsertWithWhereUniqueWithoutResultInput = {
@@ -9230,29 +11482,29 @@ export namespace Prisma {
     data: XOR<ActionItemUpdateManyMutationInput, ActionItemUncheckedUpdateManyWithoutResultInput>
   }
 
-  export type MeetingUpsertWithoutResultInput = {
-    update: XOR<MeetingUpdateWithoutResultInput, MeetingUncheckedUpdateWithoutResultInput>
-    create: XOR<MeetingCreateWithoutResultInput, MeetingUncheckedCreateWithoutResultInput>
-    where?: MeetingWhereInput
+  export type UploadUpsertWithoutResultInput = {
+    update: XOR<UploadUpdateWithoutResultInput, UploadUncheckedUpdateWithoutResultInput>
+    create: XOR<UploadCreateWithoutResultInput, UploadUncheckedCreateWithoutResultInput>
+    where?: UploadWhereInput
   }
 
-  export type MeetingUpdateToOneWithWhereWithoutResultInput = {
-    where?: MeetingWhereInput
-    data: XOR<MeetingUpdateWithoutResultInput, MeetingUncheckedUpdateWithoutResultInput>
+  export type UploadUpdateToOneWithWhereWithoutResultInput = {
+    where?: UploadWhereInput
+    data: XOR<UploadUpdateWithoutResultInput, UploadUncheckedUpdateWithoutResultInput>
   }
 
-  export type MeetingUpdateWithoutResultInput = {
+  export type UploadUpdateWithoutResultInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
     processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    uploader?: UserUpdateOneRequiredWithoutMeetingsNestedInput
-    team?: TeamUpdateOneWithoutMeetingsNestedInput
+    uploader?: UserUpdateOneRequiredWithoutUploadsNestedInput
+    team?: TeamUpdateOneWithoutUploadsNestedInput
   }
 
-  export type MeetingUncheckedUpdateWithoutResultInput = {
+  export type UploadUncheckedUpdateWithoutResultInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
@@ -9265,24 +11517,32 @@ export namespace Prisma {
 
   export type UserCreateWithoutActionItemsInput = {
     id?: string
-    supabaseId: string
+    sbId: string
+    username: string
     firstName: string
     lastName: string
+    totalMonthlyUploads?: number
+    subscription?: $Enums.Subscription
     createdAt?: Date | string
     updatedAt?: Date | string
     teams?: TeamCreateNestedManyWithoutMembersInput
-    meetings?: MeetingCreateNestedManyWithoutUploaderInput
+    roles?: RoleCreateNestedManyWithoutUserInput
+    uploads?: UploadCreateNestedManyWithoutUploaderInput
   }
 
   export type UserUncheckedCreateWithoutActionItemsInput = {
     id?: string
-    supabaseId: string
+    sbId: string
+    username: string
     firstName: string
     lastName: string
+    totalMonthlyUploads?: number
+    subscription?: $Enums.Subscription
     createdAt?: Date | string
     updatedAt?: Date | string
     teams?: TeamUncheckedCreateNestedManyWithoutMembersInput
-    meetings?: MeetingUncheckedCreateNestedManyWithoutUploaderInput
+    roles?: RoleUncheckedCreateNestedManyWithoutUserInput
+    uploads?: UploadUncheckedCreateNestedManyWithoutUploaderInput
   }
 
   export type UserCreateOrConnectWithoutActionItemsInput = {
@@ -9293,15 +11553,19 @@ export namespace Prisma {
   export type ResultCreateWithoutActionItemsInput = {
     id?: string
     summary: string
+    transcript: string
+    insights?: ResultCreateinsightsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
-    meeting: MeetingCreateNestedOneWithoutResultInput
+    upload: UploadCreateNestedOneWithoutResultInput
   }
 
   export type ResultUncheckedCreateWithoutActionItemsInput = {
     id?: string
     summary: string
-    meetingId: string
+    transcript: string
+    insights?: ResultCreateinsightsInput | string[]
+    uploadId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9324,24 +11588,32 @@ export namespace Prisma {
 
   export type UserUpdateWithoutActionItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    supabaseId?: StringFieldUpdateOperationsInput | string
+    sbId?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    totalMonthlyUploads?: IntFieldUpdateOperationsInput | number
+    subscription?: EnumSubscriptionFieldUpdateOperationsInput | $Enums.Subscription
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teams?: TeamUpdateManyWithoutMembersNestedInput
-    meetings?: MeetingUpdateManyWithoutUploaderNestedInput
+    roles?: RoleUpdateManyWithoutUserNestedInput
+    uploads?: UploadUpdateManyWithoutUploaderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActionItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    supabaseId?: StringFieldUpdateOperationsInput | string
+    sbId?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    totalMonthlyUploads?: IntFieldUpdateOperationsInput | number
+    subscription?: EnumSubscriptionFieldUpdateOperationsInput | $Enums.Subscription
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teams?: TeamUncheckedUpdateManyWithoutMembersNestedInput
-    meetings?: MeetingUncheckedUpdateManyWithoutUploaderNestedInput
+    roles?: RoleUncheckedUpdateManyWithoutUserNestedInput
+    uploads?: UploadUncheckedUpdateManyWithoutUploaderNestedInput
   }
 
   export type ResultUpsertWithoutActionItemsInput = {
@@ -9358,20 +11630,32 @@ export namespace Prisma {
   export type ResultUpdateWithoutActionItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     summary?: StringFieldUpdateOperationsInput | string
+    transcript?: StringFieldUpdateOperationsInput | string
+    insights?: ResultUpdateinsightsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    meeting?: MeetingUpdateOneRequiredWithoutResultNestedInput
+    upload?: UploadUpdateOneRequiredWithoutResultNestedInput
   }
 
   export type ResultUncheckedUpdateWithoutActionItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     summary?: StringFieldUpdateOperationsInput | string
-    meetingId?: StringFieldUpdateOperationsInput | string
+    transcript?: StringFieldUpdateOperationsInput | string
+    insights?: ResultUpdateinsightsInput | string[]
+    uploadId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MeetingCreateManyUploaderInput = {
+  export type RoleCreateManyUserInput = {
+    id?: string
+    type?: $Enums.RoleType
+    teamId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UploadCreateManyUploaderInput = {
     id?: string
     title: string
     fileUrl: string
@@ -9394,38 +11678,67 @@ export namespace Prisma {
   export type TeamUpdateWithoutMembersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    meetings?: MeetingUpdateManyWithoutTeamNestedInput
+    roles?: RoleUpdateManyWithoutTeamNestedInput
+    uploads?: UploadUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamUncheckedUpdateWithoutMembersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    meetings?: MeetingUncheckedUpdateManyWithoutTeamNestedInput
+    roles?: RoleUncheckedUpdateManyWithoutTeamNestedInput
+    uploads?: UploadUncheckedUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamUncheckedUpdateManyWithoutMembersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MeetingUpdateWithoutUploaderInput = {
+  export type RoleUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    team?: TeamUpdateOneRequiredWithoutRolesNestedInput
+  }
+
+  export type RoleUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType
+    teamId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoleUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType
+    teamId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UploadUpdateWithoutUploaderInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
     processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    result?: ResultUpdateOneWithoutMeetingNestedInput
-    team?: TeamUpdateOneWithoutMeetingsNestedInput
+    result?: ResultUpdateOneWithoutUploadNestedInput
+    team?: TeamUpdateOneWithoutUploadsNestedInput
   }
 
-  export type MeetingUncheckedUpdateWithoutUploaderInput = {
+  export type UploadUncheckedUpdateWithoutUploaderInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
@@ -9433,10 +11746,10 @@ export namespace Prisma {
     teamId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    result?: ResultUncheckedUpdateOneWithoutMeetingNestedInput
+    result?: ResultUncheckedUpdateOneWithoutUploadNestedInput
   }
 
-  export type MeetingUncheckedUpdateManyWithoutUploaderInput = {
+  export type UploadUncheckedUpdateManyWithoutUploaderInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
@@ -9476,7 +11789,15 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MeetingCreateManyTeamInput = {
+  export type RoleCreateManyTeamInput = {
+    id?: string
+    userId: string
+    type?: $Enums.RoleType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UploadCreateManyTeamInput = {
     id?: string
     title: string
     fileUrl: string
@@ -9488,47 +11809,82 @@ export namespace Prisma {
 
   export type UserUpdateWithoutTeamsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    supabaseId?: StringFieldUpdateOperationsInput | string
+    sbId?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    totalMonthlyUploads?: IntFieldUpdateOperationsInput | number
+    subscription?: EnumSubscriptionFieldUpdateOperationsInput | $Enums.Subscription
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    meetings?: MeetingUpdateManyWithoutUploaderNestedInput
+    roles?: RoleUpdateManyWithoutUserNestedInput
+    uploads?: UploadUpdateManyWithoutUploaderNestedInput
     actionItems?: ActionItemUpdateManyWithoutAssigneeNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTeamsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    supabaseId?: StringFieldUpdateOperationsInput | string
+    sbId?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    totalMonthlyUploads?: IntFieldUpdateOperationsInput | number
+    subscription?: EnumSubscriptionFieldUpdateOperationsInput | $Enums.Subscription
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    meetings?: MeetingUncheckedUpdateManyWithoutUploaderNestedInput
+    roles?: RoleUncheckedUpdateManyWithoutUserNestedInput
+    uploads?: UploadUncheckedUpdateManyWithoutUploaderNestedInput
     actionItems?: ActionItemUncheckedUpdateManyWithoutAssigneeNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutTeamsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    supabaseId?: StringFieldUpdateOperationsInput | string
+    sbId?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    totalMonthlyUploads?: IntFieldUpdateOperationsInput | number
+    subscription?: EnumSubscriptionFieldUpdateOperationsInput | $Enums.Subscription
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MeetingUpdateWithoutTeamInput = {
+  export type RoleUpdateWithoutTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutRolesNestedInput
+  }
+
+  export type RoleUncheckedUpdateWithoutTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    type?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoleUncheckedUpdateManyWithoutTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    type?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UploadUpdateWithoutTeamInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
     processStatus?: EnumProcessStatusFieldUpdateOperationsInput | $Enums.ProcessStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    result?: ResultUpdateOneWithoutMeetingNestedInput
-    uploader?: UserUpdateOneRequiredWithoutMeetingsNestedInput
+    result?: ResultUpdateOneWithoutUploadNestedInput
+    uploader?: UserUpdateOneRequiredWithoutUploadsNestedInput
   }
 
-  export type MeetingUncheckedUpdateWithoutTeamInput = {
+  export type UploadUncheckedUpdateWithoutTeamInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
@@ -9536,10 +11892,10 @@ export namespace Prisma {
     uploaderId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    result?: ResultUncheckedUpdateOneWithoutMeetingNestedInput
+    result?: ResultUncheckedUpdateOneWithoutUploadNestedInput
   }
 
-  export type MeetingUncheckedUpdateManyWithoutTeamInput = {
+  export type UploadUncheckedUpdateManyWithoutTeamInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     fileUrl?: StringFieldUpdateOperationsInput | string
@@ -9552,9 +11908,9 @@ export namespace Prisma {
   export type ActionItemCreateManyResultInput = {
     id?: string
     action: string
+    assigneeId?: string | null
     dueDate?: Date | string | null
     dueStatus?: $Enums.DueStatus
-    assigneeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9572,9 +11928,9 @@ export namespace Prisma {
   export type ActionItemUncheckedUpdateWithoutResultInput = {
     id?: StringFieldUpdateOperationsInput | string
     action?: StringFieldUpdateOperationsInput | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
-    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9582,9 +11938,9 @@ export namespace Prisma {
   export type ActionItemUncheckedUpdateManyWithoutResultInput = {
     id?: StringFieldUpdateOperationsInput | string
     action?: StringFieldUpdateOperationsInput | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueStatus?: EnumDueStatusFieldUpdateOperationsInput | $Enums.DueStatus
-    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

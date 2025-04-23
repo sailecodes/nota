@@ -1,21 +1,18 @@
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ProcessStatus as ProcessStatusType } from "@/schemas";
-import { ProcessStatus } from "@/utils/enum";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { IMeetingCardProps } from "@/schemas";
+import { EProcessStatus } from "@/utils/enum";
 import { getDate, getMeetingStatusBadgeColor } from "@/utils";
 import { Calendar, CircleAlert, ListTodo } from "lucide-react";
 import Link from "next/link";
-
-interface MeetingCardProps {
-  title: string;
-  processStatus: ProcessStatusType;
-  uploader: string;
-  dateUploaded: Date;
-  summary: string;
-  numOfActionItems: number;
-  uploadId: string;
-}
 
 export default function MeetingCard({
   title,
@@ -24,8 +21,8 @@ export default function MeetingCard({
   dateUploaded,
   summary,
   numOfActionItems,
-  uploadId,
-}: MeetingCardProps) {
+  meetingId,
+}: IMeetingCardProps) {
   return (
     <Card className="bg-background justify-between">
       <CardHeader>
@@ -53,13 +50,14 @@ export default function MeetingCard({
         </div>
       </CardContent>
       <CardFooter>
-        {processStatus === ProcessStatus.FAILED ? (
+        {processStatus === EProcessStatus.FAILED ? (
           <div className="flex gap-2 items-center text-sm font-medium text-red-400">
-            <CircleAlert className="size-4 stroke-red-400" /> An error occurred. Please retry uploading the file.
+            <CircleAlert className="size-4 stroke-red-400" /> An error occurred. Please retry
+            uploading the file.
           </div>
         ) : (
           <Link
-            href={`/dashboard/meetings/meeting/${uploadId}`}
+            href={`/dashboard/meetings/meeting/${meetingId}`}
             className={buttonVariants({ variant: "secondary", className: "w-full" })}>
             View details
           </Link>

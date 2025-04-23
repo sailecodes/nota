@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -7,10 +8,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ListTodo } from "lucide-react";
-import { buttonVariants } from "../../ui/button";
-import Link from "next/link";
+import { Button, buttonVariants } from "../../ui/button";
+import { IActionItemsCardProps } from "@/schemas";
 
-export default function ActionItemsCard() {
+export default function ActionItemsCard({ user }: IActionItemsCardProps) {
   return (
     <Card className="bg-background">
       <CardHeader>
@@ -20,7 +21,8 @@ export default function ActionItemsCard() {
         </CardDescription>
         <CardTitle>
           <span className="text-4xl">
-            5 <span className="text-xs text-muted-foreground">due soon</span>
+            {user?.actionItems.length}
+            <span className="text-xs text-muted-foreground"> due soon</span>
           </span>
         </CardTitle>
       </CardHeader>
@@ -31,11 +33,18 @@ export default function ActionItemsCard() {
       </CardContent>
       <CardFooter className="px-[23px]">
         <div className="w-full p-[2px] rounded-md">
-          <Link
+          {/* TODO: Create Action Items page */}
+          {/* <Link
             href="/dashboard/action-items"
             className={buttonVariants({ variant: "secondary", className: "w-full" })}>
-            See actions
-          </Link>
+            View actions
+          </Link> */}
+          <Button
+            disabled
+            variant="secondary"
+            className="w-full">
+            Actions page coming soon
+          </Button>
         </div>
       </CardFooter>
     </Card>

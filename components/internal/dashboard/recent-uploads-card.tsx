@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -8,9 +9,9 @@ import {
 } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import { buttonVariants } from "../../ui/button";
-import Link from "next/link";
+import { IRecentUploadsCardProps } from "@/schemas";
 
-export default function RecentUploadsCard() {
+export default async function RecentUploadsCard({ user }: IRecentUploadsCardProps) {
   return (
     <Card className="bg-background">
       <CardHeader>
@@ -20,7 +21,9 @@ export default function RecentUploadsCard() {
         </CardDescription>
         <CardTitle>
           <span className="text-4xl">
-            2 <span className="text-xs text-muted-foreground">completed</span>
+            {/* FIXME: Currently returning TOTAL uploads instead of RECENT */}
+            {user!.uploads.length}
+            <span className="text-xs text-muted-foreground"> completed</span>
           </span>
         </CardTitle>
       </CardHeader>
@@ -32,9 +35,9 @@ export default function RecentUploadsCard() {
       <CardFooter className="px-[23px]">
         <div className="w-full p-[2px] rounded-md">
           <Link
-            href="/dashboard/summaries"
+            href="/dashboard/meetings"
             className={buttonVariants({ variant: "secondary", className: "w-full" })}>
-            View summaries
+            Read summaries
           </Link>
         </div>
       </CardFooter>

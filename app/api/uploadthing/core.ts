@@ -34,9 +34,8 @@ export const ourFileRouter = {
         if (!currUser) throw new UploadThingError(`Cannot find user with id ${metadata.user.id}`);
 
         // 1. Create new Meeting record
-        // TODO: Include team
 
-        const newUpload = await prisma.meeting.create({
+        const newUpload = await prisma.upload.create({
           include: {
             uploader: true,
             team: true,
@@ -56,7 +55,7 @@ export const ourFileRouter = {
 
         // 3. Update Upload record to process status `SUMMARIZING`
 
-        await prisma.meeting.update({
+        await prisma.upload.update({
           where: {
             id: newUpload.id,
           },
@@ -75,7 +74,7 @@ export const ourFileRouter = {
 
         // 5. Update Upload record to process status `COMPLETED`
 
-        await prisma.meeting.update({
+        await prisma.upload.update({
           where: {
             id: newUpload.id,
           },
@@ -85,8 +84,6 @@ export const ourFileRouter = {
         });
 
         // 6. Create new Result record
-        // TODO: Include team
-        // TODO: Action items
 
         const newResult = await prisma.result.create({
           include: {

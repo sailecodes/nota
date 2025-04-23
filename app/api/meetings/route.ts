@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const meetingId = searchParams.get("meetingId");
+  uploadId = searchParams.get("meetingId");
 
-  const meeting = await prisma.meeting.findUnique({
+  upload = await prisma.upload.findUnique({
     where: {
       id: meetingId!,
     },

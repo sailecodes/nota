@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import CustomField from "@/components/general/custom-field";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { signInSchema } from "@/schemas";
@@ -11,8 +13,6 @@ import { Form } from "@/components/ui/form";
 import { toast } from "sonner";
 import { CheckCircle2, CircleX } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import CustomField from "@/components/general/custom-field";
 import { Separator } from "@/components/ui/separator";
 
 export default function SignIn() {
@@ -34,7 +34,7 @@ export default function SignIn() {
     setIsSigningIn(false);
 
     if (res) {
-      toast.error(`${res.msg}`, {
+      toast.error(`${res.error}`, {
         icon: <CircleX className="w-4 h-4 stroke-red-300" />,
       });
     } else {

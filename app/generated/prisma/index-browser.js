@@ -119,9 +119,12 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  supabaseId: 'supabaseId',
+  sbId: 'sbId',
+  username: 'username',
   firstName: 'firstName',
   lastName: 'lastName',
+  totalMonthlyUploads: 'totalMonthlyUploads',
+  subscription: 'subscription',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -129,11 +132,21 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.TeamScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  organization: 'organization',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.MeetingScalarFieldEnum = {
+exports.Prisma.RoleScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  teamId: 'teamId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UploadScalarFieldEnum = {
   id: 'id',
   title: 'title',
   fileUrl: 'fileUrl',
@@ -147,7 +160,9 @@ exports.Prisma.MeetingScalarFieldEnum = {
 exports.Prisma.ResultScalarFieldEnum = {
   id: 'id',
   summary: 'summary',
-  meetingId: 'meetingId',
+  transcript: 'transcript',
+  insights: 'insights',
+  uploadId: 'uploadId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -155,9 +170,9 @@ exports.Prisma.ResultScalarFieldEnum = {
 exports.Prisma.ActionItemScalarFieldEnum = {
   id: 'id',
   action: 'action',
+  assigneeId: 'assigneeId',
   dueDate: 'dueDate',
   dueStatus: 'dueStatus',
-  assigneeId: 'assigneeId',
   resultId: 'resultId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -177,6 +192,17 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.Subscription = exports.$Enums.Subscription = {
+  STARTER: 'STARTER',
+  TEAM: 'TEAM',
+  ORGANIZATION: 'ORGANIZATION'
+};
+
+exports.RoleType = exports.$Enums.RoleType = {
+  MEMBER: 'MEMBER',
+  LEAD: 'LEAD'
+};
+
 exports.ProcessStatus = exports.$Enums.ProcessStatus = {
   TRANSCRIBING: 'TRANSCRIBING',
   SUMMARIZING: 'SUMMARIZING',
@@ -185,18 +211,19 @@ exports.ProcessStatus = exports.$Enums.ProcessStatus = {
 };
 
 exports.DueStatus = exports.$Enums.DueStatus = {
+  TBD: 'TBD',
   NEW: 'NEW',
   UPCOMING: 'UPCOMING',
   DUE_SOON: 'DUE_SOON',
   COMPLETED: 'COMPLETED',
-  OVERDUE: 'OVERDUE',
-  NO_DUE_DATE: 'NO_DUE_DATE'
+  OVERDUE: 'OVERDUE'
 };
 
 exports.Prisma.ModelName = {
   User: 'User',
   Team: 'Team',
-  Meeting: 'Meeting',
+  Role: 'Role',
+  Upload: 'Upload',
   Result: 'Result',
   ActionItem: 'ActionItem'
 };

@@ -21,6 +21,7 @@ export default function SignUp() {
     defaultValues: {
       email: "",
       password: "",
+      username: "",
       firstName: "",
       lastName: "",
     },
@@ -54,7 +55,7 @@ export default function SignUp() {
         icon: <CheckCircle2 className="w-4 h-4 stroke-green-300" />,
       });
 
-      router.push("/dashboard/overview");
+      router.push("/dashboard");
     }
   };
 
@@ -81,6 +82,12 @@ export default function SignUp() {
             label="Password"
             type="password"
             placeholder="mySecret123"
+          />
+          <CustomField
+            control={signUpForm.control}
+            name="username"
+            label="Username"
+            placeholder="pparker"
           />
           <CustomField
             control={signUpForm.control}

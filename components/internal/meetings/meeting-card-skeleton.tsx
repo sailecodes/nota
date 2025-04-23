@@ -1,24 +1,24 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Calendar, ListTodo } from "lucide-react";
 import { Skeleton } from "../../ui/skeleton";
 import { getDate, getMeetingSkeletonColor, getMeetingStatusBadgeColor } from "@/utils";
-import { ProcessStatus as ProcessStatusType } from "@/schemas";
-
-interface MeetingCardSkeletonProps {
-  title: string;
-  processStatus: ProcessStatusType;
-  uploader: string;
-  dateUploaded: Date;
-}
+import { IMeetingCardSkeletonProps } from "@/schemas";
 
 export default function MeetingCardSkeleton({
   title,
   processStatus,
   uploader,
   dateUploaded,
-}: MeetingCardSkeletonProps) {
+}: IMeetingCardSkeletonProps) {
   return (
     <Card className="bg-background justify-between">
       <CardHeader>

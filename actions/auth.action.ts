@@ -1,19 +1,15 @@
 "use server";
 
-import { z } from "zod";
 import prisma from "@/lib/prisma";
+import { z } from "zod";
 import { signInSchema, signUpSchema } from "@/schemas";
 import { createClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
 export async function signUp(signUpData: z.infer<typeof signUpSchema>) {
-  let parsedData;
+  const { data: parsedData, error: parseError } = signUpSchema.safeParse(signUpData);
 
-  try {
-    parsedData = signUpSchema.parse(signUpData);
-  } catch (e) {
-    return { error: "Data couldn't be parsed" };
-  }
+  if (parseError) return { error: "Data couldn't be parsed" };
 
   const supabase = await createClient();
 
@@ -25,23 +21,26 @@ export async function signUp(signUpData: z.infer<typeof signUpSchema>) {
     password: parsedData.password,
     options: {
       data: {
+        username: parsedData.username,
         firstName: parsedData.firstName,
         lastName: parsedData.lastName,
       },
       // TODO: Change url for prod
-      emailRedirectTo: "http://localhost:3000/dashboard/overview",
+      emailRedirectTo: "http://localhost:3000/dashboard",
     },
   });
 
   // Only accounting for existing email error
   if (signUpError?.message) return { error: "Email already exists" };
+  else if (!user) return { error: "User couldn't be created" };
 
   try {
     await prisma.user.create({
       data: {
-        supabaseId: user!.id,
-        firstName: user!.user_metadata.firstName,
-        lastName: user!.user_metadata.lastName,
+        sbId: user.id,
+        username: user.user_metadata.username,
+        firstName: user.user_metadata.firstName,
+        lastName: user.user_metadata.lastName,
       },
     });
   } catch (e) {
@@ -49,17 +48,14 @@ export async function signUp(signUpData: z.infer<typeof signUpSchema>) {
     const { error: deleteUserError } = await supabaseAdmin.auth.admin.deleteUser(user!.id);
 
     if (deleteUserError) return { error: deleteUserError.message };
+    else return { error: "User couldn't be created" };
   }
 }
 
-export async function signIn(data: z.infer<typeof signInSchema>) {
-  let parsedData;
+export async function signIn(signInData: z.infer<typeof signInSchema>) {
+  const { data: parsedData, error: parseError } = signInSchema.safeParse(signInData);
 
-  try {
-    parsedData = signInSchema.parse(data);
-  } catch (err) {
-    return { msg: "Data couldn't be parsed. Check field values." };
-  }
+  if (parseError) return { error: "Data couldn't be parsed" };
 
   const supabase = await createClient();
 
@@ -68,7 +64,7 @@ export async function signIn(data: z.infer<typeof signInSchema>) {
     password: parsedData.password,
   });
 
-  if (signInError?.message) return { msg: signInError?.message };
+  if (signInError?.message) return { error: signInError?.message };
 }
 
 export async function signOut() {}

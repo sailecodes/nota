@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { DueStatus } from "@/schemas";
+import { DueStatusType } from "@/schemas";
 import { getActionItemDueStatusBadgeColor, getDate, parseActionItemDueStatus } from "@/utils";
 import { CalendarClock, UserCheck2Icon } from "lucide-react";
 import { useState } from "react";
@@ -12,11 +12,17 @@ interface ActionItemSnippetProps {
   fileName: string;
   dueDate: Date;
   assignee: string; // FIXME:
-  dueStatus: DueStatus;
+  dueStatus: DueStatusType;
 }
 
-export default function ActionItemSnippet({ action, fileName, dueDate, assignee, dueStatus }: ActionItemSnippetProps) {
-  const [status, setStatus] = useState<DueStatus>(dueStatus);
+export default function ActionItemSnippet({
+  action,
+  fileName,
+  dueDate,
+  assignee,
+  dueStatus,
+}: ActionItemSnippetProps) {
+  const [status, setStatus] = useState<DueStatusType>(dueStatus);
 
   const handleMarkAsComplete = () => {
     // TODO: Create a server action to update db dueStatus field
