@@ -17,7 +17,7 @@ export default function MeetingCardSkeleton({
   title,
   processStatus,
   uploader,
-  dateUploaded,
+  createdAt,
 }: IMeetingCardSkeletonProps) {
   return (
     <Card className="bg-background justify-between">
@@ -33,7 +33,7 @@ export default function MeetingCardSkeleton({
       <CardContent className="space-y-2">
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
           <Calendar className="h-4 w-4" />
-          <span>{getDate(dateUploaded)}</span>
+          <span>{getDate(createdAt)}</span>
         </div>
         <div className="space-y-2 mb-3">
           <Skeleton className={`h-[18px] w-full ${getMeetingSkeletonColor(processStatus)}`} />

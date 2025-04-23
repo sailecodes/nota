@@ -1,7 +1,3 @@
-// ===
-// === Prisma Schema
-// ===
-
 export enum ESubscription {
   STARTER = "STARTER",
   TEAM = "TEAM",

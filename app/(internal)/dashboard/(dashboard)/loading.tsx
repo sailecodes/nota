@@ -11,7 +11,9 @@ import React from "react";
 
 export default function Loading() {
   return (
-    <section className="grid grid-cols-[minmax(0,408px)] min-[970px]:grid-cols-[1fr_1fr_1fr] justify-center gap-3 max-w-7xl mx-auto p-4">
+    <section
+      className="grid [grid-template-columns:repeat(auto-fit,minmax(0,408px))]
+      justify-center gap-3 max-w-7xl mx-auto p-4 pb-[25px]">
       {Array.from([1, 2, 3]).map((ind) => (
         <Card
           key={ind}

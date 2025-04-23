@@ -1,7 +1,8 @@
 import MeetingCard from "@/components/internal/meetings/meeting-card";
 import MeetingCardSkeleton from "@/components/internal/meetings/meeting-card-skeleton";
+import NoMeetings from "@/components/internal/meetings/no-meetings";
 import prisma from "@/lib/prisma";
-import { EProcessStatus } from "@/utils/enum";
+import { EProcessStatus } from "@/schemas/enum";
 import { parseName } from "@/utils";
 
 export default async function Meetings() {
@@ -14,44 +15,37 @@ export default async function Meetings() {
     },
   });
 
-  if (uploads.length === 0)
-    return (
-      <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 font-medium text-center text-lg">
-        No meetings yet :(
-        <br />
-        Try uploading?
-      </div>
-    );
-
   return (
-    <section
-      className="grid [grid-template-columns:repeat(auto-fit,minmax(0,408px))] auto-rows-[300px]
-      justify-center gap-3 max-w-7xl mx-auto p-4 pb-[25px] space-y-[25px]">
-      {uploads.map((upload) => {
-        if (upload.processStatus !== EProcessStatus.COMPLETED)
-          return (
-            <MeetingCardSkeleton
-              key={upload.id}
-              title={upload.title}
-              processStatus={upload.processStatus}
-              uploader={parseName(upload.uploader.firstName, upload.uploader.lastName)}
-              dateUploaded={upload.createdAt}
-            />
-          );
-        else
-          return (
-            <MeetingCard
-              key={upload.id}
-              meetingId={upload.id}
-              title={upload.title}
-              processStatus={upload.processStatus}
-              uploader={parseName(upload.uploader.firstName, upload.uploader.lastName)}
-              dateUploaded={upload.createdAt}
-              summary={upload.result!.summary}
-              numOfActionItems={upload.result!.actionItems.length}
-            />
-          );
-      })}
-    </section>
+    <>
+      {uploads.length < 1 && <NoMeetings />}
+      {uploads.length >= 0 && (
+        <section
+          className="grid [grid-template-columns:repeat(auto-fit,minmax(0,408px))] auto-rows-[300px]
+          justify-center gap-3 max-w-7xl mx-auto p-4 pb-[25px] space-y-[25px]">
+          {uploads.map((upload) =>
+            upload.processStatus !== EProcessStatus.COMPLETED ? (
+              <MeetingCardSkeleton
+                key={upload.id}
+                title={upload.title}
+                processStatus={upload.processStatus}
+                uploader={parseName(upload.uploader.firstName, upload.uploader.lastName)}
+                createdAt={upload.createdAt}
+              />
+            ) : (
+              <MeetingCard
+                key={upload.id}
+                meetingId={upload.id}
+                title={upload.title}
+                processStatus={upload.processStatus}
+                uploader={parseName(upload.uploader.firstName, upload.uploader.lastName)}
+                createdAt={upload.createdAt}
+                summary={upload.result!.summary}
+                actionItemsNum={upload.result!.actionItems.length}
+              />
+            )
+          )}
+        </section>
+      )}
+    </>
   );
 }

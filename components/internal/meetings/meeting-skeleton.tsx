@@ -68,10 +68,7 @@ export default function MeetingSkeleton() {
           <CardHeader className="text-lg font-semibold">Action Items</CardHeader>
           <CardContent className="space-y-5">
             <div className="grid grid-cols-2 gap-y-4 gap-x-8">
-              <div className="space-y-1">
-                <Skeleton className="w-[100px] h-[24px]" />
-                <Skeleton className="w-[150px] h-[20px]" />
-              </div>
+              <Skeleton className="w-[100px] h-[24px]" />
               <Skeleton className="size-[24px] self-start justify-self-end" />
               <div className="space-y-1">
                 <span className="flex gap-2 items-center text-muted-foreground">

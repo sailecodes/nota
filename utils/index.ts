@@ -1,7 +1,6 @@
 import { DueStatus, ProcessStatus } from "@/app/generated/prisma";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Prisma } from "@/app/generated/prisma";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -21,22 +20,44 @@ export function getMeetingSkeletonColor(status: ProcessStatus) {
   else return "bg-gray-200/50";
 }
 
-export function parseName(firstName: string, lastName: string) {
-  return firstName + " " + lastName.charAt(0) + ".";
+export function parseName(firstName: string | undefined, lastName: string | undefined) {
+  return !firstName || !lastName ? "Unassigned" : firstName + " " + lastName.charAt(0) + ".";
 }
 
-export function getDate(date: Date) {
-  return date.toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+export function getDate(date: Date | null) {
+  return date
+    ? date.toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    : "TBD";
 }
 
-export function parseActionItemDueStatus(dueStatus: DueStatus) {
+export function parseStatus(dueStatus: DueStatus | ProcessStatus) {
   return dueStatus
     .toLowerCase()
     .split("_")
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
+}
+
+export function getActionItemDueStatusBadgeColor(status: DueStatus) {
+  if (status === "NEW") return "text-teal-800 bg-teal-100";
+  else if (status === "UPCOMING") return "text-violet-800 bg-violet-100";
+  else if (status === "DUE_SOON") return "text-orange-800 bg-orange-100";
+  else if (status === "COMPLETED") return "text-green-800 bg-green-100";
+  else if (status === "OVERDUE") return "text-red-800 bg-red-100";
+  else if (status === "TBD") return "text-stone-800 bg-stone-100";
+  else return "text-gray-800 bg-gray-100";
+}
+
+export function getActionItemCardAccentColor(status: DueStatus) {
+  if (status === "NEW") return "bg-teal-300";
+  else if (status === "UPCOMING") return "bg-violet-300";
+  else if (status === "DUE_SOON") return "bg-orange-300";
+  else if (status === "COMPLETED") return "bg-green-300";
+  else if (status === "OVERDUE") return "bg-red-300";
+  else if (status === "TBD") return "bg-stone-300";
+  else return "bg-gray-300";
 }

@@ -3,21 +3,25 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  uploadId = searchParams.get("meetingId");
+  const uploadId = searchParams.get("meetingId");
 
-  upload = await prisma.upload.findUnique({
+  const upload = await prisma.upload.findUnique({
     where: {
-      id: meetingId!,
+      id: uploadId!,
     },
     include: {
       result: {
         include: {
-          actionItems: true,
+          actionItems: {
+            include: {
+              assignee: true,
+            },
+          },
         },
       },
       uploader: true,
     },
   });
 
-  return NextResponse.json(meeting, { status: 200 });
+  return NextResponse.json(upload, { status: 200 });
 }

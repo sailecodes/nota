@@ -1,6 +1,6 @@
+import CustomSidebar from "@/components/internal/sidebar/custom-sidebar";
 import { cookies } from "next/headers";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import CustomSidebar from "@/components/internal/sidebar/custom-sidebar";
 import { Separator } from "@/components/ui/separator";
 
 export default async function AuthenticatedLayout({ children }: { children: React.ReactNode }) {

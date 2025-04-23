@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -9,18 +10,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { IMeetingCardProps } from "@/schemas";
-import { EProcessStatus } from "@/utils/enum";
-import { getDate, getMeetingStatusBadgeColor } from "@/utils";
+import { EProcessStatus } from "@/schemas/enum";
+import { getDate, getMeetingStatusBadgeColor, parseStatus } from "@/utils";
 import { Calendar, CircleAlert, ListTodo } from "lucide-react";
-import Link from "next/link";
 
 export default function MeetingCard({
   title,
   processStatus,
   uploader,
-  dateUploaded,
+  createdAt,
   summary,
-  numOfActionItems,
+  actionItemsNum,
   meetingId,
 }: IMeetingCardProps) {
   return (
@@ -29,7 +29,7 @@ export default function MeetingCard({
         <div className="flex items-center justify-between gap-6">
           <CardTitle className="line-clamp-2 leading-5">{title}</CardTitle>
           <Badge className={getMeetingStatusBadgeColor(processStatus)}>
-            {processStatus.charAt(0) + processStatus.slice(1).toLocaleLowerCase()}
+            {parseStatus(processStatus)}
           </Badge>
         </div>
         <CardDescription>Uploaded by {uploader}</CardDescription>
@@ -37,7 +37,7 @@ export default function MeetingCard({
       <CardContent className="space-y-2">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Calendar className="h-4 w-4" />
-          <span>{getDate(dateUploaded)}</span>
+          <span>{getDate(createdAt)}</span>
         </div>
         <p className="text-sm text-muted-foreground line-clamp-2">{summary}</p>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -45,7 +45,7 @@ export default function MeetingCard({
           <Link
             href="/dashboard/action-items"
             className="hover:underline">
-            {numOfActionItems} {numOfActionItems !== 1 ? " action items" : " action item"}
+            {actionItemsNum} {actionItemsNum !== 1 ? " action items" : " action item"}
           </Link>
         </div>
       </CardContent>
