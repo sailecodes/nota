@@ -39,16 +39,12 @@ export const changeEmailAddress = async (data: z.infer<typeof emailAddressSchema
     error: getUserError,
   } = await supabase.auth.getUser();
 
-  if (!user) return { success: false, msg: "Unauthorized access." };
-  else if (getUserError) return { success: false, msg: getUserError.message };
+  if (!user) return { error: "Unauthorized access" };
+  else if (getUserError) return { error: getUserError.message };
 
-  let parsedData;
+  const { data: parsedData, error: parseError } = emailAddressSchema.safeParse(data);
 
-  try {
-    parsedData = emailAddressSchema.parse(data);
-  } catch (err) {
-    return { success: false, msg: "Data couldn't be parsed. Check field values." };
-  }
+  if (parseError) return { error: "Data couldn't be parsed" };
 
   const { error: updateUserError } = await supabase.auth.updateUser(
     { email: parsedData.emailAddress },
@@ -56,7 +52,7 @@ export const changeEmailAddress = async (data: z.infer<typeof emailAddressSchema
     { emailRedirectTo: "http://localhost:3000/dashboard/account" }
   );
 
-  if (updateUserError) return { success: false, msg: updateUserError.message };
+  if (updateUserError) return { error: updateUserError.message };
 };
 
 export const sendPasswordResetLink = async () => {
@@ -67,15 +63,15 @@ export const sendPasswordResetLink = async () => {
     error: getUserError,
   } = await supabase.auth.getUser();
 
-  if (!user) return { success: false, msg: "Unauthorized access." };
-  else if (getUserError) return { success: false, msg: getUserError.message };
+  if (!user) return { error: "Unauthorized access" };
+  else if (getUserError) return { error: getUserError.message };
 
   const { error: updateUserError } = await supabase.auth.resetPasswordForEmail(user.email!, {
     // TODO: Change url in prod
     redirectTo: "http://localhost:3000/reset-password",
   });
 
-  if (updateUserError) return { success: false, msg: updateUserError.message };
+  if (updateUserError) return { error: updateUserError.message };
 };
 
 export const resetPassword = async (data: z.infer<typeof passwordSchema>) => {

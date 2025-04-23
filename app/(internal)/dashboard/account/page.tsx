@@ -1,7 +1,6 @@
 import ProfileInformation from "@/components/internal/account/profile-information";
 import EmailAddress from "@/components/internal/account/email-address";
 import Password from "@/components/internal/account/password";
-import SubscriptionAndBilling from "@/components/internal/account/subscription-and-billing";
 import Danger from "@/components/internal/account/danger";
 import { createClient } from "@/lib/supabase/server";
 
@@ -15,6 +14,7 @@ export default async function AccountPage() {
       <ProfileInformation user={user!} />
       <EmailAddress user={user!} />
       <Password user={user!} />
+      {/* TODO: Future ftr */}
       {/* <SubscriptionAndBilling /> */}
       <Danger />
     </div>

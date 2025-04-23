@@ -6,20 +6,15 @@ import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
 import { Input } from "../../ui/input";
-import { emailAddressSchema } from "@/schemas";
+import { emailAddressSchema, IEmailAddressProps } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { changeEmailAddress } from "@/actions/account.action";
 import { CheckCircle2, CircleX, Verified } from "lucide-react";
 import { Badge } from "../../ui/badge";
-import { User } from "@supabase/supabase-js";
 import { toast } from "sonner";
 
-interface EmailAddressProps {
-  user: User;
-}
-
-export default function EmailAddress({ user }: EmailAddressProps) {
+export default function EmailAddress({ user }: IEmailAddressProps) {
   const emailAddressForm = useForm<z.infer<typeof emailAddressSchema>>({
     resolver: zodResolver(emailAddressSchema),
     defaultValues: {
@@ -37,8 +32,8 @@ export default function EmailAddress({ user }: EmailAddressProps) {
     setIsChangingEmailAddress(false);
 
     if (res) {
-      console.error("Email change error: ", res.msg);
-      toast.error(res.msg, { icon: <CircleX className="w-4 h-4 stroke-red-300" /> });
+      console.error("[Error while changing email] ", res.error);
+      toast.error(res.error, { icon: <CircleX className="w-4 h-4 stroke-red-300" /> });
     } else {
       toast.success("Email verification sent!", {
         description: `We've sent you a confirmation email at ${emailAddressFormVals.emailAddress}.`,
@@ -55,7 +50,6 @@ export default function EmailAddress({ user }: EmailAddressProps) {
       <CardContent className="space-y-6">
         <Form {...emailAddressForm}>
           <form
-            // className="flex justify-between gap-4"
             className="flex flex-col xs:flex-row justify-between gap-4"
             onSubmit={emailAddressForm.handleSubmit(handleChangeEmailAddress)}>
             <FormField

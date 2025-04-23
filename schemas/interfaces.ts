@@ -1,4 +1,5 @@
 import { DueStatus, Prisma, ProcessStatus, User } from "@/app/generated/prisma";
+import { User as SbUser } from "@supabase/supabase-js";
 
 export interface IRecentUploadsCardProps {
   user: Prisma.UserGetPayload<{ include: { uploads: true; actionItems: true } }> | null;
@@ -34,4 +35,12 @@ export interface ActionItemSnippetProps {
   dueDate: Date | null;
   assignee: User | null;
   dueStatus: DueStatus;
+}
+
+export interface IEmailAddressProps {
+  user: SbUser;
+}
+
+export interface IPasswordProps {
+  user: SbUser;
 }
