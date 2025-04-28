@@ -1,3 +1,7 @@
+import CustomSidebarGroup from "./custom-sidebar-group";
+import CustomSidebarSingle from "./custom-sidebar-single";
+import UploadButton from "./upload-btn";
+import SignOutBtn from "./sign-out-btn";
 import {
   Sidebar,
   SidebarContent,
@@ -9,11 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "../../ui/sidebar";
-import { FileText, LayoutDashboardIcon, Route, User } from "lucide-react";
-import CustomSidebarGroup from "./custom-sidebar-group";
-import CustomSidebarSingle from "./custom-sidebar-single";
-import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
-import UploadButton from "./upload-btn";
+import { FileText, LayoutDashboardIcon, User } from "lucide-react";
 
 const sidebarData = {
   dashboard: {
@@ -58,7 +58,6 @@ export default function CustomSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  {/* Upload button for meetings */}
                   <UploadButton />
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -70,16 +69,7 @@ export default function CustomSidebar() {
         <CustomSidebarGroup data={sidebarData.preferences} />
       </SidebarContent>
       <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton className="h-fit">
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <SignOutBtn />
       </SidebarFooter>
     </Sidebar>
   );

@@ -67,4 +67,10 @@ export async function signIn(signInData: z.infer<typeof signInSchema>) {
   if (signInError?.message) return { error: signInError?.message };
 }
 
-export async function signOut() {}
+export async function signOut() {
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signOut();
+
+  if (error) return { error: error.message };
+}

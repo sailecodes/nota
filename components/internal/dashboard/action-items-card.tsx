@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ListTodo } from "lucide-react";
-import { Button, buttonVariants } from "../../ui/button";
+import { Button } from "../../ui/button";
 import { IActionItemsCardProps } from "@/schemas";
 
 export default function ActionItemsCard({ user }: IActionItemsCardProps) {
@@ -33,12 +33,6 @@ export default function ActionItemsCard({ user }: IActionItemsCardProps) {
       </CardContent>
       <CardFooter className="px-[23px]">
         <div className="w-full p-[2px] rounded-md">
-          {/* TODO: Create Action Items page */}
-          {/* <Link
-            href="/dashboard/action-items"
-            className={buttonVariants({ variant: "secondary", className: "w-full" })}>
-            View actions
-          </Link> */}
           <Button
             disabled
             variant="secondary"

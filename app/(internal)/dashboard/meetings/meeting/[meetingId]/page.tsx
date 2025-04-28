@@ -8,6 +8,7 @@ import { Calendar, UserCircle2 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { IMeetingProps } from "@/schemas";
 
+// TODO: What happens if the meeting can't be found?
 export default async function Meeting({ params }: IMeetingProps) {
   const { meetingId } = await params;
 

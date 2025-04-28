@@ -111,11 +111,10 @@ export default function SignUp() {
           </Button>
         </form>
       </Form>
-      <p className="text-xs text-muted-foreground text-center w-[200px]">
-        {/* TODO: Add dummy Terms of Service and Privacy Policy text */}
+      {/* <p className="text-xs text-muted-foreground text-center w-[200px]">
         By signing up, you agree to our <span className="underline">Terms of Service</span> and{" "}
         <span className="underline">Privacy Policy</span>.
-      </p>
+      </p> */}
       <Separator />
       <p className="text-sm text-muted-foreground text-center">
         Already have an account?{" "}
