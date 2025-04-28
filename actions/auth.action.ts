@@ -25,8 +25,10 @@ export async function signUp(signUpData: z.infer<typeof signUpSchema>) {
         firstName: parsedData.firstName,
         lastName: parsedData.lastName,
       },
-      // TODO: Change url for prod
-      emailRedirectTo: "http://localhost:3000/dashboard",
+      emailRedirectTo:
+        process.env.NODE_ENV !== "production"
+          ? "http://localhost:3000/dashboard"
+          : "https://nota-c44ulgj93-elias-iv-romans-projects.vercel.app/dashboard",
     },
   });
 

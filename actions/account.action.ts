@@ -49,7 +49,12 @@ export const changeEmailAddress = async (data: z.infer<typeof emailAddressSchema
   const { error: updateUserError } = await supabase.auth.updateUser(
     { email: parsedData.emailAddress },
     // TODO: Change url in prod
-    { emailRedirectTo: "http://localhost:3000/dashboard/account" }
+    {
+      emailRedirectTo:
+        process.env.NODE_ENV !== "production"
+          ? "http://localhost:3000/dashboard/account"
+          : "https://nota-c44ulgj93-elias-iv-romans-projects.vercel.app/dashboard/account",
+    }
   );
 
   if (updateUserError) return { error: updateUserError.message };
@@ -68,7 +73,10 @@ export const sendPasswordResetLink = async () => {
 
   const { error: updateUserError } = await supabase.auth.resetPasswordForEmail(user.email!, {
     // TODO: Change url in prod
-    redirectTo: "http://localhost:3000/reset-password",
+    redirectTo:
+      process.env.NODE_ENV !== "production"
+        ? "http://localhost:3000/reset-password"
+        : "https://nota-c44ulgj93-elias-iv-romans-projects.vercel.app/reset-password",
   });
 
   if (updateUserError) return { error: updateUserError.message };
