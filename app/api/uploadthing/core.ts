@@ -5,7 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 import { transcribe } from "@/actions/transcribe.action";
 import { summarize } from "@/actions/summarize.action";
 import { revalidatePath } from "next/cache";
-import { ProcessStatus, Result, User } from "@/app/generated/prisma";
+import { ProcessStatus } from "@/app/generated/prisma";
+import { Upload } from "lucide-react";
 
 const f = createUploadthing();
 
@@ -29,16 +30,17 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ metadata, file: { name, ufsUrl } }) => {
       try {
-        const currUser = await prisma.user.findUnique({ where: { supabaseId: metadata.user.id } });
+        const currUser = await prisma.user.findUnique({ where: { sbId: metadata.user.id } });
 
         if (!currUser) throw new UploadThingError(`Cannot find user with id ${metadata.user.id}`);
+        else if (currUser.totalMonthlyUploads > 5)
+          throw new UploadThingError("Reached monthly upload limit");
 
-        // 1. Create new Meeting record
+        // 1. Create new Upload record
 
         const newUpload = await prisma.upload.create({
           include: {
             uploader: true,
-            team: true,
           },
           data: {
             title: name,
@@ -87,11 +89,12 @@ export const ourFileRouter = {
 
         const newResult = await prisma.result.create({
           include: {
-            meeting: true,
+            upload: true,
           },
           data: {
             summary: result.summary,
-            meetingId: newUpload.id,
+            transcript: transcript!,
+            uploadId: newUpload.id,
           },
         });
 
@@ -99,6 +102,13 @@ export const ourFileRouter = {
 
         await prisma.actionItem.createMany({
           data: await formatActionItems(result.actionItems, newResult.id),
+        });
+
+        // 8.
+
+        await prisma.user.update({
+          where: { id: currUser.id },
+          data: { totalMonthlyUploads: currUser.totalMonthlyUploads + 1 },
         });
 
         revalidatePath("/dashboard/meetings");

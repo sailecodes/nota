@@ -8,7 +8,7 @@ export const TIERS = [
     pricing: "Free",
     btnText: "Get started now",
     features: [
-      "7 uploads/mo (30MB per)",
+      "5 uploads/mo (32MB per)",
       "AI-powered transcription & summaries",
       "Automatic action item extraction",
       "Access to dashboard",

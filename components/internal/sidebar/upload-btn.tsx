@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 export default function UploadButton() {
   const [files, setFiles] = useState<File[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -30,6 +31,7 @@ export default function UploadButton() {
   const { startUpload, routeConfig } = useUploadThing("audioUploader", {
     onClientUploadComplete: async () => {
       setIsDialogOpen(false);
+      setIsUploading(false);
       router.push("/dashboard/meetings");
     },
     onUploadError: (e) => {
@@ -39,6 +41,7 @@ export default function UploadButton() {
       });
     },
     onUploadBegin: () => {
+      setIsUploading(true);
       toast.info("Uploading file...", {
         icon: <Info className="size-4" />,
       });
@@ -76,7 +79,10 @@ export default function UploadButton() {
           {...getRootProps()}
           className="flex flex-col justify-center items-center gap-4">
           {/* FIXME: Button shouldn't make file explorer popup */}
-          <input {...getInputProps()} />
+          <input
+            {...getInputProps()}
+            disabled={isFileReady}
+          />
           <Upload className="size-12" />
           <div className="flex flex-col items-center">
             <span className="text-base font-medium">
@@ -89,7 +95,7 @@ export default function UploadButton() {
             disabled={!isFileReady}
             variant={isFileReady ? "default" : "secondary"}
             className="w-[150px] hover:cursor-pointer">
-            {isFileReady ? "Upload file" : "Select file"}
+            {isUploading ? "Uploading..." : isFileReady ? "Upload file" : "Select file"}
           </Button>
         </div>
       </DialogContent>

@@ -86,9 +86,10 @@ export default async function Meeting({ params }: IMeetingProps) {
               <CardHeader className="text-lg font-semibold">Action Items</CardHeader>
               <CardContent className="space-y-5">
                 {meeting.result!.actionItems.map(
-                  ({ action, dueDate, assignee, dueStatus }, ind) => (
+                  ({ id, action, dueDate, assignee, dueStatus }, ind) => (
                     <>
                       <ActionItemSnippet
+                        key={id}
                         action={action}
                         dueDate={dueDate}
                         assignee={assignee}
