@@ -35,10 +35,9 @@ export default function UploadButton() {
       router.push("/dashboard/meetings");
     },
     onUploadError: (e) => {
+      setIsUploading(false);
       console.error(e.message);
-      toast.error(e.message, {
-        icon: <CircleX className="size-4 stroke-red-300" />,
-      });
+      toast.error(e.message);
     },
     onUploadBegin: () => {
       setIsUploading(true);

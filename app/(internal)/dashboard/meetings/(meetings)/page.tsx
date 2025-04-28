@@ -21,7 +21,7 @@ export default async function Meetings() {
       {uploads.length >= 0 && (
         <section
           className="grid [grid-template-columns:repeat(auto-fit,minmax(0,408px))] auto-rows-[300px]
-          justify-center gap-3 max-w-7xl mx-auto p-4 pb-[25px] space-y-[25px]">
+          justify-center gap-3 max-w-7xl mx-auto p-4 pb-[25px]">
           {uploads.map((upload) =>
             upload.processStatus !== EProcessStatus.COMPLETED ? (
               <MeetingCardSkeleton

@@ -33,7 +33,7 @@ export const ourFileRouter = {
         const currUser = await prisma.user.findUnique({ where: { sbId: metadata.user.id } });
 
         if (!currUser) throw new UploadThingError(`Cannot find user with id ${metadata.user.id}`);
-        else if (currUser.totalMonthlyUploads > 5)
+        else if (currUser.totalMonthlyUploads === 5)
           throw new UploadThingError("Reached monthly upload limit");
 
         // 1. Create new Upload record
