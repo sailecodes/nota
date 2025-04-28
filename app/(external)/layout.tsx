@@ -39,7 +39,7 @@ export default async function UnauthenticatedLayout({
           )}
           {user && (
             <Link
-              href="/dashboard/overview"
+              href="/dashboard"
               className={buttonVariants({ size: "lg" })}>
               View dashboard
             </Link>

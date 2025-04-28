@@ -14,8 +14,10 @@ export default async function AccountPage() {
       <ProfileInformation user={user!} />
       <EmailAddress user={user!} />
       <Password user={user!} />
-      {/* TODO: Future ftr */}
-      {/* <SubscriptionAndBilling /> */}
+      {/* 
+        TODO: Future ftr
+        <SubscriptionAndBilling />
+      */}
       <Danger />
     </div>
   );

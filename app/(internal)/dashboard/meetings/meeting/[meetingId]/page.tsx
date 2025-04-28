@@ -1,43 +1,33 @@
-"use client";
-
 import ActionItemSnippet from "@/components/internal/meetings/action-item-snippet";
 import MeetingSkeleton from "@/components/internal/meetings/meeting-skeleton";
+import prisma from "@/lib/prisma";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { parseName } from "@/utils";
 import { Calendar, UserCircle2 } from "lucide-react";
-import { use, useEffect, useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Prisma } from "@/app/generated/prisma";
 import { IMeetingProps } from "@/schemas";
 
-export default function Meeting({ params }: IMeetingProps) {
-  const { meetingId } = use(params);
-  const [meeting, setMeeting] = useState<Prisma.UploadGetPayload<{
+export default async function Meeting({ params }: IMeetingProps) {
+  const { meetingId } = await params;
+
+  const meeting = await prisma.upload.findUnique({
+    where: {
+      id: meetingId,
+    },
     include: {
       result: {
         include: {
           actionItems: {
             include: {
-              assignee: true;
-            };
-          };
-        };
-      };
-      uploader: true;
-    };
-  }> | null>(null);
-
-  useEffect(() => {
-    const getMeeting = async () => {
-      const res = await fetch(`/api/meetings?meetingId=${meetingId}`);
-      const data = await res.json();
-
-      setMeeting(data);
-    };
-
-    getMeeting();
-  }, []);
+              assignee: true,
+            },
+          },
+        },
+      },
+      uploader: true,
+    },
+  });
 
   return (
     <>
