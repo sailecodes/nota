@@ -46,7 +46,7 @@ export default function PricingCard({
             </div>
             <p className="text-sm/relaxed text-muted-foreground">{description}</p>
             <Link
-              href="/payment"
+              href="/sign-up"
               className={buttonVariants({
                 size: "lg",
                 className: `${title !== "Starter" ? "pointer-events-none opacity-50" : ""}`,

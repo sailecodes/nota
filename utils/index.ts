@@ -35,6 +35,8 @@ export function getDate(date: Date | null) {
 }
 
 export function parseStatus(dueStatus: DueStatus | ProcessStatus) {
+  if (dueStatus === "TBD") return dueStatus;
+
   return dueStatus
     .toLowerCase()
     .split("_")

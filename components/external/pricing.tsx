@@ -9,7 +9,7 @@ export default function Pricing() {
         Get started with smart meeting summaries and action tracking. Upgrade when your workflow
         grows.
       </p>
-      <div className="grid grid-cols-3 auto-rows-[620px] gap-4">
+      <div className="grid grid-cols-3 auto-rows-[560px] gap-4">
         {TIERS.map((tier) => (
           <PricingCard
             key={tier.title}

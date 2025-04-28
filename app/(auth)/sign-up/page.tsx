@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import CustomField from "@/components/general/custom-field";
 import { Separator } from "@/components/ui/separator";
 
+// TODO: Redirect to dashboard if already logged in
 export default function SignUp() {
   const signUpForm = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -28,6 +29,7 @@ export default function SignUp() {
   });
   const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
   const [signUpErrMessage, setSignUpErrMessage] = useState<string>("");
+
   const router = useRouter();
 
   const handleSignUp = async (data: z.infer<typeof signUpSchema>) => {

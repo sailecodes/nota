@@ -31,6 +31,7 @@ export interface IMeetingProps {
 }
 
 export interface ActionItemSnippetProps {
+  id: string;
   action: string;
   dueDate: Date | null;
   assignee: User | null;
