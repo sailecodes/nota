@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { buttonVariants } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { Separator } from "../ui/separator";
 import PricingCardFeature from "./pricing-card-feature";
 import { Badge } from "../ui/badge";
-
-const MostPopularTier = "Teams";
+import { MOST_POPULAR_TIER } from "@/constants";
 
 interface PricingCardProps {
   title: string;
@@ -25,14 +24,14 @@ export default function PricingCard({
   return (
     <div
       className={`p-[2px] rounded-xl ${
-        title === MostPopularTier &&
+        title === MOST_POPULAR_TIER &&
         "bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 animate-gradient-x"
       }`}>
-      <Card className={`min-h-full ${title === MostPopularTier && "bg-background"}`}>
+      <Card className={`min-h-full ${title === MOST_POPULAR_TIER && "bg-background"}`}>
         <CardHeader>
           <CardTitle className="flex justify-between gap-2">
             <p className="text-lg">{title}</p>
-            {title === MostPopularTier && <Badge>Most popular</Badge>}
+            {title === MOST_POPULAR_TIER && <Badge>Most popular</Badge>}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -48,7 +47,10 @@ export default function PricingCard({
             <p className="text-sm/relaxed text-muted-foreground">{description}</p>
             <Link
               href="/payment"
-              className={buttonVariants({ size: "lg" })}>
+              className={buttonVariants({
+                size: "lg",
+                className: `${title !== "Starter" ? "pointer-events-none opacity-50" : ""}`,
+              })}>
               {btnText}
             </Link>
           </div>

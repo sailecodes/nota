@@ -1,8 +1,5 @@
-import NavLinks from "@/components/external/nav-links";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { ModeToggle } from "@/components/ui/mode-toggle";
-
 import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
 import { ReactNode } from "react";
 import { createClient } from "@/lib/supabase/server";
 
@@ -21,7 +18,6 @@ export default async function UnauthenticatedLayout({
           className="flex-1 text-3xl font-bold">
           Nota
         </Link>
-        <NavLinks />
         <div className="flex flex-1 items-center justify-end gap-4">
           {!user && (
             <>
