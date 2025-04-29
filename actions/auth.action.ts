@@ -28,7 +28,7 @@ export async function signUp(signUpData: z.infer<typeof signUpSchema>) {
       emailRedirectTo:
         process.env.NODE_ENV !== "production"
           ? "http://localhost:3000/dashboard"
-          : "https://nota-c44ulgj93-elias-iv-romans-projects.vercel.app/dashboard",
+          : "https://nota-elias.vercel.app/dashboard",
     },
   });
 

@@ -53,7 +53,7 @@ export const changeEmailAddress = async (data: z.infer<typeof emailAddressSchema
       emailRedirectTo:
         process.env.NODE_ENV !== "production"
           ? "http://localhost:3000/dashboard/account"
-          : "https://nota-c44ulgj93-elias-iv-romans-projects.vercel.app/dashboard/account",
+          : "https://nota-elias.vercel.app/dashboard/account",
     }
   );
 
@@ -76,7 +76,7 @@ export const sendPasswordResetLink = async () => {
     redirectTo:
       process.env.NODE_ENV !== "production"
         ? "http://localhost:3000/reset-password"
-        : "https://nota-c44ulgj93-elias-iv-romans-projects.vercel.app/reset-password",
+        : "https://nota-elias.vercel.app/reset-password",
   });
 
   if (updateUserError) return { error: updateUserError.message };
