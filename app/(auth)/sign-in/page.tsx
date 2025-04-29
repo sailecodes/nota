@@ -4,16 +4,15 @@ import Link from "next/link";
 import CustomField from "@/components/general/custom-field";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { signInSchema } from "@/schemas";
+import { ServerActionResult, signInSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "@/actions/auth.action";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { toast } from "sonner";
-import { CheckCircle2, CircleX } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
+import { customFetch } from "@/utils";
 
 export default function SignIn() {
   const signInForm = useForm<z.infer<typeof signInSchema>>({
@@ -27,28 +26,25 @@ export default function SignIn() {
   const router = useRouter();
 
   const handleSignIn = async (data: z.infer<typeof signInSchema>) => {
-    try {
-      setIsSigningIn(true);
+    setIsSigningIn(true);
 
-      const response = await fetch("/api/auth/sign-in", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      const result = await response.json();
+    const { result, status } = await customFetch<
+      z.infer<typeof signInSchema>,
+      ServerActionResult<null>
+    >("/api/auth/sign-in", data);
 
-      if (!response.ok) {
-        toast.error(`${result.error}`);
-      } else {
-        toast.success("Welcome back!");
-        router.push("/dashboard");
-      }
-    } catch (e) {
-      console.error(e);
-      toast.error("An unexpected error occurred");
-    } finally {
-      setIsSigningIn(false);
+    if (result && "success" in result && !result.success) {
+      console.error("[Sign in error] ", result.error);
+      if (result.source === "action") toast.error(result.error);
+      else toast.error("Something went wrong. Please try again.");
+    } else if (!status) {
+      toast.error(`Something went wrong. Please try again.`);
+    } else {
+      toast.success("Welcome back!");
+      router.push("/dashboard");
     }
+
+    setIsSigningIn(false);
   };
 
   return (
@@ -83,14 +79,14 @@ export default function SignIn() {
         </form>
       </Form>
       <Separator />
-      <span className="text-sm text-muted-foreground text-center col-span-full">
-        Not registered yet?{" "}
+      <div className="text-sm text-muted-foreground text-center col-span-full">
+        <span>Not registered yet? </span>
         <Link
           href="/sign-up"
           className="text-primary underline">
           Sign up
         </Link>
-      </span>
+      </div>
     </main>
   );
 }

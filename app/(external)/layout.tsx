@@ -11,7 +11,7 @@ export default async function UnauthenticatedLayout({
   } = await (await createClient()).auth.getUser();
 
   return (
-    <main className="flex flex-col min-h-screen max-w-7xl px-10 mx-auto">
+    <main className="flex flex-col min-h-screen max-w-7xl px-4 xs:px-10 mx-auto">
       <nav className="flex items-center justify-between gap-5 py-5 mt-2">
         <Link
           href="/"

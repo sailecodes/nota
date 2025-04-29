@@ -2,10 +2,17 @@ import { signIn } from "@/actions/auth.action";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const res = await signIn(body);
+  try {
+    const body = await req.json();
+    const result = await signIn(body);
 
-  if (res) return NextResponse.json(res, { status: 404 });
+    if (result.success) return NextResponse.json(result.data, { status: 200 });
 
-  return NextResponse.json(null, { status: 200 });
+    const status = result.source === "action" ? 400 : 500;
+
+    return NextResponse.json(result, { status });
+  } catch (err) {
+    console.log("[API route error] ", err);
+    return NextResponse.json(null, { status: 500 });
+  }
 }

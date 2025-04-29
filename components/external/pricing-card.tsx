@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { buttonVariants } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
-import { MOST_POPULAR_TIER } from "@/constants";
+import { MOST_POPULAR_TIER } from "@/utils";
 import { IPricingCardProps } from "@/schemas";
 
 export default function PricingCard({

@@ -1,5 +1,5 @@
 import PricingCard from "./pricing-card";
-import { TIERS } from "@/constants";
+import { TIERS } from "@/utils";
 
 export default function Pricing() {
   return (

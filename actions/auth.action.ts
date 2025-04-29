@@ -5,6 +5,7 @@ import { z } from "zod";
 import { signInSchema, signUpSchema } from "@/schemas";
 import { createClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { createServerAction } from "@/utils";
 
 export async function signUp(signUpData: z.infer<typeof signUpSchema>) {
   const { data: parsedData, error: parseError } = signUpSchema.safeParse(signUpData);
@@ -54,10 +55,10 @@ export async function signUp(signUpData: z.infer<typeof signUpSchema>) {
   }
 }
 
-export async function signIn(signInData: z.infer<typeof signInSchema>) {
+export const signIn = createServerAction(async function (signInData: z.infer<typeof signInSchema>) {
   const { data: parsedData, error: parseError } = signInSchema.safeParse(signInData);
 
-  if (parseError) return { error: "Data couldn't be parsed" };
+  if (parseError) throw new Error("Invalid data. Please provide valid credentials.");
 
   const supabase = await createClient();
 
@@ -66,8 +67,10 @@ export async function signIn(signInData: z.infer<typeof signInSchema>) {
     password: parsedData.password,
   });
 
-  if (signInError?.message) return { error: signInError?.message };
-}
+  if (signInError) throw new Error("Invalid credentials. Please try again.");
+
+  return { data: null };
+});
 
 export async function signOut() {
   const supabase = await createClient();
