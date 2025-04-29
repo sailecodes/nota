@@ -11,8 +11,7 @@ export default function Pricing() {
         Get started with smart meeting summaries and action tracking. Upgrade when your workflow
         grows.
       </p>
-      {/* <div className="grid grid-cols-3 auto-rows-[560px] gap-4"> */}
-      <div className="grid [grid-template-columns:repeat(auto-fit,minmax(0,385px))] auto-rows-[635px] gap-4 ml:auto-rows-[560px]">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(276px,1fr))] auto-rows-auto gap-4">
         {TIERS.map((tier) => (
           <PricingCard
             key={tier.title}
