@@ -45,3 +45,11 @@ export interface IEmailAddressProps {
 export interface IPasswordProps {
   user: SbUser;
 }
+
+export interface IPricingCardProps {
+  title: string;
+  description: string;
+  pricing: string;
+  btnText: string;
+  features: string[];
+}

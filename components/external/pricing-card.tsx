@@ -1,18 +1,11 @@
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Button, buttonVariants } from "../ui/button";
-import { Separator } from "../ui/separator";
 import PricingCardFeature from "./pricing-card-feature";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { buttonVariants } from "../ui/button";
+import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
 import { MOST_POPULAR_TIER } from "@/constants";
-
-interface PricingCardProps {
-  title: string;
-  description: string;
-  pricing: string;
-  btnText: string;
-  features: string[];
-}
+import { IPricingCardProps } from "@/schemas";
 
 export default function PricingCard({
   title,
@@ -20,7 +13,7 @@ export default function PricingCard({
   pricing,
   btnText,
   features,
-}: PricingCardProps) {
+}: IPricingCardProps) {
   return (
     <div
       className={`p-[2px] rounded-xl ${

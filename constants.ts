@@ -17,12 +17,13 @@ export const TIERS = [
   {
     title: "Teams",
     description:
-      "Unlock Nota’s full potential — guaranteed access to the most powerful AI models, faster processing, and deeper collaboration features.",
+      "Unlock Nota’s full potential — guaranteed access to the most powerful AI models, faster processing, and collaboration features.",
     pricing: "$15",
     btnText: "Coming soon",
     features: [
       "Unlimited uploads (250MB per)",
       "Guaranteed usage of best-in-class AI",
+      "3 workspaces with admin configurations",
       "Collaboration tools — assign, track, and manage actions",
       "Role-based access control for teams",
     ],
