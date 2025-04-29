@@ -1,6 +1,20 @@
 import { DueStatus, Prisma, ProcessStatus, User } from "@/app/generated/prisma";
 import { User as SbUser } from "@supabase/supabase-js";
 
+export interface ICoreFeaturesCardProps {
+  icon: any;
+  title: string;
+  description: string;
+}
+
+export interface IPricingCardProps {
+  title: string;
+  description: string;
+  pricing: string;
+  btnText: string;
+  features: string[];
+}
+
 export interface IRecentUploadsCardProps {
   user: Prisma.UserGetPayload<{ include: { uploads: true; actionItems: true } }> | null;
 }
@@ -44,12 +58,4 @@ export interface IEmailAddressProps {
 
 export interface IPasswordProps {
   user: SbUser;
-}
-
-export interface IPricingCardProps {
-  title: string;
-  description: string;
-  pricing: string;
-  btnText: string;
-  features: string[];
 }
