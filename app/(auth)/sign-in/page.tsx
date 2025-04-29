@@ -35,6 +35,7 @@ export default function SignIn() {
 
     if (result && "success" in result && !result.success) {
       console.error("[Sign in error] ", result.error);
+
       if (result.source === "action") toast.error(result.error);
       else toast.error("Something went wrong. Please try again.");
     } else if (!status) {

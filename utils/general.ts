@@ -70,8 +70,8 @@ export function createServerAction<TArgs extends any[], TReturn>(
 ) {
   return async (...args: TArgs): Promise<ServerActionResult<TReturn>> => {
     try {
-      const result = await fn(...args);
-      return { success: true, data: result };
+      const data = await fn(...args);
+      return { success: true, data };
     } catch (err) {
       // FIXME: "instanceof Error" too generic
       const isServerActionError = err instanceof Error;

@@ -7,10 +7,10 @@ import { createClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createServerAction } from "@/utils";
 
-export async function signUp(signUpData: z.infer<typeof signUpSchema>) {
+export const signUp = createServerAction(async function (signUpData: z.infer<typeof signUpSchema>) {
   const { data: parsedData, error: parseError } = signUpSchema.safeParse(signUpData);
 
-  if (parseError) return { error: "Data couldn't be parsed" };
+  if (parseError) throw new Error("Invalid data. Please provide valid credentials.");
 
   const supabase = await createClient();
 
@@ -28,14 +28,14 @@ export async function signUp(signUpData: z.infer<typeof signUpSchema>) {
       },
       emailRedirectTo:
         process.env.NODE_ENV !== "production"
-          ? "http://localhost:3000/dashboard"
-          : "https://nota-elias.vercel.app/dashboard",
+          ? `${process.env.DEV_URL}/dashboard`
+          : `${process.env.PROD_URL}/dashboard`,
     },
   });
 
   // Only accounting for existing email error
-  if (signUpError?.message) return { error: "Email already exists" };
-  else if (!user) return { error: "User couldn't be created" };
+  if (signUpError?.message) throw new Error("Email already exists");
+  else if (!user) throw new Error("Something went wrong. Please try again.");
 
   try {
     await prisma.user.create({
@@ -46,14 +46,18 @@ export async function signUp(signUpData: z.infer<typeof signUpSchema>) {
         lastName: user.user_metadata.lastName,
       },
     });
+
+    return { data: null };
   } catch (e) {
     // Rollback previous Supabase auth table modification
     const { error: deleteUserError } = await supabaseAdmin.auth.admin.deleteUser(user!.id);
 
-    if (deleteUserError) return { error: deleteUserError.message };
-    else return { error: "User couldn't be created" };
+    console.error("[Sign up rollback failed] ", deleteUserError);
+
+    if (deleteUserError) throw new Error("Something went wrong. Please try again.");
+    else throw new Error("User couldn't be created. Please try again.");
   }
-}
+});
 
 export const signIn = createServerAction(async function (signInData: z.infer<typeof signInSchema>) {
   const { data: parsedData, error: parseError } = signInSchema.safeParse(signInData);

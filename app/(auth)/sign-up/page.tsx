@@ -1,21 +1,26 @@
 "use client";
 
+import Link from "next/link";
+import CustomField from "@/components/general/custom-field";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { signUpSchema } from "@/schemas";
+import { ServerActionResult, signUpSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUp } from "@/actions/auth.action";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import Link from "next/link";
 import { toast } from "sonner";
-import { CheckCircle2, CircleX } from "lucide-react";
 import { useRouter } from "next/navigation";
-import CustomField from "@/components/general/custom-field";
 import { Separator } from "@/components/ui/separator";
+import { customFetch } from "@/utils";
 
 // TODO: Redirect to dashboard if already logged in
+// TODO: Confirmation email functionality can be added later on.
+//       Caveat of not knowing if email is duplicate
+// toast.success("Check your inbox!", {
+//   description: `We've sent you a confirmation email at ${emailWatch}.`,
+// });
 export default function SignUp() {
   const signUpForm = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -29,36 +34,32 @@ export default function SignUp() {
   });
   const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
   const [signUpErrMessage, setSignUpErrMessage] = useState<string>("");
-
   const router = useRouter();
 
   const handleSignUp = async (data: z.infer<typeof signUpSchema>) => {
     setIsSigningUp(true);
 
-    const res = await signUp(data);
+    const { result, status } = await customFetch<
+      z.infer<typeof signUpSchema>,
+      ServerActionResult<null>
+    >("/api/auth/sign-up", data);
 
-    setIsSigningUp(false);
+    if (result && "success" in result && !result.success) {
+      console.error("[Sign up error] ", result.error);
 
-    if (res) {
-      if (res.error === "Email already exists") setSignUpErrMessage("Email already exists");
-      else
-        toast.error(`${res.error}`, {
-          icon: <CircleX className="w-4 h-4 stroke-red-300" />,
-        });
+      if (result.error.includes("Email")) setSignUpErrMessage(result.error);
+      else if (result.source === "action") toast.error(result.error);
+      else toast.error("Something went wrong. Please try again.");
+    } else if (!status) {
+      toast.error(`Something went wrong. Please try again.`);
     } else {
-      // TODO: Confirmation email functionality can be added later on.
-      //       Caveat of not knowing if email is duplicate
-      // toast.success("Check your inbox!", {
-      //   description: `We've sent you a confirmation email at ${emailWatch}.`,
-      //   icon: <CheckCircle2 className="w-4 h-4 stroke-green-300" />,
-      // });
       toast.success("Welcome to Nota!", {
         description: `Get started by uploading a meeting.`,
-        icon: <CheckCircle2 className="w-4 h-4 stroke-green-300" />,
       });
-
       router.push("/dashboard");
     }
+
+    setIsSigningUp(false);
   };
 
   return (

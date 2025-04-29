@@ -1,10 +1,10 @@
-import { signIn } from "@/actions/auth.action";
+import { signUp } from "@/actions/auth.action";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const result = await signIn(body);
+    const result = await signUp(body);
 
     if (result.success) return NextResponse.json(result, { status: 200 });
 
