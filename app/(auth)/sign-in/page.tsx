@@ -27,21 +27,27 @@ export default function SignIn() {
   const router = useRouter();
 
   const handleSignIn = async (data: z.infer<typeof signInSchema>) => {
-    setIsSigningIn(true);
+    try {
+      setIsSigningIn(true);
 
-    const res = await signIn(data);
-
-    setIsSigningIn(false);
-
-    if (res) {
-      toast.error(`${res.error}`, {
-        icon: <CircleX className="w-4 h-4 stroke-red-300" />,
+      const response = await fetch("/api/auth/sign-in", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       });
-    } else {
-      toast.success("Welcome back!", {
-        icon: <CheckCircle2 className="w-4 h-4 stroke-green-300" />,
-      });
-      router.push("/dashboard");
+      const result = await response.json();
+
+      if (!response.ok) {
+        toast.error(`${result.error}`);
+      } else {
+        toast.success("Welcome back!");
+        router.push("/dashboard");
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error("An unexpected error occurred");
+    } finally {
+      setIsSigningIn(false);
     }
   };
 
